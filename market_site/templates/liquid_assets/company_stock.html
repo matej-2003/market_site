@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<table tb>
+    <tr>
+        <td colspan="2">{{ company.name }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image"></td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Company data</b></td>
+    </tr>
+    <tr>
+        <td>Company value</td>
+        <td>${{ '{:,.2f}'.format(company.value) }}</td>
+    </tr>
+    <tr>
+        <td>Total shares</td>
+        <td>{{ company.share_number() }}</td>
+    </tr>
+    <tr>
+        <td>Share value</td>
+        <td>${{ '{:,.2f}'.format(company.share_value()) }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Your data</b></td>
+    </tr>
+    <tr>
+        <td>Your shares</td>
+        <td>{{ current_user.share_number(company) }}</td>
+    </tr>
+    <tr>
+        <td>Your share value</td>
+        <td>${{ '{:.3f}'.format(current_user.share_value(company)) }}</td>
+    </tr>
+    <tr>
+        <td>Your share %</td>
+        <td>{{ '{:.3f}'.format(100 * current_user.share_percentage(company)) }}%</td>
+    </tr>
+    <tr>
+        <td>Information</td>
+        <td>{{ company.info }}</td>
+    </tr>
+</table>
+{% endblock %}

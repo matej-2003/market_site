@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1em;
+    }
+
+    img[asset_image] {
+        height: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    table td[value] {
+        width: 15em;
+    }
+
+    table tr {
+        padding: 0.5em;
+        border-bottom: 1px solid gray;
+    }
+
+    [content] {
+        width: 80%;
+    }
+
+    textarea {
+        width: 100%;
+        height: 3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<b>Your balance:</b> ${{ current_user.balance }}
+<br>
+<b>The property you want to sell:</b>
+<br>
+<center>
+    <b>{{ asset.name }}</b>
+</center>
+<hr>
+<form action="" method="POST">
+    <div class="box">
+        <img asset_image src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+        <table sub>
+            <tr>
+                <td>Owner ID</td>
+                <td value>{{ asset.owner.id }}</td>
+            </tr>
+            <tr>
+                <td>Owner username</td>
+                <td value>{{ asset.owner.username }}</td>
+            </tr>
+            <tr>
+                <td>Owner full name</td>
+                <td value>{{ asset.owner.full_name }}</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td value>{{ asset.type }}</td>
+            </tr>
+            <tr>
+                <td>Value</td>
+                <td value>${{ asset.value }}</td>
+            </tr>
+            <tr>
+                <td>Set sale price</td>
+                <td value>$<input type="number" step="1.00" name="price" value="{{ sale.price }}"></td>
+            </tr>
+            <tr>
+                <td>Diffrence</td>
+                <td value diff></td>
+            </tr>
+            <tr>
+                <td>Returns</td>
+                <td value returns></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Info</b>
+                    <br>
+                    <textarea name="info">
+                    {{ asset.info.strip(' \n\t') }}
+                    </textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    {% if asset.is_on_sale() %}
+    <a href="{{ url_for('user_assets') }}"><button>CANCEL</button></a>
+        <input type="submit" value="EDIT" name="action">
+        <input type="submit" value="DELETE" name="action">
+    {% else %}
+        <a href="{{ url_for('user_assets') }}"><button>CANCEL</button></a>
+        <input type="submit" value="CONFIRM" name="action">
+    {% endif %}
+</form>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    let info = document.querySelector('textarea[name=info]');
+    info.value = info.value.trim();
+    let value = {{ asset.value }};
+    let price = document.querySelector('input[name=price]');
+    let diff = document.querySelector('td[diff]');
+    let returns = document.querySelector('td[returns]');
+    show_diff(price.value - value);
+    show_returns(((price.value - value) / value * 100).toFixed(2));
+
+    price.addEventListener('change', () => {
+        show_diff(price.value - value);
+        show_returns(((price.value - value) / value * 100).toFixed(2));
+    });
+
+    function show_returns(n) {
+        if (n < 0) returns.style.color = 'red';
+        else if (n > 0) returns.style.color = 'green';
+        else returns.style.color = 'black';
+        returns.innerHTML = `\%${n}`;
+    }
+
+    function show_diff(n) {
+        if (n < 0) diff.style.color = 'red';
+        else if (n > 0) diff.style.color = 'green';
+        else diff.style.color = 'black';
+        diff.innerHTML = `\$${n}`;
+    }
+</script>
+{% endblock %}

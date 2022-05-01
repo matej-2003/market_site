@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<table tb>
+    <tr>
+        <td colspan="2">{{ asset.name }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"><img src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image"></td>
+    </tr>
+    <tr>
+        <td>Value</td>
+        <td>${{ asset.value }}</td>
+    </tr>
+    <tr>
+        <td>Owner ID</td>
+        <td>{{ asset.owner.id }}</td>
+    </tr>
+    <tr>
+        <td>Owner username</td>
+        <td>{{ asset.owner.username }}</td>
+    </tr>
+    <tr>
+        <td>Owner full name</td>
+        <td>{{ asset.owner.full_name }}</td>
+    </tr>
+    <tr>
+        <td>Information</td>
+        <td>{{ asset.info }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <a href="/hard_asset/asset/{{ asset.id }}/sale_history">sale history</a>
+        </td>
+    </tr>
+    {% if asset.owner == current_user %}
+        {% if asset.is_on_sale() %}
+            <tr>
+                <td colspan="2">
+                    <a href="/hard_asset/asset/{{ asset.id }}/sell"><button>EDIT SALE</button></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">
+                    <a href="/hard_asset/asset/{{ asset.id }}/sell"><button>SELL</button></a>
+                </td>
+            </tr>
+        {% endif %}
+    {% endif %}
+
+    {% if asset.is_on_sale() and asset.owner != current_user %}
+    <tr>
+        <td colspan="2">
+            <a href="/hard_asset/asset/{{ asset.id }}/sale"><button>BUY</button></a>
+        </td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

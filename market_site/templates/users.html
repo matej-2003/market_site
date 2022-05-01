@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    td[small] {
+        font-size: small;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<table tb>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Full name</th>
+        <th>Balance</th>
+        <th>Type</th>
+        <th>Last login</th>
+        <th>Date created</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td><a href="/user/{{ user.id }}">{{ user.id }}</a></td>
+            <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+            <td><a href="/user/{{ user.id }}">{{ user.email }}</a></td>
+            <td><a href="/user/{{ user.id }}">{{ user.full_name }}</a></td>
+            <td>${{ user.balance }}</td>
+            <td small>
+                {% if user.type == 0 %}
+                    LEGAL_PERSON
+                {% else %}
+                    PHYSICAL_PERSON
+                {% endif %}
+            </td>
+            <td small>{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td small>{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

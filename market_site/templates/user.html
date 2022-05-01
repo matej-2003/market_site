@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        height: 5em;
+        width: auto;
+    }
+
+    img[company_logo_min] {
+        display: inline-block;
+        max-height: 1.7em;
+    }
+
+    span.gray {
+        color: #414141;
+    }
+
+    span.small {
+        font-size: small;
+    }
+
+    .for_sale {
+        background-color: #00ff0d;
+        color: white;
+        padding: 0.1em;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+
+    .not_for_sale {
+        background-color: #ff0000;
+        color: #ffffff;
+        padding: 0.1em;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<table tb>
+    <tr>
+        <td>ID</td>
+        <td>{{ user.id }}</td>
+        <td>Username</td>
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{ user.email }}</td>
+        <td>Full name</td>
+        <td>{{ user.full_name }}</td>
+    </tr>
+    <tr>
+        <td>Balance</td>
+        <td>${{ user.balance }}</td>
+        <td>Type</td>
+        <td>
+            {% if user.type == 0 %}
+                LEGAL_PERSON
+            {% else %}
+                PHYSICAL_PERSON
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>Last login</td>
+        <td>{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+        <td>Date created</td>
+        <td>{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+    </tr>
+</table>
+<br>
+<a href="/transaction?receipient_id={{user.id}}"><button>Make transactions</button></a>
+<br>
+<h3>Payments made</h3>
+Total payments made: ${{ user.total_payments_made }}
+<table tb>
+    <tr>
+        <th>Amount</th>
+        <th>Receipient</th>
+        <th>Time</th>
+        <th>Info</th>
+    </tr>
+    {% for payment in user.payments_made() %}
+        <tr>
+            <td>${{ payment.amount }}</td>
+            <td>{{ payment.payee.username }}</td>
+            <td>{{ payment.time }}</td>
+            <td>{{ payment.info }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+
+<h3>Payments received</h3>
+Total payments received: ${{ user.total_payments_received }}
+<table tb>
+    <tr>
+        <th>Amount</th>
+        <th>Payer</th>
+        <th>Time</th>
+        <th>Info</th>
+    </tr>
+    {% for payment in user.payments_received() %}
+        <tr>
+            <td>${{ payment.amount }}</td>
+            <td>{{ payment.payer.username }}</td>
+            <td>{{ payment.time }}</td>
+            <td>{{ payment.info }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+
+<h3>Hard assets</h3>
+<table tb>
+    <tr>
+        <th>Image</th>
+        <th>Info</th>
+    </tr>
+    {% for asset in user.hard_assets %}
+    <tr>
+        <td>
+            <a href="/hard_asset/asset/{{ asset.id }}"><img asset_image
+                    src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image"></a>
+        </td>
+        <td>
+            <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br> 
+            <span class="gray">Value: </span>${{ asset.value }}<br> 
+            <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
+            <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
+            <span class="gray">Status: </span>
+            <span class="small {% if asset.is_on_sale() %} for_sale {% else %} not_for_sale {% endif %}">
+                {% if asset.is_on_sale() %} FOR SALE {% else %} NOT FOR SALE {% endif %}
+            </span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<h3>Company shares</h3>
+<table tb>
+    <tr>
+        <th>Company logo</th>
+        <th>Company Name</th>
+        <th>Share value</th>
+        <th>Number of shares</th>
+    </tr>
+    {% for company, number_of_shares in user.shares() %}
+    <tr>
+        <td>
+            <a href="/liquid_assets/company/{{ company.id }}">
+                <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}"
+                    alt="{{ company.name }} image">
+            </a>
+        </td>
+        <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
+        <td>${{ "{:,.2f}".format(user.share_value(company)) }}</td>
+        <td>{{ number_of_shares }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

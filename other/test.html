@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Market site</title>
+    <link rel="stylesheet" href="market_site/static/css/style.css">
+    <link rel="icon" href="market_site/static/logos/logo1.1.png">
+    <style>
+        table *[bb] {
+            border-bottom: 1px solid black;
+        }
+
+        table {
+            width: 50%;
+        }
+
+        td.data {
+            width: 1%;
+            text-align: left;
+        }
+
+        td.key {
+            width: auto;
+        }
+
+        [l] { text-align: left; }
+        [r] { text-align: right; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="market_site/static/logos/logo1.1.png" logo>
+        <img src="market_site/static/logos/logo1.2.png" logo>
+    </header>
+
+    <div main>
+        <nav>
+            <div>
+                <img src="market_site/static/logos/profile.png" alt="">
+                <br>
+                <b>
+                    oliver
+                </b>
+            </div>
+            <!-- <a href="market_site/profile">Profile</a><br> -->
+            <a href="market_site/home">Home</a><br>
+            <a href="market_site/user_assets">My assets</a><br>
+            <a href="market_site/transaction">Transaction</a><br>
+            <a href="market_site/users">Users</a><br>
+            <a href="market_site/market">Market</a><br>
+            <a href="market_site/logout">Logout</a><br>
+        </nav>
+
+        <div content>
+            <table>
+                <tr bb>
+                    <td colspan="2"><b>Receipient info</b></td>
+                </tr>
+                <tr bb>
+                    <td class="key">Recipient ID</td>
+                    <td class="data">1</td>
+                </tr>
+                <tr bb>
+                    <td class="key">Receipient username</td>
+                    <td class="data">harry</td>
+                </tr>
+            </table>
+            <br>
+            <table>
+                <tr bb>
+                    <td colspan="2"><b>Transaction info</b></td>
+                </tr>
+                <tr bb>
+                    <td class="key">Amount</td>
+                    <td class="data">$40</td>
+                </tr>
+                <tr bb>
+                    <td class="key">Tax</td>
+                    <td class="data">10%</td>
+                </tr>
+                <tr>
+                    <td r style="padding-left: 2em;">Total:</td>
+                    <td r bb>120$</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- <div content>
+            <fieldset>
+                <legend>Make Payment</legend>
+                <table>
+                    <tr bb>
+                        <th colspan="2">Subject of sale</th>
+                    </tr>
+                    <tr bb>
+                        <td colspan="2">House in New Jersey</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><img src="market_site/static/hard_assets/asset_6.png"
+                                alt="House in New Jersey image"></td>
+                    </tr>
+                    <tr bb>
+                        <td>Value</td>
+                        <td>$30.0</td>
+                    </tr>
+                    <tr bb>
+                        <td>Owner ID</td>
+                        <td>10</td>
+                    </tr>
+                    <tr bb>
+                        <td>Owner username</td>
+                        <td>harry</td>
+                    </tr>
+                    <tr bb>
+                        <td>Owner full name</td>
+                        <td>Harry</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button>CANCEL</button>
+                            <button>NEXT -></button>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+
+            <fieldset>
+                <legend>Make Payment</legend>
+                <table>
+                    <tr>
+                        <th colspan="2">Payee information</th>
+                    </tr>
+                    <tr>
+                        <td>Payee ID</td>
+                        <td><input type="number" disabled value="432"></td>
+                    </tr>
+                    <tr>
+                        <td>Payee username</td>
+                        <td><input type="text" disabled value="harry"></td>
+                    </tr>
+                    <tr>
+                        <td>Amount in $</td>
+                        <td><input type="text" disabled value="30.0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button> <-BACK</button>
+                            <button>CANCEL</button>
+                            <button>NEXT-></button>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <fieldset>
+                <legend>Make Payment</legend>
+                <table>
+                    <tr>
+                        <td <b>Transaction information</b></td>
+                        <td </td>
+                    </tr>
+                    <tr>
+                        <td Payee</td>
+                        <td 432</td>
+                    </tr>
+                    <tr>
+                        <td Amount in $</td>
+                        <td 30.0</td>
+                    </tr>
+                    <tr>
+                        <td 
+                            <br>
+                            <b>Subject of sale</b>
+                        </td>
+                        <td </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">House in New Jersey</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br>
+                            <br>
+                            <button>CANCEL</button>
+                            <button>CONFIRM PAYMENT</button>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div> -->
+    </div>
+
+    <footer>
+        &copy; Licence
+        Copyright @ 2021 Market site SLO, inc. All rights reserved.
+        <br>
+        Terms of Use | Privacy Policy - Reserved
+    </footer>
+    <script src="market_site/static/js/script.js"></script>
+
+    <script>
+        let receipient_id = window.location.search.split('?')[1].split('=')[1];
+        document.querySelector(`input[name=receipient_id]`).value = receipient_id;
+    </script>
+
+</body>

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .form {
+        width: clamp(150px, 30%, 450px);
+    }
+</style>
+{% endblock %}
+{% block content %}
+<form action="" method="POST" class="form">
+    {{ form.hidden_tag() }}
+    <fieldset>
+        <legend>Sign in</legend>
+        <div>
+            <table>
+                <tr>
+                    <td>{{ form.username.label() }}</td>
+                    <td>
+                        {{ form.username() }}
+                        {% if form.username.errors %}
+                            <div class="invalid_feadback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label() }}</td>
+                    <td>
+                        {{ form.password() }}
+                        {% if form.password.errors %}
+                            <div class="invalid_feadback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %} 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspam="2">
+                        {{ form.submit.label() }}
+                        {{ form.submit() }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </fieldset>
+</form>
+<div>
+    {#
+    <small>
+        Do you need an account? <a href="{{url_for('register')}}">Sign in</a><br>
+        Forgot password? 
+    </small>
+    #}
+</div>
+{% endblock %}

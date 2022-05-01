@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="" method="POST">
+    <fieldset>
+        <legend>Determine amount</legend>
+        <table>
+            <tr>
+                <td>ID</td>
+                <td>{{ receipient.id }}</td>
+            </tr>
+            <tr>
+                <td>username</td>
+                <td>{{ receipient.username }}</td>
+            </tr>
+            <tr>
+                <td>Full name</td>
+                <td>{{ receipient.full_name }}</td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td><input name="amount" type="number"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button><-BACK</button>
+                    <button>NEXT-></button>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+{% endblock %}

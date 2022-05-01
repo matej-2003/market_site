@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .panel {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+    }
+
+    img[vertical_logo] {
+        max-width: 10em;
+        height: auto;
+    }
+
+    .info {
+        width: max-content;
+    }
+
+    .container {
+        display: inline-block;
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    div[info] {
+        text-align: left;
+    }
+
+    span[mark] {
+        color: #3c3c3c;
+    }
+
+    a[name] {
+        font-size: 1.3rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 3em;
+        margin-top: 0.5em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="panel">
+    {% for company in companies %}
+    <div class="container">
+        <div class="logo">
+            <a href="/market/stocks/{{ company.id }}">
+            <img vertical_logo src="/static/companies/{{ company.get_images()[0] }}"
+                alt="{{ company.name }} image">
+            </a>
+        </div>
+        <br>
+        <a name href="/market/stocks/{{ company.id }}">{{ company.name }}</a>
+        <br>
+        <br>
+        <div info>
+            <span mark>Value</span>: ${{ '{:,.2f}'.format(company.value) }}
+            <br>
+            <span mark>Share number</span>: {{ company.share_number() }}
+            <br>
+            <span mark>Share value</span>: ${{ '{:,.2f}'.format(company.share_value()) }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

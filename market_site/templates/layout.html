@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Market site
+
+    </title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="icon" href="{{ url_for('static', filename='logos/logo1.1.png') }}">
+    {% block style %}{% endblock %}
+    {% block meta_tags %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logos/logo1.1.png') }}" logo>
+        <img src="{{ url_for('static', filename='logos/logo1.2.png') }}" logo>
+    </header>
+
+    <div main>
+        {% if not not_show_nav %}
+            <nav>
+                <div>
+                    <img src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
+                    <br>
+                    <b>
+                        <!-- LEGAL_PERSON == 0 -->
+                        {% if current_user.type == 0 %}
+                            CEO of
+                            <br>
+                            {{ current_user.get_company().name }}
+                        {% else %}
+                            {{current_user.username}}
+                        {% endif %}
+                    </b>
+                </div>
+                <!-- <a href="/profile">Profile</a><br> -->
+                <a href="/home">Home</a><br>
+                <a href="/user_assets">My assets</a><br>
+                <a href="/transaction">Transaction</a><br>
+                <a href="/users">Users</a><br>
+                <a href="/market">Market</a><br>
+                <a href="/logout">Logout</a><br>
+            </nav>
+        {% endif %}
+        <div content>
+            <div class="title">
+                {% if title %}
+                    {{title}}
+                {% endif %}
+            </div>
+
+            {% with msgs = get_flashed_messages(with_categories=true) %}
+                {% if msgs %}
+                    {% for category, msg in msgs%}
+                        <div class="alert {{ category}}">
+                            <span class="close_alert">&times;</span>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <footer>
+        &copy; Licence
+		Copyright @ 2021 Market site SLO, inc. All rights reserved.
+		<br>
+		Terms of Use | Privacy Policy - Reserved
+	</footer>
+    <script src="{{url_for('static', filename='js/script.js')}}"></script>
+    {% block javascript %}{% endblock %}
+</body>
