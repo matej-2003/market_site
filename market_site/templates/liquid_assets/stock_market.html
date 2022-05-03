@@ -49,13 +49,13 @@
     {% for company in companies %}
     <div class="container">
         <div class="logo">
-            <a href="/market/stocks/{{ company.id }}">
+            <a href="/market/liquid_assets/stocks/{{ company.id }}">
             <img vertical_logo src="/static/companies/{{ company.get_images()[0] }}"
                 alt="{{ company.name }} image">
             </a>
         </div>
         <br>
-        <a name href="/market/stocks/{{ company.id }}">{{ company.name }}</a>
+        <a name href="/market/liquid_assets/stocks/{{ company.id }}">{{ company.name }}</a>
         <br>
         <br>
         <div info>
@@ -63,7 +63,7 @@
             <br>
             <span mark>Share number</span>: {{ company.share_number() }}
             <br>
-            <span mark>Share value</span>: ${{ '{:,.2f}'.format(company.share_value()) }}
+            <span mark>Share value</span>: ${{ '{:,.2f}'.format(company.share_value) }}
         </div>
     </div>
     {% endfor %}

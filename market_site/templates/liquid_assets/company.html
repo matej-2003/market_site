@@ -15,12 +15,24 @@
         <td>${{ '{:,.2f}'.format(company.value) }}</td>
     </tr>
     <tr>
+        <td>Company debt</td>
+        <td>${{ '{:,.2f}'.format(company.get_debt()) }}</td>
+    </tr>
+    <tr>
         <td>Total shares</td>
         <td>{{ company.share_number() }}</td>
     </tr>
     <tr>
         <td>Share value</td>
-        <td>${{ '{:,.2f}'.format(company.share_value()) }}</td>
+        <td>${{ '{:,.2f}'.format(company.share_value) }}</td>
+    </tr>
+    <tr>
+        <td>Share list</td>
+        <td><a href="/liquid_assets/company/{{ company.id }}/stock">share list</a></td>
+    </tr>
+    <tr>
+        <td>Bond list</td>
+        <td><a href="/liquid_assets/company/{{ company.id }}/bonds">bond list</a></td>
     </tr>
     <tr>
         <td colspan="2"><b>Your data</b></td>

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<table tb>
+    <tr>
+        <th>Number of shares</th>
+        <th>Sale price</th>
+        <th>Full sale price</th>
+        <th>Company name</th>
+        <th>User</th>
+    </tr>
+    {% for share_number, sale, share, company, user in share_sales %}
+        <tr>
+            <td>{{ share_number }}</td>
+            <td>${{ sale.price }}</td>
+            <td>${{ sale.price * share_number }}</td>
+            <td>{{ company.name }}</td>
+            <td>{{ share.owner.username }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

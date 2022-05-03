@@ -3,8 +3,8 @@
 <style>
     img[asset_image] {
         display: inline-block;
-        height: 5em;
-        width: auto;
+        height: auto;
+        width: 7em;
     }
 
     img[company_logo_min] {
@@ -34,6 +34,22 @@
         padding: 0.1em;
         border-radius: 3px;
         font-weight: bold;
+    }
+
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
     }
 </style>
 {% endblock %}
@@ -116,31 +132,29 @@ Total payments received: ${{ user.total_payments_received }}
 
 
 <h3>Hard assets</h3>
-<table tb>
-    <tr>
-        <th>Image</th>
-        <th>Info</th>
-    </tr>
-    {% for asset in user.hard_assets %}
-    <tr>
-        <td>
-            <a href="/hard_asset/asset/{{ asset.id }}"><img asset_image
-                    src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image"></a>
-        </td>
-        <td>
-            <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br> 
-            <span class="gray">Value: </span>${{ asset.value }}<br> 
+<div class="container">
+    {% for asset in current_user.hard_assets %}
+    <div class="asset_item">
+        <div>
+            <a href="/hard_asset/asset/{{ asset.id }}">
+                <img asset_image src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+            </a>
+        </div>
+        <div>
+            <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
+            <span class="gray">Value: </span>${{ asset.value }}<br>
             <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
             <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
             <span class="gray">Status: </span>
             <span class="small {% if asset.is_on_sale() %} for_sale {% else %} not_for_sale {% endif %}">
                 {% if asset.is_on_sale() %} FOR SALE {% else %} NOT FOR SALE {% endif %}
             </span>
-        </td>
-    </tr>
+        </div>
+    </div>
     {% endfor %}
-</table>
+</div>
 <br>
+
 <h3>Company shares</h3>
 <table tb>
     <tr>
@@ -149,7 +163,7 @@ Total payments received: ${{ user.total_payments_received }}
         <th>Share value</th>
         <th>Number of shares</th>
     </tr>
-    {% for company, number_of_shares in user.shares() %}
+    {% for share, company, share_number in user.shares() %}
     <tr>
         <td>
             <a href="/liquid_assets/company/{{ company.id }}">
@@ -158,8 +172,35 @@ Total payments received: ${{ user.total_payments_received }}
             </a>
         </td>
         <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td>${{ "{:,.2f}".format(user.share_value(company)) }}</td>
-        <td>{{ number_of_shares }}</td>
+        <td>${{ "{:,.2f}".format(company.share_value * share_number ) }}</td>
+        <td>{{ share_number }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Company bonds</h3>
+<table tb>
+    <tr>
+        <th>Company logo</th>
+        <th>Company Name</th>
+        <th>Bonds value</th>
+        <th>Bonds interest rate</th>
+        <th>Bonds full value</th>
+        <th>Number of bonds</th>
+    </tr>
+    {% for bond, company, bond_number in user.bonds() %}
+    <tr>
+        <td>
+            <a href="/liquid_assets/company/{{ company.id }}">
+                <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}"
+                    alt="{{ company.name }} image">
+            </a>
+        </td>
+        <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
+        <td>${{ "{:,.2f}".format(bond.value * bond_number) }}</td>
+        <td>{{ "{:,.2f}".format(bond.interest_rate) }}%</td>
+        <td>${{ "{:,.2f}".format(bond.full_value() * bond_number) }}</td>
+        <td>{{ bond_number }}</td>
     </tr>
     {% endfor %}
 </table>

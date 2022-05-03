@@ -1,0 +1,296 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .growth {
+        color: #00ae00;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+    }
+
+    .fall {
+        color: #b60000;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+    }
+
+    .container {
+        display: flex;
+        /*flex-wrap: wrap;*/
+        width: 100%;
+        gap: 1em;
+    }
+
+    div.graph {
+        width: -webkit-fill-available;
+    }
+
+    span.profit {
+        color: green;
+    }
+
+    span.loss {
+        color: red;
+    }
+
+    table {
+        width: max-content;
+        padding: 1em;
+        height: 100%;
+    }
+
+    table td {
+        padding: 0.2em 1em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<marquee>
+    <span class="growth">&#8593$2.3 Google inc.</span>&nbsp&nbsp
+    <span class="fall">&#8595$4.9 Amazon inc.</span>&nbsp&nbsp
+    <span class="growth">&#8593$2.3 Google inc.</span>&nbsp&nbsp
+    <span class="fall">&#8595$4.9 Amazon inc.</span>&nbsp&nbsp
+    <span class="growth">&#8593$2.3 Google inc.</span>&nbsp&nbsp
+    <span class="fall">&#8595$4.9 Amazon inc.</span>&nbsp&nbsp
+</marquee>
+
+<div class="container">
+    <div>
+        <form action="" method="POST">
+            <fieldset>
+                <legend>Sell stock</legend>
+                <table>
+                    <tr>
+                        <td colspan="2">{{ company.name }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}"
+                                alt="{{ company.name }} image"></td>
+                    </tr>
+                    <tr>
+                        <td>Share value</td>
+                        <td>${{ company.share_value }}</td>
+                    </tr>
+                    <tr>
+                        <td>Your shares</td>
+                        <td>{{ user_share_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Your share value</td>
+                        <td>${{ '{:.2f}'.format(current_user.share_value(company)) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Number of stock</td>
+                        <td><input type="number" name="share_number" value="1" step="1" min="1"
+                                max="{{ user_share_number }}" required></td>
+                    </tr>
+                    <tr>
+                        <td>Share price</td>
+                        <td><input type="number" name="price" value="{{ company.share_value }}" required></td>
+                    </tr>
+                    <tr>
+                        <td>*Purchase share price</td>
+                        <td purchase_share_price>$40</td>
+                    </tr>
+                    <tr>
+                        <td>Full price</td>
+                        <td full_price>$60</td>
+                    </tr>
+                    <tr>
+                        <td>*Full purchase price</td>
+                        <td full_purchase_price>$60</td>
+                    </tr>
+                    <tr>
+                        <td>Diffrence</td>
+                        <td><span diff class="profit">$40</span></td>
+                    </tr>
+                    <tr>
+                        <td>Returns</td>
+                        <td><span returns class="profit">50.98%</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="SELL">
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+    <div class="graph">
+        <br>
+        <select name="" id="">
+            <option value="custom">--custom--</option>
+            <option value="last day">Last day</option>
+            <option value="last week">Last week</option>
+            <option value="last month">Last month</option>
+            <option value="last year">Last year</option>
+        </select> |
+        Before: <input type="date" name="before">
+        After: <input type="date" name="after">
+        <button>SHOW</button>
+        <canvas id="stock_chart"></canvas>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.1/chart.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+
+<script>
+    let pspv = '{{ company.share_value }}';
+    let fpp = '{{ company.share_value * user_share_number}}';
+
+    let share_number = document.querySelector('input[name=share_number]');
+    let price = document.querySelector('input[name=price]');
+
+    let purchase_share_price = document.querySelector('td[purchase_share_price]');
+    purchase_share_price.innerHTML = pspv;
+    let full_purchase_price = document.querySelector('td[full_purchase_price]');
+    full_purchase_price.innerHTML = fpp;
+
+    let full_price = document.querySelector('td[full_price]');
+    let diff = document.querySelector('span[diff]');
+    let returns = document.querySelector('span[returns]');
+    let fp, d;
+    update();
+
+    function update() {
+        fp = price.value * share_number.value;
+        full_price.innerHTML = fp;
+        d = fp - pspv * share_number.value;
+        if (d < 0) {
+            diff.classList.remove('profit');
+            diff.classList.add('loss');
+            returns.classList.remove('profit');
+            returns.classList.add('loss');
+        } else if (d > 0) {
+            diff.classList.remove('loss');
+            diff.classList.add('profit');
+            returns.classList.remove('loss');
+            returns.classList.add('profit');
+        } else {
+            diff.classList.remove('profit');
+            diff.classList.remove('loss');
+            returns.classList.remove('profit');
+            returns.classList.remove('loss');
+        }
+        diff.innerHTML = '$' + d;
+        returns.innerHTML = (d / (pspv * share_number.value) * 100).toFixed(2) + '%';
+    }
+
+
+    share_number.addEventListener('change', () => {
+        update();
+    });
+
+    price.addEventListener('change', () => {
+        update();
+    });
+</script>
+
+
+<script>
+    get_stock_data('{{ company.id }}');
+
+    async function get_stock_data(id) {
+        const response = await fetch('/api/company/' + id + '/stocks');
+        const stock_data = await response.json();
+        draw_graph(stock_data);
+    }
+
+    function draw_graph(stock_data) {
+        let xValues = stock_data.map((e) => new Date(e[1]));
+        let yValues = stock_data.map((e) => e[0]);
+
+        console.log(
+            stock_data,
+            xValues,
+            yValues
+        );
+
+        new Chart("stock_chart", {
+            type: "line",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    label: '{{ company.name }} stock prices',
+                    fill: true,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,0.3)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: yValues,
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Stock value',
+                        },
+                        ticks: {
+                            callback: function (value, index, ticks) {
+                                return '$ ' + value;
+                            },
+                        }
+                    },
+
+                    
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time',
+                        },
+                        ticks: {
+                            callback: function (value, index, ticks) {
+                                let d = new Date(value)
+                                return `${d.getDay()}.${d.getMonth()}.${d.getFullYear()}`;
+                            },
+                        },
+                    },
+                    /*
+                    tooltip: {
+                        callbacks: function (context) {
+                            return context;
+                        }
+                    }
+                    */
+                },
+                /*
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                */
+                animation: {
+                    duration: 0
+                },
+                elements: {
+                    point: {
+                        radius: 3
+                    }
+                }
+            }
+        });
+    }
+
+
+</script>
+
+{% endblock %}

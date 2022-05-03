@@ -1,4 +1,4 @@
-from market_site import db, bc, PHYSICAL_PERSON
+from market_site import db, bc, PHYSICAL_PERSON, FOR_SALE
 from market_site import ART, HISTORICAL_ARTIFACTS, RARE_EARTHS, PRECIOUS_METALS, REAL_ESTATE, OTHER, TRANSPORT
 from market_site.models import *
 import random
@@ -9,7 +9,7 @@ db.create_all()
 names = ["oliver", "noah", "george", "arthur", "freddie", "leo", "theo", "oscar", "charlie", "harry", "archie", "alfie", "jack"]
 
 for name in names[:2]:
-    c = User(
+    b = User(
         username=name,
         password=bc.generate_password_hash(name),
         email=f"{name}@locahost",
@@ -17,8 +17,8 @@ for name in names[:2]:
         balance=random.randrange(1000, 10000)
         # balance=random.randrange(10, 100)
     )
-    print(c)
-    db.session.add(c)
+    print(b)
+    db.session.add(b)
 
 db.session.commit()
 
@@ -163,6 +163,34 @@ for i in assets1:
 
 # db.session.commit()
 
+bank_names = [
+    ['Nova Ljubljanska banka', 'nlb', 100000, 'nlb.png'],
+    ['Bank of America', 'america', 100000, 'america.png'],
+    ['Deutsche Bank', 'deutsche', 100000, 'deutsche.png'],
+    ['Bank of England', 'england', 100000, 'england.png'],
+    ['JPMorgan Chase', 'jpmorgan', 100000, 'jpmorgan.png'],
+    ['Intesa Sanpaolo Bank', 'sanpaolo', 100000, 'sampaolo.png'],
+]
+
+for i, bank in enumerate(bank_names):
+    u = User(
+        username = bank[1],
+        password = bc.generate_password_hash(bank[1]),
+        type = LEGAL_PERSON,
+        balance = bank[2],
+    )
+    b = Bank(
+        name = bank[0],
+        images = json.dumps([ bank[3] ]),
+    )
+    db.session.add(u)
+    db.session.add(b)
+    db.session.commit()
+    u.bank_id = b.id
+    b.legal_person_id = u.id
+    print(b)
+db.session.commit()
+
 
 company_names = [
     ["Walmart Inc.", "walmart", "company_1.png", 9000, "Wal-Mart Stores, Inc., ali samo Walmart je velika ameriška trgovska veriga, ki jo je ustanovil Sam Walton leta 1962. Sedež podjetja je v Bentonvillu, v ameriški zvezni državi Arkansas. Veriga ima v lasti več kot 11 000 trgovin v 28 državah po svetu."],
@@ -176,29 +204,33 @@ company_names = [
 
 
 for i, company in enumerate(company_names):
+    share_value = random.randint(10, 500)
     u = User(
         username=company[1],
         password=bc.generate_password_hash(company[1]),
         type = LEGAL_PERSON,
         balance = 0,
     )
-    c = Company(
+    b = Company(
         name = company[0],
         images = json.dumps([ company[2] ]),
         value = company[3],
         info = company[4],
+        share_value = share_value,
     )
     db.session.add(u)
-    db.session.add(c)
+    db.session.add(b)
     db.session.commit()
-    u.company_id = c.id
-    c.legal_person_id = u.id
-    print(c)
+    u.company_id = b.id
+    b.legal_person_id = u.id
+    print(b)
 db.session.commit()
 
 companies = Company.query.all()
 
 for i, company in enumerate(companies):
+    bond_price = random.randint(10, 200)
+    interest_rate = 1 + random.randint(1, 60) / 100
     for i in range(random.randint(3, 8)):
         users = db.session.query(User)\
             .where(User.type == PHYSICAL_PERSON)\
@@ -208,9 +240,38 @@ for i, company in enumerate(companies):
             owner_id = random.choice(users).id,
             company_id = company.id,
         )
-        print(share)
+        bond = CompanyBond(
+            owner_id = random.choice(users).id,
+            company_id = company.id,
+            value = bond_price,
+            interest_rate = interest_rate,
+        )
         db.session.add(share)
+        db.session.add(bond)
+        print(share)
+        print(bond)
 db.session.commit()
+
+for n in range(3):
+    print(f"SHARE SALE {n}")
+    for c in companies:
+        for s in c.shares:
+            ss = CompanyShareSale(
+                price = round(random.uniform(c.share_value, c.share_value * 1.1), 2),
+                share_id = s.id,
+                seller_id = s.owner_id,
+            )
+            db.session.add(ss)
+    db.session.commit()
+
+    share_sales = db.session.query(CompanyShareSale).where(CompanyShareSale.status == FOR_SALE).all()
+    print(share_sales)
+
+    for ss in share_sales:
+        users = db.session.query(User).where(User.type == PHYSICAL_PERSON).filter(User.id != ss.seller_id).all()
+        ss.sell(random.choice(users))
+
+
 
 
 # GET USERS SHARES

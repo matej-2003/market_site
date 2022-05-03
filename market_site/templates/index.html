@@ -15,7 +15,7 @@ Total payments made: ${{ current_user.total_payments_made }}
         <tr>
             <td>${{ payment.amount }}</td>
             <td>{{ payment.payee.username }}</td>
-            <td>{{ payment.time }}</td>
+            <td>{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</td>
         </tr>
     {% endfor %}
 </table>

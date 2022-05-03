@@ -1,8 +1,7 @@
-# from crypt import methods
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, redirect, request
 from market_site import PHYSICAL_PERSON, app, bc, db, TRANSACTIO_ERROR
 from market_site.forms import LoginForm
-from market_site.models import HardAsset, User
+from market_site.models import User, Bank
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -75,3 +74,9 @@ def transaction():
 		except ValueError:
 			print("error")
 	return render_template('transaction.html', title='Make Payment')
+
+@app.route('/borrow', methods=['POST', 'GET'])
+@login_required
+def borrow():
+	banks = Bank.query.all()
+	return render_template('borrow.html', title='Borrow', banks=banks)
