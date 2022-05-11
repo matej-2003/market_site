@@ -1,0 +1,7 @@
+table.selectable tr.selected {
+    background-color: #e3e9ff;
+}
+
+table.selectable tr:not(.toolbar):hover {
+    background-color: #d3dbff;
+}

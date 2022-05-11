@@ -3,7 +3,7 @@
 <style>
     img[asset_image] {
         display: inline-block;
-        height: 5em;
+        height: 8em;
         width: auto;
     }
 
@@ -16,8 +16,25 @@
 {% block content %}
 <table tb>
     <tr>
-        <th>Image</th>
-        <th>Name</th>
+        <th colspan="100">{{ asset.name }}</th>
+    </tr>
+    <tr>
+        <td colspan="100">
+            <a href="/hard_asset/asset/{{ asset.id }}">
+                <img asset_image src="/static/hard_assets/{{ asset.get_images()[0] }}"
+                alt="{{ asset.name }} image">
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td>Value</td>
+        <td colspan="100"><span class="m">{{ asset.value }}</span></td>
+    </tr>
+    <tr>
+        <td>Current owner</td>
+        <td colspan="100">{{ asset.owner.username }}</td>
+    </tr>
+    <tr>
         <th>Seller</th>
         <th>Buyer</th>
         <th>Sale price</th>
@@ -27,27 +44,20 @@
     </tr>
     {% for sale in sales %}
         <tr>
-            <td>
-                <a href="/hard_asset/asset/{{ asset.id }}">
-                    <img asset_image src="/static/hard_assets/{{ asset.get_images()[0] }}"
-                    alt="{{ asset.name }} image">
-                </a>
-            </td>
-            <td><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a></td>
             <td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
             <td><a href="/user/{{ sale.get_buyer().id }}">{{ sale.get_buyer().username }}</a></td>
-            <td>${{ '{:,.2f}'.format(sale.price) }}</td>
+            <td><span class="m">{{ '{:,.2f}'.format(sale.price) }}</span></td>
             <td>
                 {% if sale.status == 0 %}
-                    FOR SALE
+                    <span class="status for_sale"></span>
                 {% else %}
-                    SOLD
+                    <span class="status sold"></span>
                 {% endif %}
             </td>
-            <td>{{ sale.sale_start.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td><span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
             <td>
-                {% if sale.sale_end%}
-                    {{ sale.sale_end.strftime('%d/%m/%Y %H:%M:%S') }}
+                {% if sale.end %}
+                    <span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span> 
                 {% endif %}
             </td>
         </tr>

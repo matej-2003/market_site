@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    table {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<table tb>
+    <tr>
+        <td colspan="2">{{ bank.name }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <img company_logo src="/static/logos/{{ bank.get_images()[0] }}" alt="{{ bank.name }} image">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Bank data</b></td>
+    </tr>
+    <tr>
+        <td>Location</td>
+        <td>{{ bank.country.name }}</td>
+    </tr>
+    <tr>
+        <td>Information</td>
+        <td>{{ bank.info }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"><a href="/borrow/bank/{{ bank.id }}/loan"><button>TAKE A LOAN</button></a></td>
+    </tr>
+</table>
+{% endblock %}

@@ -1,9 +1,10 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, Response
 from market_site import PHYSICAL_PERSON, app, bc, db, TRANSACTIO_ERROR
 from market_site.forms import LoginForm
 from market_site.models import User, Bank
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
+import json
 
 @app.route('/')
 @app.route('/home')
@@ -27,6 +28,15 @@ def users():
 def user(user_id):
 	user = User.query.get_or_404(user_id)
 	return render_template('user.html', title='User ' + user.username, user=user)
+
+@app.route('/api/user/<int:user_id>/hard_assets')
+@login_required
+def api_user_hard_assets(user_id):
+	user = User.query.get_or_404(user_id)
+	data = []
+	for hard_asset in user.hard_assets:
+		data.append(hard_asset.objectify())
+	return Response(json.dumps(data), mimetype='text/json')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -79,4 +89,16 @@ def transaction():
 @login_required
 def borrow():
 	banks = Bank.query.all()
-	return render_template('borrow.html', title='Borrow', banks=banks)
+	return render_template('/borrow/banks.html', title='Borrow', banks=banks)
+
+@app.route('/borrow/bank/<int:bank_id>', methods=['POST', 'GET'])
+@login_required
+def bank(bank_id):
+	bank = Bank.query.get_or_404(bank_id)
+	return render_template('/borrow/bank.html', title='Bank', bank=bank)
+
+@app.route('/borrow/bank/<int:bank_id>/loan', methods=['POST', 'GET'])
+@login_required
+def loan(bank_id):
+	bank = Bank.query.get_or_404(bank_id)
+	return render_template('/borrow/loan.html', title='Loan', bank=bank)

@@ -93,7 +93,13 @@ table[tb] td,
 table[tb] th {
     border: 1px solid #b6b6b6;
     text-align: left;
-    padding: 8px;
+    padding: 0.2em;
+}
+
+table.c tr:nth-child(even),
+table[c] tr:nth-child(even)
+{
+    background-color: #dddddd;
 }
 
 table {
@@ -111,4 +117,72 @@ fieldset {
 img[company_logo] {
     max-width: 25em;
     max-height: 4em;
+}
+
+
+.status {
+    color: #ffffff;
+    padding: 0.1em;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.for_sale {
+    background-color: #00ff0d;
+}
+.for_sale:after {content: 'FOR SALE';}
+
+.not_for_sale {
+    background-color: #ff0000;
+}
+.not_for_sale:after {content: 'NOT FOR SALE';}
+
+.auction {
+    background-color: var(--primary);
+}
+.auction:after {content: 'AUCTION';}
+
+.sold {
+    background-color:  #0062ff;
+}
+.sold:after {content: 'SOLD';}
+
+.involved {
+    background-color:  var(--primary);
+}
+.involved:after {content: 'INVOLVED';}
+
+.not_involved {
+    background-color:  var(--purple);
+}
+.not_involved:after {content: 'NOT INVOLVED';}
+
+[t], .t,
+[p], .p,
+[m], .m {
+    font-family: 'Courier New', Courier, monospace;
+    /* font-family: monospace; */
+    color: #1f1f1f;
+    /* background-color: #f3f3f3; */
+}
+
+[t], .t {
+    font-size: small;
+}
+
+[neg], .neg {
+    color: #bb0303;
+}
+
+[pos], .pos {
+    color: #00a300;
+}
+
+[m]::before, .m::before {
+    content: "$";
+}
+
+[p]::after, .p::after {
+    content: "%";
 }

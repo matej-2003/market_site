@@ -1,0 +1,41 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    /* min-width: 100%; */
+    overflow: auto;
+}
+
+tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+th,
+td {
+    border: 1px solid #7c7c7c;
+    padding: 0.1em;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+tr:hover {
+    background-color: #dadafd;
+}
+
+th {
+    background-color: #c6c6ff;
+}
+
+tr.selected {
+    background-color: #e3e3ff;
+}
+
+td.status {
+    font-size: small;
+    font-weight: bold;
+    width: max-content;
+    color: #fff;
+}

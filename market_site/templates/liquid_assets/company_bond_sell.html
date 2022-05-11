@@ -57,7 +57,7 @@
     <div>
         <form action="" method="POST">
             <fieldset>
-                <legend>Sell stock</legend>
+                <legend>Sell bonds</legend>
                 <table>
                     <tr>
                         <td colspan="2">{{ company.name }}</td>
@@ -67,16 +67,16 @@
                                 alt="{{ company.name }} image"></td>
                     </tr>
                     <tr>
-                        <td>Share value</td>
-                        <td><span class="m">{{ company.share_value }}</span></td>
+                        <td>Bond value</td>
+                        <td>$</td>
                     </tr>
                     <tr>
-                        <td>Your shares</td>
-                        <td>{{ user_share_number }}</td>
+                        <td>Your bonds</td>
+                        <td>{{ user_bond_number }}</td>
                     </tr>
                     <tr>
-                        <td>Your share value</td>
-                        <td><span class="m">{{ '{:.2f}'.format(current_user.share_value(company)) }}</span></td>
+                        <td>Your bond value</td>
+                        <td><span class="m">{{ '{:.2f}'.format(1) }}</span></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -84,33 +84,33 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Number of stock</td>
-                        <td><input type="number" name="share_number" value="1" step="1" min="1"
-                                max="{{ user_share_number }}" required></td>
+                        <td>Number of bonds</td>
+                        <td><input type="number" name="bond_number" value="1" step="1" min="1"
+                                max="{{ user_bond_number }}" required></td>
                     </tr>
                     <tr>
-                        <td>Share price</td>
-                        <td><input type="number" name="price" value="{{ company.share_value }}"  min="1" required></td>
+                        <td>Bond price</td>
+                        <td><input type="number" name="price" value="{{ 1 }}"  min="1" required></td>
                     </tr>
                     <tr>
-                        <td>*Purchase share price</td>
-                        <td><span purchase_share_price class="m"></span></td>
+                        <td>*Purchase bond price</td>
+                        <td purchase_bond_price></td>
                     </tr>
                     <tr>
                         <td>Full price</td>
-                        <td><span full_price class="m"></span></td>
+                        <td full_price></td>
                     </tr>
                     <tr>
                         <td>*Full purchase price</td>
-                        <td><span full_purchase_price class="m"></span></td>
+                        <td full_purchase_price></td>
                     </tr>
                     <tr>
                         <td>Diffrence</td>
-                        <td><span diff class="m profit"></span></td>
+                        <td><span diff class="profit"></span></td>
                     </tr>
                     <tr>
                         <td>Returns</td>
-                        <td><span returns class="p profit"></span></td>
+                        <td><span returns class="profit"></span></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -133,7 +133,7 @@
         Before: <input type="date" name="before">
         After: <input type="date" name="after">
         <button>SHOW</button>
-        <div id="stock_chart" style="height: 300px; width: 100%;"></div>
+        <div id="bond_chart" style="height: 300px; width: 100%;"></div>
     </div>
 </div>
 
@@ -143,76 +143,25 @@
 <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
 
-<script>
-    let pspv = '{{ company.share_value }}';
-    let fpp = '{{ company.share_value * user_share_number}}';
-
-    let share_number = document.querySelector('input[name=share_number]');
-    let price = document.querySelector('input[name=price]');
-
-    let purchase_share_price = document.querySelector('[purchase_share_price]');
-    purchase_share_price.innerHTML = pspv;
-    let full_purchase_price = document.querySelector('[full_purchase_price]');
-    full_purchase_price.innerHTML = fpp;
-
-    let full_price = document.querySelector('[full_price]');
-    let diff = document.querySelector('span[diff]');
-    let returns = document.querySelector('span[returns]');
-    let fp, d;
-    update();
-
-    function update() {
-        fp = price.value * share_number.value;
-        full_price.innerHTML = fp;
-        d = fp - pspv * share_number.value;
-        if (d < 0) {
-            diff.classList.remove('profit');
-            diff.classList.add('loss');
-            returns.classList.remove('profit');
-            returns.classList.add('loss');
-        } else if (d > 0) {
-            diff.classList.remove('loss');
-            diff.classList.add('profit');
-            returns.classList.remove('loss');
-            returns.classList.add('profit');
-        } else {
-            diff.classList.remove('profit');
-            diff.classList.remove('loss');
-            returns.classList.remove('profit');
-            returns.classList.remove('loss');
-        }
-        diff.innerHTML = d.toFixed(2);
-        returns.innerHTML = (d / (pspv * share_number.value) * 100).toFixed(2);
-    }
-
-
-    share_number.addEventListener('change', () => {
-        update();
-    });
-
-    price.addEventListener('change', () => {
-        update();
-    });
-</script>
-
 
 <script>
-    get_stock_data('{{ company.id }}');
+    get_bond_data('{{ company.id }}');
 
-    async function get_stock_data(id) {
-        const response = await fetch('/api/company/' + id + '/stocks');
-        const stock_data = await response.json();
-        draw_graph(stock_data);
+    async function get_bond_data(id) {
+        const response = await fetch('/api/company/' + id + '/bonds');
+        const bond_data = await response.json();
+        console.log(bond_data);
+        draw_graph(bond_data);
     }
 
-    function draw_graph(stock_data) {
-        let data = stock_data.map(function(e) {
+    function draw_graph(bond_data) {
+        let data = bond_data.map(function(e) {
             return { label: e[1], y: e[0]};
         });
 
         console.log(data);
 
-        var chart = new CanvasJS.Chart("stock_chart", {
+        var chart = new CanvasJS.Chart("bond_chart", {
             title:{
                 text: "My First Chart in CanvasJS"              
             },

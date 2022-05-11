@@ -13,16 +13,18 @@
         <th>Bank logo</th>
         <th>Bank Name</th>
         <th>Bank value</th>
-        <th>Debt</th>
+        <th>Location</th>
     </tr>
     {% for bank in banks %}
     <tr>
         <td>
-            <img bank_logo_min src="/static/logos/{{ bank.get_images()[0] }}" alt="{{ bank.name }} image">
+            <a href="/borrow/bank/{{ bank.id }}">
+                <img bank_logo_min src="/static/logos/{{ bank.get_images()[0] }}" alt="{{ bank.name }} image">
+            </a>
         </td>
-        <td>{{ bank.name }}</td>
-        <td>${{ "{:,.2f}".format(bank.legal_person.balance) }}</td>
-        <td></td>
+        <td><a href="/borrow/bank/{{ bank.id }}">{{ bank.name }}</a></td>
+        <td><span class="m">{{ "{:,.2f}".format(bank.legal_person.balance) }}</span></td>
+        <td>{{ bank.country.name }}</td>
     </tr>
     {% endfor %}
 </table>

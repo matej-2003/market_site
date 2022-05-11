@@ -1,0 +1,103 @@
+input,
+textarea {
+    display: block;
+    /*width: 100%;*/
+    color: #495057;
+    background-clip: padding-box;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    padding: 0.2em 0.1em;
+
+    /* do not delete this */
+    /* border-radius: 0.1rem; */
+    margin: 0.2em 0em;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+    outline: none;
+    outline-color: none;
+    outline-style: none;
+    outline-width: 0;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--input-border-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem var(--input-border-color-shadow);
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="color"],
+input[type="submit"] {
+    display: inline-block;
+    width: max-content;
+}    
+
+input[type="file"] {
+    padding: 0px;
+}    
+
+input[type="submit"] {
+    padding: 0.5em;
+    /* padding: 0.2em 0.4em; */
+}    
+
+input[type=color] {
+    padding: 0px;
+    width: 1rem;
+    height: 1.2rem;
+    background-color: #fff;
+    color: #fff;
+}    
+
+
+select:focus-visible {
+    outline: 0;
+}
+
+select[multiple] {
+    width: 100%;
+}
+
+/* select {
+    width: 100%;
+} */
+
+option {
+    border-radius: 0px;
+    /* border: none; */
+}
+.multiple_select {
+    display: grid;
+    grid-template-columns: auto max-content auto;
+    grid-template-rows: max-content max-content;
+    grid-gap: 0.5rem;
+    padding: 8px;
+    background-color:#eee;
+    border-radius: 2px;
+    width: fit-content;
+}
+
+.multiple_select select {
+    width: 100%;
+    min-width: 160px;
+    box-sizing: border-box;
+}
+
+.multiple_select select:focus {
+    outline: none;
+}
+
+.multiple_select div[buttons] {
+    display: flex;
+    flex-direction: column;
+}

@@ -6,10 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Market site
-
+        {% if title %}
+         - {{title}}
+        {% endif %}
     </title>
+
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/modal.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/alert.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/btn.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/input.css')}}">
+
+
     <link rel="icon" href="{{ url_for('static', filename='logos/logo1.1.png') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {% block style %}{% endblock %}
     {% block meta_tags %}{% endblock %}
 </head>
@@ -43,6 +53,7 @@
                 <a href="/borrow">Borrow money</a><br>
                 <a href="/transaction">Transaction</a><br>
                 <a href="/users">Users</a><br>
+                <!-- <a href="/countries">Countries</a><br> -->
                 <a href="/market">Market</a><br>
                 <a href="/logout">Logout</a><br>
             </nav>
@@ -53,6 +64,12 @@
                     {{title}}
                 {% endif %}
             </div>
+
+            {% if current_user.is_authenticated %}
+                <b>Your balance:</b> <span class="m">{{ "{:,.2f}".format(current_user.balance) }}</span>
+                <br>
+                <br>
+            {% endif %}
 
             {% with msgs = get_flashed_messages(with_categories=true) %}
                 {% if msgs %}
@@ -71,11 +88,12 @@
     </div>
 
     <footer>
-        &copy; Licence
-		Copyright @ 2021 Market site SLO, inc. All rights reserved.
+		Copyright &copy; 2021 Market site inc., All rights reserved.
 		<br>
-		Terms of Use | Privacy Policy - Reserved
+		<a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
 	</footer>
     <script src="{{url_for('static', filename='js/script.js')}}"></script>
+    <script src="{{url_for('static', filename='js/modal_script.js')}}"></script>
+
     {% block javascript %}{% endblock %}
 </body>

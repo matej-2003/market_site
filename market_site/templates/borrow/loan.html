@@ -1,0 +1,219 @@
+{% extends "layout.html" %} {% block style %}
+<style>
+    table {
+        width: 100%;
+    }
+    
+    img[min] {
+        width: auto;
+        height: 4rem;
+    }
+    
+    [mortgage] {
+        height: 50vh;
+        overflow: auto;
+    }
+    
+    [small] {
+        font-size: smaller;
+    }
+    
+    .modal table td {
+        padding: 0.2em;
+    }
+    
+    ul[items] {
+        margin: 0;
+    }
+</style>
+{% endblock %} {% block meta_tags %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/selectable_table.css')}}"> {% endblock %} {% block content %}
+<table tb>
+    <tr>
+        <td colspan="2">
+            Take a loan at {{ bank.name }}
+            <br>
+            <img company_logo src="/static/logos/{{ bank.get_images()[0] }}" alt="{{ bank.name }} image">
+            <br> {{ bank.country.name }}
+        </td>
+    </tr>
+    <tr>
+        <th colspan="2">User data</th>
+    </tr>
+    <tr>
+        <td>Number of repayments</td>
+        <td><input type="number"></td>
+    </tr>
+    <tr>
+        <td>Amount</td>
+        <td><input type="number"></td>
+    </tr>
+    <tr>
+        <td>Interest rate</td>
+        <td><input type="text" value="11%"></td>
+    </tr>
+    <tr>
+        <td>Collateral</td>
+        <td>
+            <button for="mortgage_modal">Mortgage</button><br>
+            <div id="mortgage_modal" class="modal">
+                <div class="modal_content">
+                    <div class="modal_header">Choose an asset</div>
+                    <div selection_info>
+                        <div class="toolbar" for="asset_table"></div>
+                        <!-- <br>
+                        <table small>
+                            <tr>
+                                <th>Total value</th>
+                                <th>Name</th>
+                            </tr>
+                            <tr>
+                                <td total>100$</td>
+                                <td>
+                                    <ul items></ul>
+                                </td>
+                            </tr>
+                        </table> -->
+                    </div>
+                    <hr>
+                    <div mortgage>
+                        <!-- <table class="selectable" id="asset_table">
+                            {% for asset in current_user.hard_assets %}
+                            <tr>
+                                <td><input type="checkbox" name="{{ asset.id }}"></td>
+                                <td><img min src="/static/hard_assets/{{ asset.get_images()[0] }}"></td>
+                                <td>{{ asset.name }}</td>
+                                <td><span class="m">${{ "{:,.2f}".format(asset.value) }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </table> -->
+                    </div>
+                    <hr>
+                    <div>
+                        <button cancel>CANCEL</button>
+                        <button select>SELECT</button>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>Mortgage selection</td>
+        <td selected>
+        </td>
+    </tr>
+</table>
+
+{% endblock %} {% block javascript %}
+<script src="{{url_for('static', filename='js/selectable_table.js')}}"></script>
+<script>
+    async function get_user_hard_assets(id) {
+        const response = await fetch('/api/user/' + id + '/hard_assets');
+        const data = await response.json();
+        process_data(data);
+    }
+
+    function process_data(data) {
+        function row_(datum) {
+            let row = ce('tr');
+
+            let checkbox = ce('input', {
+                'type': 'checkbox',
+                'name': datum['id']
+            });
+            let chk_row = row.insertCell(-1);
+            chk_row.append(checkbox);
+
+            let img_row = row.insertCell(-1);
+            let img = ce('img', {
+                'src': '/static/hard_assets/' + datum['images'][0],
+                'min': null
+            });
+            img_row.append(img);
+
+            let name = row.insertCell(-1);
+            name.innerHTML = datum['name'];
+            let value = row.insertCell(-1);
+            value.innerHTML = `$${datum['value']}`;
+
+            return new Row(row, checkbox);
+        }
+
+        const st = new SelectableTable(
+            data = data,
+            toolbar = $('[for=asset_table]'),
+            make_row = row_,
+            on_click = update,
+            on_all = update,
+            on_toggle = update,
+            on_clear = update,
+        );
+
+        let tb = ce('table', {
+            'small': null
+        });
+        $('[selection_info]').append(tb);
+        let tbr = tb.insertRow(0);
+        let ul = ce('ul', {
+            'items': null
+        });
+        tbr.insertCell(0).append(ul);
+        let full_value = tbr.insertCell(0);
+
+        function update() {
+            ul.innerHTML = '';
+            full_value.innerHTML = '$0';
+            let fp = 0;
+            for (let row of st.rows) {
+                if (row.checkbox.checked) {
+                    let li = ce('li');
+                    li.innerHTML = `${row.html.cells[2].innerHTML}`;
+                    ul.append(li);
+
+                    fp += parseFloat(row.html.cells[3].innerHTML.replace('$', ''));
+                }
+            }
+
+            full_value.innerHTML = `$${fp}`;
+        }
+
+        update();
+
+
+        $('[mortgage]').append(st.table);
+        let select = $('[select]');
+        let cancel = $('[cancel]');
+
+        cancel.addEventListener('click', () => {
+            st.clear_();
+            stop_modal('mortgage_modal');
+        });
+
+        select.addEventListener('click', () => {
+            let selected = st.get_selected();
+            let selected_table = ce('table');
+            for (let i of selected) {
+                let row = selected_table.insertRow(-1);
+/*
+                let img_row = row.insertCell(-1);
+                let img = ce('img', {
+                    'src': '/static/hard_assets/' + i['images'][0],
+                    'min': null
+                });
+                img_row.append(img);
+*/    
+                let name = row.insertCell(-1);
+                name.innerHTML = i['name'];
+                let value = row.insertCell(-1);
+                value.innerHTML = `$${i['value']}`;
+            }
+            $('td[selected]').innerHTML = '';
+            $('td[selected]').append(selected_table);
+            stop_modal('mortgage_modal');
+        });
+    }
+
+    get_user_hard_assets(1);
+    start_modal('mortgage_modal');
+</script>
+{% endblock %}

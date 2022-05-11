@@ -7,8 +7,8 @@
     }
 
     img[vertical_logo] {
-        max-height: 8em;
-        width: auto;
+        max-width: 10em;
+        height: auto;
     }
 
     .info {
@@ -31,13 +31,14 @@
     }
 
     a[name] {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
 
     .logo {
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 3em;
         margin-top: 0.5em;
     }
 </style>
@@ -45,22 +46,22 @@
 {% block content %}
 
 <div class="panel">
-    {% for sale in sales %}
+    {% for company in companies %}
     <div class="container">
         <div class="logo">
-            <a href="/hard_asset/asset/{{ sale.hard_asset.id }}">
-            <img vertical_logo src="/static/hard_assets/{{ sale.hard_asset.get_images()[0] }}"
-                alt="{{ sale.hard_asset.name }} image">
+            <a href="/market/liquid_assets/bonds/{{ company.id }}">
+            <img vertical_logo src="/static/companies/{{ company.get_images()[0] }}"
+                alt="{{ company.name }} image">
             </a>
         </div>
         <br>
-        <a name href="/hard_asset/asset/{{ sale.hard_asset.id }}">{{ sale.hard_asset.name }}</a>
+        <a name href="/market/liquid_assets/bonds/{{ company.id }}">{{ company.name }}</a>
+        <br>
         <br>
         <div info>
-            <span mark>Sale price</span>: ${{ '{:,.2f}'.format(sale.price) }}<br>
-            <span mark>Propery value</span>: ${{ '{:,.2f}'.format(sale.hard_asset.value) }}<br>
-            <span mark>Current owner</span>: <a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a><br>
-            <span mark>Sale start</span>: {{ sale.sale_start.strftime('%d/%m/%Y %H:%M:%S') }}<br>
+            <span mark>Value</span>: <span class="m">{{ '{:,.2f}'.format(company.value) }}</span>
+            <br>
+            <span mark>Bond number</span>: {{ company.bond_number() }}
         </div>
     </div>
     {% endfor %}

@@ -21,19 +21,21 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=True)
     full_name = db.Column(db.String(80), unique=False, nullable=True)
-    last_login = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    last_login = db.Column(db.DateTime, nullable=True, default=datetime.now)
     type = db.Column(db.Integer, default=PHYSICAL_PERSON)
     # company = db.Column(db.String(40), unique=True, nullable=True)      # only if the type==LEGAL_PERSON
     company_id = db.Column(db.Integer, unique=True, nullable=True)      # only if the type==LEGAL_PERSON
     bank_id = db.Column(db.Integer, unique=True, nullable=True)      # only if the type==BANKER
 
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     balance = db.Column(db.Float, nullable=False, default=0)
 
     bank_loans = db.relationship('BankLoan', backref='borrower', lazy=True)
     hard_assets = db.relationship('HardAsset', backref='owner', lazy=True)
     company_shares = db.relationship('CompanyShare', backref='owner', lazy=True)
     company_bonds = db.relationship('CompanyBond', backref='owner', lazy=True)
+    # auctions = db.relationship("AuctionBidder", backref='bidder', lazy=True)
+
     total_payments_received = db.Column(db.Float, nullable=True, default=0)
     total_payments_made = db.Column(db.Float, nullable=True, default=0)
 
@@ -42,6 +44,12 @@ class User(db.Model, UserMixin):
 
     def share_number(self, company):
         return len(self.get_shares(company))
+
+    def get_bonds(self, company):
+        return db.session.query(CompanyBond).filter_by(company_id=company.id, owner_id=self.id).all()
+
+    def bond_number(self, company):
+        return len(self.get_bonds(company))
 
     def share_value(self, company):
         return self.share_number(company) * company.share_value
@@ -78,10 +86,8 @@ class User(db.Model, UserMixin):
 
     def pay(self, amount, payee, info=None):
         if (amount <= self.balance) and (amount > 0) and (self.id != payee.id):
-            self.balance -= amount
+            self.make_payment(amount)
             payee.receive_payment(amount)
-            payee.total_payments_received += amount
-            self.total_payments_made += amount
             t = Transaction(payer_id=self.id, payee_id=payee.id, amount=amount, info=info)
             db.session.add(t)
             db.session.commit()
@@ -91,6 +97,15 @@ class User(db.Model, UserMixin):
     
     def receive_payment(self, amount):
         self.balance += amount
+        self.total_payments_received += amount
+        round(self.balance, 2)
+        round(self.total_payments_received, 2)
+    
+    def make_payment(self, amount):
+        self.balance -= amount
+        self.total_payments_made += amount
+        round(self.balance, 2)
+        round(self.total_payments_made, 2)
     
     def get_company(self):
         return Company.query.get(self.company_id)
@@ -106,6 +121,7 @@ class User(db.Model, UserMixin):
         return f'User({self.id}, {self.username}, {self.email})'
 
 
+
 class Transaction(db.Model):
     __tablename__ = 'transactions'
     id = db.Column(db.Integer, primary_key=True)
@@ -114,11 +130,12 @@ class Transaction(db.Model):
     payee_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     payee = db.relationship("User", foreign_keys=[payee_id])
     amount = db.Column(db.Float, nullable=False)
-    time = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
+    time = db.Column(db.DateTime, nullable=True, default=datetime.now)
     info = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         return f'HardAsset({self.time}, ${self.amount}, {self.payer.username} -> {self.payee.username}, {self.id})'
+
 
 
 class HardAsset(db.Model):
@@ -133,22 +150,27 @@ class HardAsset(db.Model):
     # mortgage_status = db.Column(db.Integer, nullable=False, default=FOR_SALE)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     sales = db.relationship('HardAssetSale', backref='hard_asset', lazy=True)
+    auctions = db.relationship('Auction', backref='hard_asset', lazy=True)
     mortgages = db.relationship('BankLoan', backref='hard_asset', lazy=True)
 
     def is_under_mortgage(self):
-        if self.mortgages[-1].status == REPAID:
-            return True
+        if self.mortgages:
+            return self.mortgages[-1].status == REPAID
         return False
 
     # owner1 = db.relationship("User", foreign_keys=[owner_id])
 
     def is_on_sale(self):
-        if not self.sales:
-            return False
-        elif self.sales[-1].status == SOLD:
-            return False
-        else:
-            return True
+        if self.sales:
+            if self.sales[-1].status == FOR_SALE:
+                return True
+        return False
+    
+    def is_on_auction(self):
+        if self.auctions:
+            if self.auctions[-1].status == FOR_SALE:
+                return True
+        return False
 
     def get_images(self):
         image_list = []
@@ -158,8 +180,24 @@ class HardAsset(db.Model):
         except:
             return False
 
+    def objectify(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'value': self.value,
+            'info': self.info,
+            'images': json.loads(self.images),
+            'amount': self.amount,
+            'type': self.type,
+            'owner_id': self.owner_id,
+        }
+
+    def to_json(self):
+        return json.dumps(self.objectify())
+
     def __repr__(self):
         return f'HardAsset({self.id}, name={self.name}, value={self.value}, owner={self.owner})'
+
 
 
 class HardAssetSale(db.Model):
@@ -171,8 +209,8 @@ class HardAssetSale(db.Model):
     seller_id = db.Column(db.Integer, nullable=True)
     buyer_id = db.Column(db.Integer, nullable=True)
 
-    sale_start = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
-    sale_end = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True, default=datetime.now)
+    end = db.Column(db.DateTime, nullable=True)
 
     def sell(self, buyer):
         if buyer.balance >= self.price and buyer != self.hard_asset.owner:
@@ -180,7 +218,7 @@ class HardAssetSale(db.Model):
             self.buyer_id = buyer.id
             self.hard_asset.owner_id = buyer.id
             self.status = SOLD
-            self.sale_end = datetime.utcnow()
+            self.end = datetime.now()
             db.session.commit()
             return OK
         return ERROR
@@ -193,6 +231,7 @@ class HardAssetSale(db.Model):
 
     def __repr__(self):
         return f'HardAssetSale({self.id}, name={self.hard_asset.name}, price={self.price})'
+
 
 
 class Company(db.Model):
@@ -242,6 +281,7 @@ class Company(db.Model):
         return f'Company({self.id}, {self.name}, value={self.value})'
 
 
+
 class CompanyShare(db.Model):
     __tablename__ = 'company_shares'
     id = db.Column(db.Integer, primary_key=True)
@@ -260,6 +300,7 @@ class CompanyShare(db.Model):
         return f'CompanyShare({self.id}, company={self.company_id}, owner={self.owner_id})'
 
 
+
 class CompanyShareSale(db.Model):
     __tablename__ = 'company_share_sales'
     id = db.Column(db.Integer, primary_key=True)
@@ -269,8 +310,8 @@ class CompanyShareSale(db.Model):
     seller_id = db.Column(db.Integer, nullable=True)
     buyer_id = db.Column(db.Integer, nullable=True)
 
-    sale_start = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
-    sale_end = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True, default=datetime.now)
+    end = db.Column(db.DateTime, nullable=True)
 
     def sell(self, buyer):
         if buyer.balance >= self.price and buyer != self.share.owner:
@@ -278,7 +319,7 @@ class CompanyShareSale(db.Model):
             self.buyer_id = buyer.id
             self.share.owner_id = buyer.id
             self.status = SOLD
-            self.sale_end = datetime.utcnow()
+            # self.end = datetime.now()
             # set share value to price
             self.share.company.share_value = self.price
             db.session.commit()
@@ -293,6 +334,7 @@ class CompanyShareSale(db.Model):
 
     def __repr__(self):
         return f'CompanyShareSale({self.id}, price={self.price})'
+
 
 
 class CompanyBond(db.Model):
@@ -321,6 +363,7 @@ class CompanyBond(db.Model):
         return f'CompanyBond({self.id}, company={self.company_id}, owner={self.owner_id})'
 
 
+
 class CompanyBondSale(db.Model):
     __tablename__ = 'company_bond_sales'
     id = db.Column(db.Integer, primary_key=True)
@@ -330,8 +373,8 @@ class CompanyBondSale(db.Model):
     seller_id = db.Column(db.Integer, nullable=True)
     buyer_id = db.Column(db.Integer, nullable=True)
 
-    sale_start = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
-    sale_end = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True, default=datetime.now)
+    end = db.Column(db.DateTime, nullable=True)
 
     def sell(self, buyer):
         if buyer.balance >= self.price and buyer != self.bond.owner:
@@ -339,7 +382,7 @@ class CompanyBondSale(db.Model):
             self.buyer_id = buyer.id
             self.bond.owner_id = buyer.id
             self.status = SOLD
-            self.sale_end = datetime.utcnow()
+            self.end = datetime.now()
             db.session.commit()
             return OK
         return ERROR
@@ -354,6 +397,7 @@ class CompanyBondSale(db.Model):
         return f'CompanyBondSale({self.id}, price={self.price})'
 
 
+
 class Bank(db.Model):
     __tablename__ = 'banks'
     id = db.Column(db.Integer, primary_key=True)
@@ -363,6 +407,9 @@ class Bank(db.Model):
     loans = db.relationship('BankLoan', backref='bank', lazy=True)
     legal_person_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     legal_person = db.relationship("User", foreign_keys=[legal_person_id])
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
+    auctions = db.relationship('Auction', backref='bank', lazy=True)
+    auction_commission = db.Column(db.Float, nullable=False, default=1)
 
     def get_images(self):
         image_list = []
@@ -376,6 +423,7 @@ class Bank(db.Model):
         return f'Bank({self.id}, name={self.name})'
 
 
+
 class BankLoan(db.Model):
     __tablename__ = 'bank_loans'
     id = db.Column(db.Integer, primary_key=True)
@@ -384,7 +432,7 @@ class BankLoan(db.Model):
     bank_id = db.Column(db.Integer, db.ForeignKey('banks.id'))
     status = db.Column(db.String(20), nullable=False, default=UNPAID)
     interest_rate = db.Column(db.Float, nullable=False, default=1)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     due_date = db.Column(db.DateTime, nullable=False)
     # loan security ot mortgage
     hard_asset_id = db.Column(db.Integer, db.ForeignKey('hard_assets.id'))
@@ -413,6 +461,7 @@ class BankLoan(db.Model):
         return f'BankLoan({self.id}, amount={self.amount}, status={self.status})'
 
 
+
 class PersonalLoans(db.Model):
     __tablename__ = 'personal_loans'
     id = db.Column(db.Integer, primary_key=True)
@@ -423,7 +472,7 @@ class PersonalLoans(db.Model):
     lender = db.relationship("User", foreign_keys=[lender_id])
     status = db.Column(db.String(20), nullable=False, default=UNPAID)
     interest_rate = db.Column(db.Float, nullable=False, default=1)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     due_date = db.Column(db.DateTime, nullable=True)
 
     def full_cost(self):
@@ -440,3 +489,163 @@ class PersonalLoans(db.Model):
 
     def __repr__(self):
         return f'PersonalLoan({self.id}, amount={self.amount}, status={self.status})'
+
+
+
+class Country(db.Model):
+    __tablename__ = 'countries'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    code = db.Column(db.String(3), nullable=True)
+    images = db.Column(db.Text, nullable=True)
+    info = db.Column(db.Text, nullable=True)
+    income_tax = db.Column(db.Float, nullable=False, default=0)
+    capital_tax = db.Column(db.Float, nullable=False, default=0)
+    vat = db.Column(db.Float, nullable=False, default=0)
+    customs_tax = db.Column(db.Float, nullable=False, default=0)
+    banks = db.relationship('Bank', backref='country', lazy=True)
+
+    def __repr__(self):
+        return f'Country(name={self.name}, code={self.code})'
+
+
+
+class Auction(db.Model):
+    __tablename__ = 'auctions'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.Integer, nullable=False, default=FOR_SALE)
+
+    hard_asset_id = db.Column(db.Integer, db.ForeignKey('hard_assets.id'))
+    bank_id = db.Column(db.Integer, db.ForeignKey('banks.id'))
+    initial_price = db.Column(db.Float, nullable=False, default=0)
+    final_price = db.Column(db.Float, nullable=False, default=1)
+    security_deposit = db.Column(db.Float, nullable=False, default=1)
+    
+    seller_id = db.Column(db.Integer, nullable=True)
+    buyer_id = db.Column(db.Integer, nullable=True)
+    bidders = db.relationship('AuctionBidder', backref='auction', lazy=True)
+    bids = db.relationship('AuctionBid', backref='auction', lazy=True)
+
+    start = db.Column(db.DateTime, nullable=True, default=datetime.now)
+    end = db.Column(db.DateTime, nullable=False)
+
+    def add_bidder(self, user):
+        if user.id != self.seller_id and not self.is_bidder(user):
+            if user.balance >= (self.bank.auction_commission + self.security_deposit):
+                user.pay(self.bank.auction_commission, self.bank.legal_person, info='Commission')
+                user.pay(self.security_deposit, self.bank.legal_person, info='Security deposit')
+                bidder = AuctionBidder(auction_id=self.id, user_id=user.id)
+                db.session.add(bidder)
+                db.session.commit()
+                return OK
+        return ERROR
+    
+    def remove_bidder(self, user):
+        bidder = self.get_bidder(user)
+        for i in bidder.bids:
+            db.session.delete(i)
+        self.bank.legal_person.pay(self.security_deposit, user, info='Security deposit return')
+        db.session.delete(bidder)
+        db.session.commit()
+
+    def last_bid(self):
+        if len(self.bids) != 0:
+            return self.bids[-1]
+        return False
+
+    def place_bid(self, user, amount):
+        bidder = self.get_bidder(user)
+        if bidder and (amount >= self.initial_price) and (amount >= self.final_price):
+            self.final_price = amount
+            bid = AuctionBid(amount=amount, bidder_id=bidder.id, auction_id=self.id)
+            db.session.add(bid)
+            db.session.commit()
+            return OK
+        return ERROR
+    
+    def get_bids(self, user):
+        q = db.session.query(AuctionBid)\
+            .join(AuctionBidder, AuctionBid.bidder_id == AuctionBidder.id)\
+            .where(AuctionBid.auction_id == self.id, AuctionBidder.user_id == user.id)
+        return q.all()
+
+    # def end(self):
+    #     pass
+
+    def is_over(self):
+        return datetime.now() > self.end
+
+    def get_bidder(self, user):
+        return db.session.query(AuctionBidder)\
+            .where(AuctionBidder.auction_id == self.id, AuctionBidder.user_id == user.id)\
+            .first()
+
+    def is_bidder(self, user):
+        return not not self.get_bidder(user)
+
+    def get_buyer(self):
+        return User.query.get(self.buyer_id)
+
+    def get_seller(self):
+        return User.query.get(self.seller_id)
+
+    def __repr__(self):
+        return f'Auction({self.id}, price={self.initial_price}, seller_id={self.seller_id})'
+
+
+
+class AuctionBidder(db.Model):
+    __tablename__ = 'auction_bidders'
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", foreign_keys=[user_id])
+    bids = db.relationship('AuctionBid', backref='bidder', lazy=True)
+
+    def last_bid(self):
+        if len(self.bids) >= 1:
+            return self.bids[-1]
+        return False
+
+    def place_bid(self, amount):
+        if amount > self.auction.final_price:
+            self.auction.final_price = amount
+            bid = AuctionBid(amount=amount, bidder_id=self.id, auction_id=self.auction_id)
+            db.session.add(bid)
+            db.session.commit()
+            return OK
+        return ERROR
+
+    def __repr__(self):
+        return f'AuctionBidder({self.id}, auction={self.auction_id}, user_id={self.user_id})'
+
+
+
+class AuctionBid(db.Model):
+    __tablename__ = 'auction_bids'
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime, nullable=True, default=datetime.now)
+    amount = db.Column(db.Float, nullable=False, default=1)
+    auction_id = db.Column(db.Integer, db.ForeignKey('auctions.id'))
+    bidder_id = db.Column(db.Integer, db.ForeignKey('auction_bidders.id'))
+
+    def __repr__(self):
+        return f'AuctionBid({self.id}, auction={self.auction_id}, amount={self.amount})'
+
+
+
+class Trade(db.Model):
+    __tablename__ = 'trades'
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f'Trade({self.id})'
+
+
+
+class TradeOffer(db.Model):
+    __tablename__ = 'trade_offers'
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return f'TradeOffer({self.id})'

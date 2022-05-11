@@ -1,39 +1,45 @@
 {% extends "layout.html" %}
 {% block content %}
 
-Your balance: ${{ '{:,.2f}'.format(current_user.balance) }}
+My auctions: <a href="/auctions/user/{{ current_user.id }}">auctions</a><br>
+My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
 
+<br>
 <h3>Payments made</h3>
-Total payments made: ${{ current_user.total_payments_made }}
+Total payments made: <span class="m">{{ '{:,.2f}'.format(current_user.total_payments_made) }}</span>
 <table tb>
     <tr>
         <th>Amount</th>
         <th>Receipient</th>
         <th>Time</th>
+        <th>Info</th>
     </tr>
-    {% for payment in current_user.payments_made() %}
+    {% for payment in current_user.payments_made()[-10:] %}
         <tr>
-            <td>${{ payment.amount }}</td>
+            <td><span class="m">{{ payment.amount }}</span></td>
             <td>{{ payment.payee.username }}</td>
-            <td>{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+            <td>{{ payment.info }}</td>
         </tr>
     {% endfor %}
 </table>
 <br>
 
 <h3>Payments received</h3>
-Total payments received: ${{ current_user.total_payments_received }}
+Total payments received: <span class="m">{{ '{:,.2f}'.format(current_user.total_payments_received) }}</span>
 <table tb>
     <tr>
         <th>Amount</th>
         <th>Payer</th>
         <th>Time</th>
+        <th>Info</th>
     </tr>
-    {% for payment in current_user.payments_received() %}
+    {% for payment in current_user.payments_received()[-10:] %}
         <tr>
-            <td>${{ payment.amount }}</td>
+            <td><span class="m">{{ payment.amount }}</span></td>
             <td>{{ payment.payer.username }}</td>
-            <td>{{ payment.time }}</td>
+            <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+            <td>{{ payment.info }}</td>
         </tr>
     {% endfor %}
 </table>

@@ -1,5 +1,4 @@
-{% extends "layout.html" %}
-{% block style %}
+{% extends "layout.html" %} {% block style %}
 <style>
     .box {
         display: flex;
@@ -7,38 +6,34 @@
         justify-content: space-between;
         gap: 1em;
     }
-
+    
     img[asset_image] {
         height: auto;
     }
-
+    
     table {
         width: 100%;
     }
-
+    
     table td[value] {
         width: 15em;
     }
-
+    
     table tr {
         padding: 0.5em;
         border-bottom: 1px solid gray;
     }
-
+    
     [content] {
         width: 80%;
     }
-
+    
     textarea {
         width: 100%;
         height: 3rem;
     }
 </style>
-{% endblock %}
-
-{% block content %}
-<b>Your balance:</b> ${{ current_user.balance }}
-<br>
+{% endblock %} {% block content %}
 <b>The property you want to sell:</b>
 <br>
 <center>
@@ -67,19 +62,19 @@
             </tr>
             <tr>
                 <td>Value</td>
-                <td value>${{ asset.value }}</td>
+                <td value><span class="m">{{ asset.value }}</span></td>
             </tr>
             <tr>
                 <td>Set sale price</td>
-                <td value>$<input type="number" step="1.00" name="price" value="{{ sale.price }}"></td>
+                <td value>$<input type="number" step="1.00" name="price" value="{% if sale %}{{ sale.price }}{% else %}{{ asset.value }}{% endif %}"></td>
             </tr>
             <tr>
                 <td>Diffrence</td>
-                <td value diff></td>
+                <td value><span class="m" diff></span></td>
             </tr>
             <tr>
                 <td>Returns</td>
-                <td value returns></td>
+                <td value><span class="p" returns></span></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -92,46 +87,41 @@
             </tr>
         </table>
     </div>
-    <br>
-    {% if asset.is_on_sale() %}
+    <br> {% if asset.is_on_sale() %}
     <a href="{{ url_for('user_assets') }}"><button>CANCEL</button></a>
-        <input type="submit" value="EDIT" name="action">
-        <input type="submit" value="DELETE" name="action">
-    {% else %}
-        <a href="{{ url_for('user_assets') }}"><button>CANCEL</button></a>
-        <input type="submit" value="CONFIRM" name="action">
-    {% endif %}
+    <input type="submit" value="CONFIRM" name="action">
+    <input type="submit" value="DELETE" name="action"> {% else %}
+    <a href="{{ url_for('user_assets') }}"><button>CANCEL</button></a>
+    <input type="submit" value="CONFIRM" name="action"> {% endif %}
 </form>
-{% endblock %}
-
-{% block javascript %}
+{% endblock %} {% block javascript %}
 <script>
     let info = document.querySelector('textarea[name=info]');
     info.value = info.value.trim();
-    let value = {{ asset.value }};
+    let value = {{asset.value}};
     let price = document.querySelector('input[name=price]');
-    let diff = document.querySelector('td[diff]');
-    let returns = document.querySelector('td[returns]');
-    show_diff(price.value - value);
-    show_returns(((price.value - value) / value * 100).toFixed(2));
+    let diff = document.querySelector('span[diff]');
+    let returns = document.querySelector('span[returns]');
+    show(diff, price.value - value);
+    show(returns, ((price.value - value) / value * 100).toFixed(2));
 
     price.addEventListener('change', () => {
-        show_diff(price.value - value);
-        show_returns(((price.value - value) / value * 100).toFixed(2));
+        show(diff, price.value - value);
+        show(returns, ((price.value - value) / value * 100).toFixed(2));
     });
 
-    function show_returns(n) {
-        if (n < 0) returns.style.color = 'red';
-        else if (n > 0) returns.style.color = 'green';
-        else returns.style.color = 'black';
-        returns.innerHTML = `\%${n}`;
-    }
-
-    function show_diff(n) {
-        if (n < 0) diff.style.color = 'red';
-        else if (n > 0) diff.style.color = 'green';
-        else diff.style.color = 'black';
-        diff.innerHTML = `\$${n}`;
+    function show(e, n) {
+        if (n < 0) {
+            e.classList.add('neg');
+            e.classList.remove('pos');
+        } else if (n > 0) {
+            e.classList.add('pos');
+            e.classList.remove('neg');
+        } else {
+            e.classList.remove('pos');
+            e.classList.remove('neg');
+        }
+        e.innerHTML = n;
     }
 </script>
 {% endblock %}

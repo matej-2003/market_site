@@ -12,11 +12,11 @@
     </tr>
     <tr>
         <td>Company value</td>
-        <td>${{ '{:,.2f}'.format(company.value) }}</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
     </tr>
     <tr>
         <td>Company debt</td>
-        <td>${{ '{:,.2f}'.format(company.get_debt()) }}</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.get_debt()) }}</span></td>
     </tr>
     <tr>
         <td>Total shares</td>
@@ -24,7 +24,7 @@
     </tr>
     <tr>
         <td>Share value</td>
-        <td>${{ '{:,.2f}'.format(company.share_value) }}</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.share_value) }}</span></td>
     </tr>
     <tr>
         <td>Share list</td>
@@ -43,11 +43,11 @@
     </tr>
     <tr>
         <td>Your share value</td>
-        <td>${{ '{:.3f}'.format(current_user.share_value(company)) }}</td>
+        <td><span class="m">{{ '{:.3f}'.format(current_user.share_value(company)) }}</span></td>
     </tr>
     <tr>
         <td>Your share %</td>
-        <td>{{ '{:.3f}'.format(100 * current_user.share_percentage(company)) }}%</td>
+        <td><span class="p">{{ '{:.3f}'.format(100 * current_user.share_percentage(company)) }}</span></td>
     </tr>
     <tr>
         <td>Information</td>

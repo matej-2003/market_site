@@ -20,21 +20,6 @@
         font-size: small;
     }
 
-    .for_sale {
-        background-color: #00ff0d;
-        color: white;
-        padding: 0.1em;
-        border-radius: 3px;
-        font-weight: bold;
-    }
-
-    .not_for_sale {
-        background-color: #ff0000;
-        color: #ffffff;
-        padding: 0.1em;
-        border-radius: 3px;
-        font-weight: bold;
-    }
 
     .container {
         display: inline-grid;
@@ -54,6 +39,9 @@
 </style>
 {% endblock %}
 {% block content %}
+My auctions: <a href="/auctions/user/{{ current_user.id }}">auctions</a><br>
+My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
+<br>
 <table tb>
     <tr>
         <td>ID</td>
@@ -69,7 +57,7 @@
     </tr>
     <tr>
         <td>Balance</td>
-        <td>${{ user.balance }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
         <td>Type</td>
         <td>
             {% if user.type == 0 %}
@@ -81,16 +69,16 @@
     </tr>
     <tr>
         <td>Last login</td>
-        <td>{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+        <td><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
         <td>Date created</td>
-        <td>{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+        <td><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
     </tr>
 </table>
 <br>
 <a href="/transaction?receipient_id={{user.id}}"><button>Make transactions</button></a>
 <br>
 <h3>Payments made</h3>
-Total payments made: ${{ user.total_payments_made }}
+Total payments made: <span class="m">{{ '{:,.2f}'.format(user.total_payments_made) }}</span>
 <table tb>
     <tr>
         <th>Amount</th>
@@ -98,11 +86,11 @@ Total payments made: ${{ user.total_payments_made }}
         <th>Time</th>
         <th>Info</th>
     </tr>
-    {% for payment in user.payments_made() %}
+    {% for payment in user.payments_made()[-10:] %}
         <tr>
-            <td>${{ payment.amount }}</td>
+            <td><span class="m">{{ payment.amount }}</span></td>
             <td>{{ payment.payee.username }}</td>
-            <td>{{ payment.time }}</td>
+            <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
             <td>{{ payment.info }}</td>
         </tr>
     {% endfor %}
@@ -110,7 +98,7 @@ Total payments made: ${{ user.total_payments_made }}
 <br>
 
 <h3>Payments received</h3>
-Total payments received: ${{ user.total_payments_received }}
+Total payments received: <span class="m">{{ '{:,.2f}'.format(user.total_payments_received) }}</span>
 <table tb>
     <tr>
         <th>Amount</th>
@@ -118,11 +106,11 @@ Total payments received: ${{ user.total_payments_received }}
         <th>Time</th>
         <th>Info</th>
     </tr>
-    {% for payment in user.payments_received() %}
+    {% for payment in user.payments_received()[-10:] %}
         <tr>
-            <td>${{ payment.amount }}</td>
+            <td><span class="m">{{ payment.amount }}</span></td>
             <td>{{ payment.payer.username }}</td>
-            <td>{{ payment.time }}</td>
+            <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
             <td>{{ payment.info }}</td>
         </tr>
     {% endfor %}
@@ -133,7 +121,7 @@ Total payments received: ${{ user.total_payments_received }}
 
 <h3>Hard assets</h3>
 <div class="container">
-    {% for asset in current_user.hard_assets %}
+    {% for asset in user.hard_assets %}
     <div class="asset_item">
         <div>
             <a href="/hard_asset/asset/{{ asset.id }}">
@@ -142,13 +130,17 @@ Total payments received: ${{ user.total_payments_received }}
         </div>
         <div>
             <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
-            <span class="gray">Value: </span>${{ asset.value }}<br>
+            <span class="gray">Value: </span><span class="m">{{ asset.value }}</span><br>
             <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
             <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
             <span class="gray">Status: </span>
-            <span class="small {% if asset.is_on_sale() %} for_sale {% else %} not_for_sale {% endif %}">
-                {% if asset.is_on_sale() %} FOR SALE {% else %} NOT FOR SALE {% endif %}
-            </span>
+            {% if asset.is_on_sale() %}
+                <span class="status small for_sale"></span>
+            {% elif asset.is_on_auction() %}
+                <span class="status small auction"></span>
+            {% else %}
+                <span class="status small not_for_sale"></span>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -172,7 +164,7 @@ Total payments received: ${{ user.total_payments_received }}
             </a>
         </td>
         <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td>${{ "{:,.2f}".format(company.share_value * share_number ) }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(company.share_value * share_number ) }}</span></td>
         <td>{{ share_number }}</td>
     </tr>
     {% endfor %}
@@ -197,9 +189,9 @@ Total payments received: ${{ user.total_payments_received }}
             </a>
         </td>
         <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td>${{ "{:,.2f}".format(bond.value * bond_number) }}</td>
-        <td>{{ "{:,.2f}".format(bond.interest_rate) }}%</td>
-        <td>${{ "{:,.2f}".format(bond.full_value() * bond_number) }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(bond.value * bond_number) }}</span></td>
+        <td><span class="p">{{ "{:,.2f}".format(bond.interest_rate) }}</span></td>
+        <td><span class="m">{{ "{:,.2f}".format(bond.full_value() * bond_number) }}</span></td>
         <td>{{ bond_number }}</td>
     </tr>
     {% endfor %}

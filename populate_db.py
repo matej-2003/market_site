@@ -8,7 +8,7 @@ db.drop_all()
 db.create_all()
 names = ["oliver", "noah", "george", "arthur", "freddie", "leo", "theo", "oscar", "charlie", "harry", "archie", "alfie", "jack"]
 
-for name in names[:2]:
+for name in names[:4]:
     b = User(
         username=name,
         password=bc.generate_password_hash(name),
@@ -146,30 +146,52 @@ for i in assets1:
         seller_id = i.owner.id,
     )
     db.session.add(ha)
-    db.session.commit()
-    print(ha)
+db.session.commit()
 
 
-# sales = HardAssetSale.query.all()
-# for i in sales:
-#     buyer = random.choice(users)
-#     if buyer.id != i.seller_id:
-#         print(i.sell(buyer))
+sales = HardAssetSale.query.all()
+for i in sales:
+    buyer = random.choice(users)
+    if buyer.id != i.seller_id:
+        print(i.sell(buyer))
 
-# for _ in range(20):
-#     payer = random.choice(User.query.all())
-#     payee = random.choice(User.query.all())
-#     payer.pay(random.randrange(10, 100), payee)
+for _ in range(20):
+    payer = random.choice(User.query.all())
+    payee = random.choice(User.query.all())
+    print("Transaction ")
+    payer.pay(random.randrange(10, 100), payee)
 
-# db.session.commit()
+db.session.commit()
+
+countries = [
+    ["SI", "Slovenia"],
+    ["US", "United States"],
+    ["DE", "Germany"],
+    ["GB", "United Kingdom"],
+    ["ES", "Spain"],
+]
+
+for i, c in enumerate(countries):
+    tax = random.uniform(0.5, 20)
+    u = Country(
+        name = c[1],
+        code = c[0],
+        income_tax = round(random.random() * tax, 2),
+        capital_tax = round(random.random() * tax, 2),
+        vat = round(random.random() * tax, 2),
+        customs_tax = round(random.random() * tax, 2),
+    )
+    db.session.add(u)
+db.session.commit()
+
 
 bank_names = [
-    ['Nova Ljubljanska banka', 'nlb', 100000, 'nlb.png'],
-    ['Bank of America', 'america', 100000, 'america.png'],
-    ['Deutsche Bank', 'deutsche', 100000, 'deutsche.png'],
-    ['Bank of England', 'england', 100000, 'england.png'],
-    ['JPMorgan Chase', 'jpmorgan', 100000, 'jpmorgan.png'],
-    ['Intesa Sanpaolo Bank', 'sanpaolo', 100000, 'sampaolo.png'],
+    ['Nova Ljubljanska banka', 'nlb', 100000, 'nlb.png', 1],
+    ['Bank of America', 'america', 100000, 'america.png', 2],
+    ['Deutsche Bank', 'deutsche', 100000, 'deutsche.png', 3],
+    ['Bank of England', 'england', 100000, 'england.png', 4],
+    ['JPMorgan Chase', 'jpmorgan', 100000, 'jpmorgan.png', 2],
+    ['Intesa Sanpaolo Bank', 'sanpaolo', 100000, 'sampaolo.png', 5],
 ]
 
 for i, bank in enumerate(bank_names):
@@ -182,6 +204,8 @@ for i, bank in enumerate(bank_names):
     b = Bank(
         name = bank[0],
         images = json.dumps([ bank[3] ]),
+        country_id = bank[4],
+        auction_commission = round(random.uniform(1, 20), 2)
     )
     db.session.add(u)
     db.session.add(b)
@@ -231,7 +255,7 @@ companies = Company.query.all()
 for i, company in enumerate(companies):
     bond_price = random.randint(10, 200)
     interest_rate = 1 + random.randint(1, 60) / 100
-    for i in range(random.randint(3, 8)):
+    for i in range(random.randint(1, 3)):
         users = db.session.query(User)\
             .where(User.type == PHYSICAL_PERSON)\
             .all()
@@ -250,11 +274,17 @@ for i, company in enumerate(companies):
         db.session.add(bond)
         print(share)
         print(bond)
+
 db.session.commit()
 
-for n in range(3):
+import time
+import datetime
+
+count = 0
+
+for n in range(1):
     print(f"SHARE SALE {n}")
-    for c in companies:
+    for c in companies[-3:]:
         for s in c.shares:
             ss = CompanyShareSale(
                 price = round(random.uniform(c.share_value, c.share_value * 1.1), 2),
@@ -262,15 +292,48 @@ for n in range(3):
                 seller_id = s.owner_id,
             )
             db.session.add(ss)
-    db.session.commit()
+            # time.sleep(0.5)
+            print(ss)
+    # db.session.commit()
 
     share_sales = db.session.query(CompanyShareSale).where(CompanyShareSale.status == FOR_SALE).all()
-    print(share_sales)
+    # print(share_sales)
 
     for ss in share_sales:
         users = db.session.query(User).where(User.type == PHYSICAL_PERSON).filter(User.id != ss.seller_id).all()
         ss.sell(random.choice(users))
+        ss.end = datetime.datetime.utcnow() + datetime.timedelta(hours=count)
+        # db.session.commit()
+        count += 1
 
+db.session.commit()
+count = 0
+
+for n in range(1):
+    print(f"BOND SALE {n}")
+    for c in companies:
+        for s in c.bonds[-3:]:
+            ss = CompanyBondSale(
+                price = round(random.uniform(s.full_value() * 0.3, s.full_value() * 0.8), 2),
+                bond_id = s.id,
+                seller_id = s.owner_id,
+            )
+            db.session.add(ss)
+            # time.sleep(0.5)
+            print(ss)
+    # db.session.commit()
+
+    bond_sales = db.session.query(CompanyBondSale).where(CompanyBondSale.status == FOR_SALE).all()
+    # print(bond_sales)
+
+    for ss in bond_sales:
+        users = db.session.query(User).where(User.type == PHYSICAL_PERSON).filter(User.id != ss.seller_id).all()
+        ss.sell(random.choice(users))
+        ss.end = datetime.datetime.utcnow() + datetime.timedelta(hours=count)
+        # db.session.commit()
+        count += 1
+
+db.session.commit()
 
 
 

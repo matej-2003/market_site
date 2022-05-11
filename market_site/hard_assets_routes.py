@@ -47,7 +47,10 @@ def hard_asset_sale(hard_asset_id):
 @login_required
 def hard_asset_sell(hard_asset_id):
 	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
-	sale = hard_asset.sales[-1]
+	sale = None
+	if len(hard_asset.sales) > 0:
+		sale = hard_asset.sales[-1]
+
 	if hard_asset.owner == current_user:
 		if request.method == 'POST':
 			try:
@@ -65,7 +68,7 @@ def hard_asset_sell(hard_asset_id):
 						)
 						db.session.add(has)
 					else:
-						if action == "EDIT":
+						if action == "CONFIRM":
 							hard_asset.info = info
 							sale.price = price
 						elif action == "DELETE":
@@ -74,9 +77,19 @@ def hard_asset_sell(hard_asset_id):
 			except ValueError:
 				pass
 			return redirect(url_for('user_assets'))
-		return render_template('hard_assets/sell.html', title='Sale', asset=hard_asset, sale=sale)
-	else:
-		return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+		return render_template('hard_assets/sell.html', title='Sall', asset=hard_asset, sale=sale)
+	return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+
+
+@app.route('/hard_asset/asset/<int:hard_asset_id>/auction', methods=['GET', 'POST'])
+@login_required
+def hard_asset_auction(hard_asset_id):
+	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+	if hard_asset.owner == current_user:
+		return render_template('hard_assets/auction.html', title='Sall', asset=hard_asset)
+	return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+
+
 
 
 @app.route('/market/hard_assets')
@@ -107,7 +120,6 @@ def hard_asset_market(category):
 	# sales = HardAssetSale.query.filter_by(status=FOR_SALE, hard_asset.type=type).all()
 	sales = db.session.query(HardAssetSale)\
 		.join(HardAsset, HardAssetSale.hard_asset_id==HardAsset.id)\
-		.where(HardAssetSale.status == FOR_SALE)\
-		.where(HardAsset.type == type).all()
+		.where(HardAssetSale.status == FOR_SALE, HardAsset.type == type).all()
 	title = type.lower().replace('_', ' ').capitalize()
-	return render_template('hard_assets/real_estate.html', title=title, sales=sales)
+	return render_template('hard_assets/market.html', title=title, sales=sales)

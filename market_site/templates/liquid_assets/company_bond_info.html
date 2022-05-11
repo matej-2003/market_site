@@ -27,10 +27,10 @@
     </tr>
     <tr>
         <td colspan="2">Company value</td>
-        <td colspan="2">${{ '{:,.2f}'.format(company.value) }}</td>
+        <td colspan="2"><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
     </tr>
     <tr>
-        <td colspan="2">Total shares</td>
+        <td colspan="2">Total bonds</td>
         <td colspan="2">{{ company.bond_number() }}</td>
     </tr>
     <tr>
@@ -43,8 +43,8 @@
     <tr>
         <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
         <td>{{ bond_number }}</td>
-        <td>${{ "{:,.2f}".format(bond_number * bond.value) }}</td>
-        <td>${{ "{:,.2f}".format(bond_number * bond.full_value()) }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.value) }}</span></td>
+        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.full_value()) }}</span></td>
     </tr>
     {% endfor %}
 </table>

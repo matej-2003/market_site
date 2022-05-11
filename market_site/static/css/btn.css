@@ -1,0 +1,123 @@
+
+.btn {
+    /* display: inline-block; */
+    /* font-weight: 400; */
+    /* text-align: center; */
+    /* white-space: nowrap; */
+    /* vertical-align: middle; */
+    /* -webkit-user-select: none; */
+    /* -moz-user-select: none; */
+    /* -ms-user-select: none; */
+    user-select: none;
+    /* border: 1px solid transparent; */
+    /* border-top-color: transparent; */
+    /* border-right-color: transparent; */
+    /* border-bottom-color: transparent; */
+    /* border-left-color: transparent; */
+    padding: 0.375rem 0.75rem;
+    /* font-size: 1rem;  */
+    /* line-height: 1.5;  */
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: 1px;
+    /* transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
+}
+
+.btn:focus {
+    outline-color: currentcolor;
+    box-shadow: rgba(0, 98, 204, 0.25) 0px 0px 0px 0.2rem;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.btn.primary {
+    color: rgb(232, 230, 227);
+    background-color: rgb(0, 98, 204);
+    border-color: rgb(0, 86, 179);
+}
+
+.btn.primary:focus {
+    box-shadow: rgba(0, 98, 204, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.secondary {
+    color: rgb(232, 230, 227);
+    background-color: rgb(88, 95, 99);
+    border-color: rgb(102, 94, 83);
+}
+
+.btn.secondary:focus {
+    box-shadow: rgba(88, 95, 99, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.success {
+    color: rgb(232, 230, 227);
+    background-color: rgb(32, 134, 55);
+    border-color: rgb(37, 156, 64);
+}
+
+.btn.success:focus {
+    box-shadow: rgba(32, 134, 55, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.danger {
+    color: rgb(232, 230, 227);
+    background-color: rgb(165, 29, 42);
+    border-color: rgb(148, 26, 37);
+}
+
+.btn.danger:focus {
+    box-shadow: rgba(165, 29, 42, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.warning {
+    color: rgb(209, 205, 199);
+    background-color: rgb(200, 150, 0);
+    border-color: rgb(176, 132, 0);
+}
+
+.btn.warning:focus {
+    box-shadow: rgba(200, 150, 0, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.info {
+    color: rgb(232, 230, 227);
+    background-color: rgb(18, 130, 147);
+    border-color: rgb(21, 151, 171);
+}
+
+.btn.info:focus {
+    box-shadow: rgba(18, 130, 147, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.light {
+    color: rgb(209, 205, 199);
+    background-color: rgb(27, 30, 31);
+    border-color: rgb(50, 54, 56);
+}
+
+.btn.light:focus {
+    box-shadow: rgba(27, 30, 31, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.dark {
+    color: rgb(232, 230, 227);
+    background-color: rgb(44, 47, 49);
+    border-color: rgb(121, 112, 99);
+}
+
+.btn.dark:focus {
+    box-shadow: rgba(44, 47, 49, 0.5) 0px 0px 0px 0.2rem;
+}
+
+.btn.link {
+    background-color: transparent;
+}
+
+.btn.link:focus {
+    text-decoration-color: currentcolor;
+    border-color: transparent;
+    box-shadow: none;
+}

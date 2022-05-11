@@ -19,22 +19,6 @@
     span.small {
         font-size: small;
     }
-
-    .for_sale {
-        background-color: #00ff0d;
-        color: white;
-        padding: 0.1em;
-        border-radius: 3px;
-        font-weight: bold;
-    }
-
-    .not_for_sale {
-        background-color: #ff0000;
-        color: #ffffff;
-        padding: 0.1em;
-        border-radius: 3px;
-        font-weight: bold;
-    }
     
     .container {
         display: inline-grid;
@@ -55,6 +39,10 @@
 {% endblock %}
 {% block content %}
 <!-- <hr> -->
+
+My auctions: <a href="/auctions/user/{{ current_user.id }}">auctions</a><br>
+My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
+
 <h3>Hard assets</h3>
 <div class="container">
     {% for asset in current_user.hard_assets %}
@@ -66,13 +54,17 @@
         </div>
         <div>
             <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
-            <span class="gray">Value: </span>${{ asset.value }}<br>
+            <span class="gray">Value: </span><span class="m">{{ "{:,.2f}".format(asset.value) }}</span><br>
             <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
             <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
             <span class="gray">Status: </span>
-            <span class="small {% if asset.is_on_sale() %} for_sale {% else %} not_for_sale {% endif %}">
-                {% if asset.is_on_sale() %} FOR SALE {% else %} NOT FOR SALE {% endif %}
-            </span>
+            {% if asset.is_on_sale() %}
+                <span class="status small for_sale"></span>
+            {% elif asset.is_on_auction() %}
+                <span class="status small auction"></span>
+            {% else %}
+                <span class="status small not_for_sale"></span>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -92,7 +84,7 @@
                     src="/static/hard_assets/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image"></a>
         </td>
         <td><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a></td>
-        <td>${{ asset.value }}</td>
+        <td><span class="m">{{ asset.value }}</span></td>
         <td>{{ asset.type }}</td>
         <td>{{ asset.info }}</td>
     </tr>
@@ -116,7 +108,7 @@
             </a>
         </td>
         <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td>${{ "{:,.2f}".format(company.share_value * share_number ) }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(company.share_value * share_number ) }}</span></td>
         <td>{{ share_number }}</td>
     </tr>
     {% endfor %}
@@ -142,9 +134,9 @@
             </a>
         </td>
         <td><a href="/liquid_assets/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td>${{ "{:,.2f}".format(bond.value * bond_number) }}</td>
-        <td>{{ "{:,.2f}".format(bond.interest_rate) }}%</td>
-        <td>${{ "{:,.2f}".format(bond.full_value() * bond_number) }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(bond.value * bond_number) }}</span></td>
+        <td><span class="p">{{ "{:,.2f}".format(bond.interest_rate) }}</span></td>
+        <td><span class="m">{{ "{:,.2f}".format(bond.full_value() * bond_number) }}</span></td>
         <td>{{ bond_number }}</td>
     </tr>
     {% endfor %}

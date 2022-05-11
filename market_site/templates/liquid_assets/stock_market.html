@@ -59,11 +59,11 @@
         <br>
         <br>
         <div info>
-            <span mark>Value</span>: ${{ '{:,.2f}'.format(company.value) }}
+            <span mark>Value</span>: <span class="m">{{ '{:,.2f}'.format(company.value) }}</span>
             <br>
             <span mark>Share number</span>: {{ company.share_number() }}
             <br>
-            <span mark>Share value</span>: ${{ '{:,.2f}'.format(company.share_value) }}
+            <span mark>Share value</span>: <span class="m">{{ '{:,.2f}'.format(company.share_value) }}</span>
         </div>
     </div>
     {% endfor %}
