@@ -28,3 +28,12 @@ function ce(tag, properties) {
         return document.createElement(tag);
     }
 }
+
+let alerts = $$(".alert");
+
+for (let alert of alerts) {
+    setTimeout(() => { alert.style.display = "none"; }, 1500);
+    alert.querySelector('.close_alert').onclick = () => {
+        alert.style.display = "none";
+    }
+}

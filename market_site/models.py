@@ -409,6 +409,7 @@ class Bank(db.Model):
     legal_person = db.relationship("User", foreign_keys=[legal_person_id])
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
     auctions = db.relationship('Auction', backref='bank', lazy=True)
+    # transaction_commission = db.Column(db.Float, nullable=False, default=1)
     auction_commission = db.Column(db.Float, nullable=False, default=1)
 
     def get_images(self):

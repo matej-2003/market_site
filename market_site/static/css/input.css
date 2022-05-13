@@ -1,6 +1,6 @@
-input,
+input:not([type="submit"]),
 textarea {
-    display: block;
+    display: inline-block;
     /*width: 100%;*/
     color: #495057;
     background-clip: padding-box;
@@ -10,7 +10,7 @@ textarea {
 
     /* do not delete this */
     /* border-radius: 0.1rem; */
-    margin: 0.2em 0em;
+    margin: 0.2em 0.3em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -19,7 +19,7 @@ textarea {
     resize: vertical;
 }
 
-input:focus-visible,
+input:not([type="submit"]):focus-visible,
 textarea:focus-visible {
     outline: none;
     outline-color: none;
@@ -27,7 +27,7 @@ textarea:focus-visible {
     outline-width: 0;
 }
 
-input:focus,
+input:not([type="submit"]):focus,
 textarea:focus {
     border-color: var(--input-border-color);
     outline: 0;
@@ -48,8 +48,8 @@ input[type="file"] {
 
 input[type="submit"] {
     padding: 0.5em;
-    /* padding: 0.2em 0.4em; */
-}    
+    padding: 0.2em 0.4em;
+}
 
 input[type=color] {
     padding: 0px;
@@ -76,6 +76,7 @@ option {
     border-radius: 0px;
     /* border: none; */
 }
+
 .multiple_select {
     display: grid;
     grid-template-columns: auto max-content auto;

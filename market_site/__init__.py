@@ -49,4 +49,4 @@ OTHER = "OTHER"
 TRANSPORT = "TRANSPORT"
 
 
-from market_site import routes, market_routes, hard_assets_routes, liquid_assets_routes
+from market_site import routes, routes_market, routes_hard_assets, routes_liquid_assets, routes_api

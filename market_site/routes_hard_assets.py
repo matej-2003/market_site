@@ -36,9 +36,10 @@ def hard_asset_sale(hard_asset_id):
 					current_user.pay(sale.price, hard_asset.owner)
 					hard_asset.owner_id = current_user.id
 					db.session.commit()
+					flash(f'You have succesfully bought <a href="/hard_asset/asset/{hard_asset.id}">{hard_asset.name}</a>', 'success')
 					return redirect(url_for('user_assets'))
 		else:
-			flash('You do not have enough money')
+			flash('You do not have enough money', 'success')
 		return render_template('hard_assets/sale.html', title='Sale', asset=hard_asset, sale=sale)
 	else:
 		return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))

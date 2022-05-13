@@ -89,7 +89,7 @@ def sell_stock(company_id):
 						db.session.add(ss)
 						db.session.commit()
 		except ValueError:
-			flash('value error')
+			flash('value error', 'error')
 	return render_template('liquid_assets/company_stock_sell.html', title='Company stock market', company=company, user_share_number=current_user.share_number(company))
 
 
@@ -118,9 +118,9 @@ def sell_bond(company_id):
 						db.session.add(ss)
 						db.session.commit()
 			else:
-				flash('You canot sell bonds you don\'t have')
+				flash('You canot sell bonds you don\'t have', 'error')
 		except ValueError:
-			flash('value error')
+			flash('value error', 'error')
 	return render_template('liquid_assets/company_bond_sell.html', title='Company bond market', company=company, user_bond_number=current_user.bond_number(company))
 
 

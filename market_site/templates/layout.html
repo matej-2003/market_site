@@ -76,7 +76,7 @@
                     {% for category, msg in msgs%}
                         <div class="alert {{ category}}">
                             <span class="close_alert">&times;</span>
-                            {{ msg }}
+                            {{ msg | safe }}
                         </div>
                     {% endfor %}
                 {% endif %}

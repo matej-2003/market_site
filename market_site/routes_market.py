@@ -50,6 +50,6 @@ def auction(auction_id):
 					auction.remove_bidder(current_user)
 					return redirect(url_for('join_auction', auction_id=auction_id))
 			except ValueError:
-				flash('error')
+				flash('error', 'error')
 		return render_template('auction/auction.html', title='Auction', auction=auction)
 	return redirect(url_for('join_auction', auction_id=auction_id))
