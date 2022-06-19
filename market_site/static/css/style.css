@@ -75,6 +75,13 @@ nav {
     padding: 0.8em 1em;
 }
 
+nav img[user_image] {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.2em;
+    width: 2.5em;
+}
+
 div[content] {
     grid-area: content;
     padding: 0.5em;
@@ -119,7 +126,6 @@ img[company_logo] {
     max-height: 4em;
 }
 
-
 .status {
     color: #ffffff;
     padding: 0.1em;
@@ -127,6 +133,9 @@ img[company_logo] {
     font-weight: bold;
     font-size: 0.8rem;
 }
+
+.true {background-color: #00ff0d;}
+.false {background-color: #ff0000;}
 
 .for_sale {
     background-color: #00ff0d;

@@ -1,4 +1,7 @@
 {% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
 {% block style %}
 <style>
     td[small] {
@@ -20,21 +23,21 @@
         <th>Date created</th>
     </tr>
     {% for user in users %}
-        <tr>
-            <td><a href="/user/{{ user.id }}">{{ user.id }}</a></td>
-            <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
-            <td><a href="/user/{{ user.id }}">{{ user.email }}</a></td>
-            <td><a href="/user/{{ user.id }}">{{ user.full_name }}</a></td>
-            <td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
-            <td small>
-                {% if user.type == 0 %}
-                    LEGAL_PERSON
-                {% else %}
-                    PHYSICAL_PERSON
-                {% endif %}
-            </td>
-            <td small><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
-            <td small><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <tr data-link="/user/{{ user.id }}">
+			<td>{{ user.id }}</td>
+			<td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.full_name }}</td>
+			<td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
+			<td small>
+				{% if user.type == 0 %}
+					LEGAL_PERSON
+				{% else %}
+					PHYSICAL_PERSON
+				{% endif %}
+			</td>
+			<td small><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+			<td small><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
         </tr>
     {% endfor %}
 </table>

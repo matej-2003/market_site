@@ -39,3 +39,7 @@ td.status {
     width: max-content;
     color: #fff;
 }
+
+table[data-link] tr:active {
+    background-color: #e3e3ff;
+}

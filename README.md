@@ -2,40 +2,37 @@
 
 # Home
 
-routes.py
 templates/home
 
-# my assets
+# My assets
 - asset overview	/home/assets
+- hard assets		/home/asset/h
+- liquid assets		/home/asset/l
+	- shares		/home/asset/l/shares
+	- bonds			/home/asset/l/bonds
 
--hard assets		/home/asset/h
--liquid assets		/home/asset/l
-	-shares			/home/asset/l/shares
-	-bonds			/home/asset/l/bonds
+- auctions			/home/auctions/
+# - trades			/home/trades/
+- sales				/home/sales/
+	- hard asset sales		/home/sales/asset/h
+	- liquid asset sales	/home/sales/asset/l
 
--auctions			/home/auctions/
--trades				/home/trades/
--sales				/home/sales/
-	-hard asset sales		/home/sales/asset/h
-	-liquid asset sales		/home/sales/asset/l
-
--loans
+- loans
 	/home/loans
 	/home/loans/bank
 	/home/loans/personal
 
--transactions
+- transactions
 	/home/transactions
 	/home/transactions/made
 	/home/transactions/received
 
 
-routes.py
 templates/borrow
 
 # Borrow money
--banks
--loans
+- banks
+- loans
 
 /borrow
 /borrow/banks
@@ -46,7 +43,6 @@ templates/borrow
 /borrow/personal_loan/offers
 
 
-routes.py
 templates/transaction
 
 # Transaction
@@ -57,35 +53,34 @@ templates/transaction
 
 
 
-routes_user.py
 templates/user
 
 # Users
 /users
 /user/<int:id>
 
-- asset overview	/home/assets
+- asset overview	/user/<int:id>/assets
 
--hard assets	/user/<int:id>/asset/h
--liquid assets	/user/<int:id>/asset/l
-	-shares		/user/<int:id>/asset/l/shares
-	-bonds		/user/<int:id>/asset/l/bonds
+- hard assets		/user/<int:id>/asset/h
+- liquid assets		/user/<int:id>/asset/l
+	- shares		/user/<int:id>/asset/l/shares
+	- bonds			/user/<int:id>/asset/l/bonds
 
--auctions		/user/<int:id>/auctions/
-   -now			/user/<int:id>/auctions/now
-   -history		/user/<int:id>/auctions/history
+- auctions			/user/<int:id>/auctions/
+   - now			/user/<int:id>/auctions/now
+   - history		/user/<int:id>/auctions/history
 
--trades			/user/<int:id>/trades/
--sales			/user/<int:id>/sales/
-	-hard asset sales		/user/<int:id>/sales/asset/h
-	-liquid asset sales		/user/<int:id>/sales/asset/l
+# - trades			/user/<int:id>/trades/
+- sales				/user/<int:id>/sales/
+	- hard asset sales		/user/<int:id>/sales/asset/h
+	- liquid asset sales	/user/<int:id>/sales/asset/l
 
--loans
+- loans
 	/user/<int:id>/loans
 	/user/<int:id>/loans/bank
 	/user/<int:id>/loans/personal
 
--transactions
+- transactions
 	/user/<int:id>/transactions
 	/user/<int:id>/transactions/made
 	/user/<int:id>/transactions/received
@@ -94,7 +89,6 @@ templates/user
 
 
 
-routes_hard_asset.py
 templates/hard_assets
 
 # Assets
@@ -104,25 +98,32 @@ templates/hard_assets
 ## hard asset
 /asset/h/<int:hard_asset_id>
 
-/asset/h/<int:hard_asset_id>/sale
+/asset/h/<int:hard_asset_id>/sale/create
+/asset/h/<int:hard_asset_id>/sales/history
 /asset/h/<int:hard_asset_id>/sale/edit
 /asset/h/<int:hard_asset_id>/sale/delete
-/asset/h/<int:hard_asset_id>/sales/history
 
-/asset/h/<int:hard_asset_id>/auction
+/sale/<int:id>/edit
+/sale/<int:id>/delete
+
+/asset/h/<int:hard_asset_id>/auction/create
+/asset/h/<int:hard_asset_id>/auctions/history
 /asset/h/<int:hard_asset_id>/auction/edit
 /asset/h/<int:hard_asset_id>/auction/delete
-/asset/h/<int:hard_asset_id>/auctions/history
 
-/asset/h/<int:hard_asset_id>/trade
-/asset/h/<int:hard_asset_id>/trade/edit
-/asset/h/<int:hard_asset_id>/trade/delete
-/asset/h/<int:hard_asset_id>/trades/history
+/auction/<int:id>/edit
+/auction/<int:id>/delete
+
+# /asset/h/<int:hard_asset_id>/trade/create
+# /asset/h/<int:hard_asset_id>/trades/history
+# /asset/h/<int:hard_asset_id>/trade/edit
+# /asset/h/<int:hard_asset_id>/trade/delete
+
+# /trade/<int:id>/edit
+# /trade/<int:id>/delete
 
 
 
-
-routes_liquid_asset.py
 templates/liquid_asset
 
 ## liquid asset
@@ -134,27 +135,7 @@ templates/liquid_asset
 -info
 
 
-/asset/l/company/<int:company_id>/stock/sell
-/asset/l/company/<int:company_id>/bonds/sell
--sell offer
 
-
-/bond/<int:id>
-/share/<int:id>
--owners
--info
-
-/bond/<int:id>/sale/history
-/share/<int:id>/sale/history
--owners
--info
-
-
-
-
-
-
-routes_market.py
 templates/market
 
 # Market
@@ -165,28 +146,54 @@ templates/market
 /market/auction/<int:auction_id>/history
 
 
-/market/asset/h
-/market/asset/h/<string:category>
--sale offers
-
-/market/asset/l
-
-/market/asset/l/bonds
-/market/asset/l/stocks
--market info
-
-/market/asset/l/stocks/<int:company_id>
-/market/asset/l/bonds/<int:company_id>
--sale offers
--buy offers
+/market/assets/h
+/market/assets/h/<string:category>
+- sale offers
 
 
-/market/asset/l/stocks/<int:company_id>/info
-/market/asset/l/bonds/<int:company_id>/info
--charts
+
+/market/assets/l
+
+/stock/<int:id>
+/bond/<int:id>
+- owner
+- info
+
+/stock/<int:id>/sell
+/bond/<int:id>/sell
+- owner
+- info
+
+/stock/<int:id>/sale/history
+/bond/<int:id>/sale/history
+- owner
+- info
 
 
-routes_api.py
+/stock/<int:company_id>/sell
+/bond/<int:company_id>/sell
+- sell offer
+
+
+/stock/<int:company_id>/buy
+/bond/<int:company_id>/buy
+- buy offer
+
+
+/stocks
+/bonds
+- all market info
+
+/stocks/<int:company_id>
+/bonds/<int:company_id>
+- graph sale offers price
+- graph buy offers price
+
+
+/stocks/<int:company_id>/info
+/bonds/<int:company_id>/info
+- price charts
+
 
 # API
 /api/user

@@ -26,20 +26,20 @@
         border-bottom: 1px solid #9d9d9d;
         margin-bottom: 1em;
     }
-    
+    /*
     summary {
         padding: 3px;
     }
     
     summary:hover {
         background-color: #002fff4a;
-    }
+    }*/
 </style>
 {% endblock %}
 {% block content %}
 <!-- 
     <details>
-        <summary><a href="/market/hard_assets">Hard assets</a></summary>
+        <summary><a href="/market/assets/h">Hard assets</a></summary>
         <div subnav>
             <a href="/market/art">Art</a><br>
             <a href="/market/energy">Energy</a><br>
@@ -55,7 +55,7 @@
         </div>
     </details>
     <details>
-        <summary><a href="/market/liquid_assets">Liquid assets</a></summary>
+        <summary><a href="/market/assets/l">Liquid assets</a></summary>
         <div subnav>
             <a href="/market/bonds">Bonds</a><br>
             <a href="/market/debt">Debt</a><br>
@@ -67,44 +67,50 @@
     <a href="/market/auctions" style="padding-left: 1em;">Auctions</a><br>
 -->
 <!-- <h2>Categories</h2> -->
-<details>
-    <summary><a href="/market/hard_assets">Hard assets</a></summary>
+<div class="collapsable">
+    <h2><a href="/market/assets/h">Hard assets</a></h2>
     <div class="multi">
-        <div class="container"><a href="/market/hard_assets/art"><img src="{{url_for('static', filename='logos/art.jpg')}}" class="logo"><br>Art</a></div>
-        <!-- <div class="container"><a href="/market/hard_assets/energy"><img src="{{url_for('static', filename='logos/energy.jpg')}}" class="logo"><br>Energy</a></div> -->
-        <!-- <div class="container"><a href="/market/hard_assets/fashion"><img src="{{url_for('static', filename='logos/fashion.jpg')}}" class="logo"><br>Fashion</a></div> -->
-        <!-- <div class="container"><a href="/market/hard_assets/food_industry"><img src="{{url_for('static', filename='logos/food_industry.jpg')}}" class="logo"><br>Food industry</a></div> -->
-        <div class="container"><a href="/market/hard_assets/historical_artifacts"><img src="{{url_for('static', filename='logos/historical_artifacts.jpg')}}" class="logo"><br>Historical artifacts</a></div>
-        <div class="container"><a href="/market/hard_assets/rare_earths"><img src="{{url_for('static', filename='logos/rare_earths.jpg')}}" class="logo"><br>Rare earths</a></div>
-        <div class="container"><a href="/market/hard_assets/precious_metals"><img src="{{url_for('static', filename='logos/precious_metals.jpg')}}" class="logo"><br>Precious metals</a></div>
-        <div class="container"><a href="/market/hard_assets/real_estate"><img src="{{url_for('static', filename='logos/real_estate.jpg')}}" class="logo"><br>Real estate</a></div>
-        <!-- <div class="container"><a href="/market/hard_assets/technology"><img src="{{url_for('static', filename='logos/technology.jpg')}}" class="logo"><br>Technology</a></div> -->
-        <!-- <div class="container"><a href="/market/hard_assets/telecommunications"><img src="{{url_for('static', filename='logos/telecommunications.jpg')}}" class="logo"><br>Telecomunications</a></div> -->
-        <!-- <div class="container"><a href="/market/hard_assets/transport"><img src="{{url_for('static', filename='logos/transport.jpg')}}" class="logo"><br>Transport</a></div> -->
-        <!-- <div class="container"><a href="/market/hard_assets/pharmaceutical_industry"><img src="{{url_for('static', filename='logos/pharmaceutical_industry.jpg')}}" class="logo"><br>Pharmaceutical industry</a></div> -->
+        <div class="container"><a href="/market/assets/h/art"><img src="{{url_for('static', filename='logos/art.jpg')}}" class="logo"><br>Art</a></div>
+        <!-- <div class="container"><a href="/market/assets/h/energy"><img src="{{url_for('static', filename='logos/energy.jpg')}}" class="logo"><br>Energy</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/h/fashion"><img src="{{url_for('static', filename='logos/fashion.jpg')}}" class="logo"><br>Fashion</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/h/food_industry"><img src="{{url_for('static', filename='logos/food_industry.jpg')}}" class="logo"><br>Food industry</a></div> -->
+        <div class="container"><a href="/market/assets/h/historical_artifacts"><img src="{{url_for('static', filename='logos/historical_artifacts.jpg')}}" class="logo"><br>Historical artifacts</a></div>
+        <div class="container"><a href="/market/assets/h/rare_earths"><img src="{{url_for('static', filename='logos/rare_earths.jpg')}}" class="logo"><br>Rare earths</a></div>
+        <div class="container"><a href="/market/assets/h/precious_metals"><img src="{{url_for('static', filename='logos/precious_metals.jpg')}}" class="logo"><br>Precious metals</a></div>
+        <div class="container"><a href="/market/assets/h/real_estate"><img src="{{url_for('static', filename='logos/real_estate.jpg')}}" class="logo"><br>Real estate</a></div>
+        <!-- <div class="container"><a href="/market/assets/h/technology"><img src="{{url_for('static', filename='logos/technology.jpg')}}" class="logo"><br>Technology</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/h/telecommunications"><img src="{{url_for('static', filename='logos/telecommunications.jpg')}}" class="logo"><br>Telecomunications</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/h/transport"><img src="{{url_for('static', filename='logos/transport.jpg')}}" class="logo"><br>Transport</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/h/pharmaceutical_industry"><img src="{{url_for('static', filename='logos/pharmaceutical_industry.jpg')}}" class="logo"><br>Pharmaceutical industry</a></div> -->
     </div>
-</details>
-<details>
-    <summary><a href="/market/liquid_assets">Liquid assets</a></summary>
+    
+    <h2><a href="/market/assets/l">Liquid assets</a></h2>
     <div class="multi">
-        <div class="container"><a href="/market/liquid_assets/bonds"><img src="{{url_for('static', filename='logos/bonds.jpg')}}" class="logo"><br>Bonds</a></div>
-        <!-- <div class="container"><a href="/market/liquid_assets/debt"><img src="{{url_for('static', filename='logos/debt.jpg')}}" class="logo"><br>Debt</a></div> -->
-        <!-- <div class="container"><a href="/market/liquid_assets/futures"><img src="{{url_for('static', filename='logos/futures.jpg')}}" class="logo"><br>Futures</a></div> -->
-        <div class="container"><a href="/market/liquid_assets/stocks"><img src="{{url_for('static', filename='logos/stocks.jpg')}}" class="logo"><br>Stocks</a></div>
+        <div class="container"><a href="/market/assets/l/bonds"><img src="{{url_for('static', filename='logos/bonds.jpg')}}" class="logo"><br>Bonds</a></div>
+        <!-- <div class="container"><a href="/market/assets/l/debt"><img src="{{url_for('static', filename='logos/debt.jpg')}}" class="logo"><br>Debt</a></div> -->
+        <!-- <div class="container"><a href="/market/assets/l/futures"><img src="{{url_for('static', filename='logos/futures.jpg')}}" class="logo"><br>Futures</a></div> -->
+        <div class="container"><a href="/market/assets/l/stocks"><img src="{{url_for('static', filename='logos/stocks.jpg')}}" class="logo"><br>Stocks</a></div>
     </div>
-</details>
-
-<details>
-    <summary><a href="/market/auctions">Auctions</a></summary>
+    
+    <h2><a href="/market/auctions">Auctions</a></h2>
     <div class="multi">
         <div class="container"><a href="/market/auctions"><img src="{{url_for('static', filename='logos/auctions.jpg')}}" class="logo"><br>Auctions</a></div>
     </div>
-</details>
-
-<details>
-    <summary><a href="/market/trades">Trades</a></summary>
+    
+    <!-- <h2><a href="/market/trades">Trades</a></h2>
     <div class="multi">
         <div class="container"><a href="/market/trades"><img src="{{url_for('static', filename='logos/trades.jpg')}}" class="logo"><br>Trades</a></div>
-    </div>
-</details>
+    </div> -->
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $("div.collapsable").each(function() {
+        $(this).accordion({
+            collapsible: true,
+            active: false,
+            heightStyle: "content",
+        });
+    });
+</script>
 {% endblock %}

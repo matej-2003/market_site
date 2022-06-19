@@ -1,6 +1,6 @@
-function $(e) {
-    return document.querySelector(e);
-}
+// function $(e) {
+//     return document.querySelector(e);
+// }
 
 function $$(e) {
     return document.querySelectorAll(e);
@@ -37,3 +37,9 @@ for (let alert of alerts) {
         alert.style.display = "none";
     }
 }
+
+$("tr [data-link]").array.forEach(e => {
+	e.onclick(() => {
+		window.location = e.dataset.link;
+	});
+});

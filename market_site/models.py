@@ -1,13 +1,14 @@
-from datetime import datetime
-from market_site import DEFAULT, db, bc, login_manager
-from market_site import OK, ERROR
-from market_site import TRANSACTIO_ERROR, TRANSACTIO_OK
-from market_site import FOR_SALE, OTHER, SOLD, UNPAID, LEGAL_PERSON, BANKER, PHYSICAL_PERSON, MATURE, REPAID
-from sqlalchemy import func, desc
-from flask_login import UserMixin
 import json
-import random
-import os
+from datetime import datetime
+
+from flask_login import UserMixin
+from sqlalchemy import desc, func
+
+from market_site import bc, db, login_manager
+from market_site.config import *
+
+# import random
+# import os
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -557,7 +558,7 @@ class Auction(db.Model):
     def place_bid(self, user, amount):
         bidder = self.get_bidder(user)
         if bidder and (amount >= self.initial_price) and (amount >= self.final_price):
-            self.final_price = amount
+            self.final_price = round(amount, 2)
             bid = AuctionBid(amount=amount, bidder_id=bidder.id, auction_id=self.id)
             db.session.add(bid)
             db.session.commit()
@@ -635,18 +636,18 @@ class AuctionBid(db.Model):
 
 
 
-class Trade(db.Model):
-    __tablename__ = 'trades'
-    id = db.Column(db.Integer, primary_key=True)
+# class Trade(db.Model):
+#     __tablename__ = 'trades'
+#     id = db.Column(db.Integer, primary_key=True)
 
-    def __repr__(self):
-        return f'Trade({self.id})'
+#     def __repr__(self):
+#         return f'Trade({self.id})'
 
 
 
-class TradeOffer(db.Model):
-    __tablename__ = 'trade_offers'
-    id = db.Column(db.Integer, primary_key=True)
+# class TradeOffer(db.Model):
+#     __tablename__ = 'trade_offers'
+#     id = db.Column(db.Integer, primary_key=True)
 
-    def __repr__(self):
-        return f'TradeOffer({self.id})'
+#     def __repr__(self):
+#         return f'TradeOffer({self.id})'

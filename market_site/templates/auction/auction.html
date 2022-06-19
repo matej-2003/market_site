@@ -137,7 +137,7 @@
                     </tr>
                     <tr>
                         <td><span mark>Countdown timer</span></td>
-                        <td><span class="t" timer></span> </td>
+                        <td><span class="t" timer><b></b></span> </td>
                     </tr>
                 </table>
             </div>
@@ -247,7 +247,7 @@
 {% endblock %}
 {% block javascript %}
 <script>
-    let timer = document.querySelector('span[timer]');
+    let timer = document.querySelector('span[timer] b');
     let countDownDate = new Date("{{ auction.end.strftime('%m/%d/%Y %H:%M:%S') }}").getTime();
 
     // Update the count down every 1 second
