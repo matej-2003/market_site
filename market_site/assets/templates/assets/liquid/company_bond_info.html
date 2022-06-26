@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block style %}
+
+<style>
+    img[company_logo_min] {
+        display: inline-block;
+        max-height: 1.7em;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+
+{% endblock %}
+{% block content %}
+<table tb>
+    <tr>
+        <td colspan="4">{{ company.name }}</td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <a href="/assets/l/company/{{ company.id }}">
+            <img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Company value</td>
+        <td colspan="2"><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
+    </tr>
+    <tr>
+        <td colspan="2">Total bonds</td>
+        <td colspan="2">{{ company.bond_number() }}</td>
+    </tr>
+    <tr>
+        <th>User</th>
+        <th>Number of bonds</th>
+        <th>Value</th>
+        <th>Full value</th>
+    </tr>
+    {% for bond_number, user, bond in bonds %}
+    <tr>
+        <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+        <td>{{ bond_number }}</td>
+        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.value) }}</span></td>
+        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.full_value()) }}</span></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .logo {
+        height: 100px;
+        width: 150px;
+    }
+    
+    div.container {
+        display: inline-block;
+        padding: 0.2em;
+        border-radius: 3px;
+        text-align: center;
+    }
+    
+    div.container:hover {
+        background-color: #002fff4a;
+    }
+    
+    div.multi {
+        padding: 1em;
+        border-bottom: 1px solid #9d9d9d;
+        margin-bottom: 1em;
+    }
+    
+    summary {
+        padding: 3px;
+    }
+    
+    summary:hover {
+        background-color: #002fff4a;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <a href="/market/assets/hard/art">
+        <img src="{{url_for('static', filename='logos/art.jpg')}}" class="logo">
+        <br>
+        Art
+    </a>
+</div>
+<div class="container">
+    <a href="/market/assets/hard/historical_artifacts">
+        <img src="{{url_for('static', filename='logos/historical_artifacts.jpg')}}" class="logo">
+        <br>
+        Historical artifacts
+    </a>
+</div>
+<div class="container">
+    <a href="/market/assets/hard/rare_earths">
+        <img src="{{url_for('static', filename='logos/rare_earths.jpg')}}" class="logo">
+        <br>
+        Rare earths
+    </a>
+</div>
+<div class="container">
+    <a href="/market/assets/hard/precious_metals">
+        <img src="{{url_for('static', filename='logos/precious_metals.jpg')}}" class="logo">
+        <br>
+        Precious metals
+    </a>
+</div>
+<div class="container">
+    <a href="/market/assets/hard/real_estate">
+        <img src="{{url_for('static', filename='logos/real_estate.jpg')}}" class="logo">
+        <br>
+        Real estate
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    [image] {
+        height: 10em;
+    }
+
+    .container {
+        display: grid;
+        grid-template-areas: 'name name name'
+                             'image details bidders'
+                             'your_bids bidder all_bids';
+        grid-template-columns: auto auto auto;
+        grid-template-rows: max-content max-content max-content;
+        width: auto;
+    }
+    
+    .name {
+        grid-area: name;
+        width: 100%;
+        text-align: center;
+        padding-bottom: 1em;
+        font-size: 1.3rem;
+        border-bottom: 1px solid #ddd;
+    }
+/*
+    .auction_item {
+        grid-area: i;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 1em;
+        padding-bottom: 1em;
+    }
+*/
+    .image {
+        grid-area: image;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+        padding: 0.5em;
+    }
+
+    .details {
+        grid-area: details;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 0.5em;
+    }
+
+    .bidders {
+        grid-area: bidders;
+        border-bottom: 1px solid #ddd;
+        padding: 0.5em;
+    }
+
+    .bidders .list {
+        height: 13em;
+        overflow: auto;
+    }
+    
+    .your_bids {
+        grid-area: your_bids;
+        padding: 0.5em;
+    }
+    
+    .bidder {
+        grid-area: bidder;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        padding: 0.5em;
+/*        margin-left: 0.5em;
+        margin-right: 0.5em;*/
+    }
+
+    .bidder div {
+        text-align: left;
+        width: max-content;
+    }
+
+    .bidder table td {
+        padding: 0.5em 0.2em;
+    }
+    
+    .all_bids {
+        grid-area: all_bids;
+        padding: 0.5em;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    [hammer_logo] {
+        height: 5em;
+    }
+
+    table[bb] tr {
+        border-bottom: 1px solid #727272;
+    }
+
+    table[bb] td {
+        padding: 0em 1em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+    {% if not auction.is_over() %}
+        <div class="container">
+            <div class="name"><b>{{ auction.hard_asset.name }}</b></div>
+            <div class="image">
+                <!-- <a name href="/market/auction/{{ auction.id }}">{{ auction.hard_asset.name }}</a>
+                <br> -->
+                <a href="/market/auction/{{ auction.id }}">
+                    <img image src="/static/assets/hard/{{ auction.hard_asset.get_images()[0] }}" alt="{{ auction.hard_asset.name }} image">
+                </a>
+            </div>
+            <div class="details">
+                <table bb>
+                    <tr>
+                        <td><span mark>Propery value</span></td>
+                        <td><span class="m">{{ '{:,.2f}'.format(auction.hard_asset.value) }}</span></td>
+                    </tr>
+                    <tr>
+                        <td><span mark>Auction price</span></td>
+                        <td><span class="m">{{ '{:,.2f}'.format(auction.final_price) }}</span></td>
+                    </tr>
+                    <tr>
+                        <td><span mark>Current owner</span></td>
+                        <td><a href="/user/{{ auction.get_seller().id }}">{{ auction.get_seller().username }}</a></td>
+                    </tr>
+                    <tr>
+                        <td><span mark>Auction start</span></td>
+                        <td><span class="t">{{ auction.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+                    </tr>
+                    <tr>
+                        <td><span mark>Auction end</span></td>
+                        <td><span class="t">{{ auction.end.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+                    </tr>
+                    <tr>
+                        <td><span mark>Countdown timer</span></td>
+                        <td><span class="t" timer><b></b></span> </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bidders">
+                <div class="list">
+                    <table tb>
+                        <tr>
+                            <th colspan="2">All bidders</th>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last bid</th>
+                        </tr>
+                        {% for bidder in auction.bidders %}
+                            <tr>
+                                <td>{{ bidder.user.username }}</td>
+                                <td>
+                                    {% set bid = bidder.last_bid() %}
+                                    {% if bid %}
+                                        <span class="m">{{ '{:,.2f}'.format(bid.amount) }}</span>
+                                    {% else %}
+                                        /
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="your_bids">
+                <center>
+                    <table tb>
+                        <tr>
+                            <th colspan="100">Your bids</th>
+                        </tr>
+                        <tr>
+                            <td>Bidder</td>
+                            <td>Amount</td>
+                            <td>Time</td>
+                        </tr>
+                        {% for bid in auction.get_bids(current_user)[::-1] %}
+                        <tr>
+                            <td>{{ bid.bidder.user.username }}</td>
+                            <td><span class="m">{{ '{:,.2f}'.format(bid.amount) }}</span></td>
+                            <td><span class="t">{{ bid.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </center>
+            </div>
+            <div class="bidder">
+                <center>
+                    <div>
+                        <form action="" method="POST">
+                            <center><img hammer_logo src="/static/logos/hammer.png"></center>
+                            <center><b>Place a bid</b></center>
+                            <br>
+                            <br>
+                            {% if auction.last_bid() %}
+                                Highest bidder: {{ auction.last_bid().bidder.user.username }} <br>
+                                Highest bid: <span class="m">{{ auction.final_price }}</span>
+                            {% else %}
+                                Highest bidder: / <br>
+                                Initial price: <span class="m">{{ auction.final_price }}</span>
+                            {% endif %}
+                            <hr>
+                            <br>
+                            <table>
+                                <tr>
+                                    <td><b>Amount:</b></td>
+                                    <td><span class="m"><input type="number" name="bid_amount" min="{{ auction.final_price }}" value="{{ auction.final_price }}" step="0.01" required></span></td>
+                                    <td><input type="submit" value="BID" name="bid_submit"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><b>Unjoin auction: </b><input type="submit" value="UNJOIN" name="auction_unjoin"></td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </center>
+            </div>
+            <div class="all_bids">
+                <center>
+                    <table tb>
+                        <tr>
+                            <th colspan="100">All bids</th>
+                        </tr>
+                        <tr>
+                            <td>Bidder</td>
+                            <td>Amount</td>
+                            <td>Time</td>
+                        </tr>
+                        {% for bid in auction.bids[::-1] %}
+                        <tr>
+                            <td>{{ bid.bidder.user.username }}</td>
+                            <td><span class="m">{{ '{:,.2f}'.format(bid.amount) }}</span></td>
+                            <td><span class="t">{{ bid.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </center>
+            </div>
+        </div>
+    {% else %}
+        this auction has ended
+    {% endif %}
+{% endblock %}
+{% block javascript %}
+<script>
+    let timer = document.querySelector('span[timer] b');
+    let countDownDate = new Date("{{ auction.end.strftime('%m/%d/%Y %H:%M:%S') }}").getTime();
+
+    // Update the count down every 1 second
+    let x = setInterval(function () {
+
+        // Get today's date and time
+        let now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        let distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        timer.innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x);
+            timer.innerHTML = "EXPIRED";
+        }
+    }, 1000);
+</script>
+{% endblock %}

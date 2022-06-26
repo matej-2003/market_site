@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+<table tb>
+    <tr>
+        <td colspan="2">{{ company.name }}</td>
+    </tr>
+    <tr>
+        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image"></td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Company data</b></td>
+    </tr>
+    <tr>
+        <td>Company value</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
+    </tr>
+    <tr>
+        <td>Company debt</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.get_debt()) }}</span></td>
+    </tr>
+    <tr>
+        <td>Total shares</td>
+        <td>{{ company.share_number() }}</td>
+    </tr>
+    <tr>
+        <td>Share value</td>
+        <td><span class="m">{{ '{:,.2f}'.format(company.share_value) }}</span></td>
+    </tr>
+    <tr>
+        <td>Share list</td>
+        <td><a href="/assets/l/company/{{ company.id }}/stock">share list</a></td>
+    </tr>
+    <tr>
+        <td>Bond list</td>
+        <td><a href="/assets/l/company/{{ company.id }}/bonds">bond list</a></td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Your data</b></td>
+    </tr>
+    <tr>
+        <td>Your shares</td>
+        <td>{{ current_user.share_number(company) }}</td>
+    </tr>
+    <tr>
+        <td>Your share value</td>
+        <td><span class="m">{{ '{:.3f}'.format(current_user.share_value(company)) }}</span></td>
+    </tr>
+    <tr>
+        <td>Your share %</td>
+        <td><span class="p">{{ '{:.3f}'.format(100 * current_user.share_percentage(company)) }}</span></td>
+    </tr>
+    <tr>
+        <td>Information</td>
+        <td>{{ company.info }}</td>
+    </tr>
+</table>
+{% endblock %}

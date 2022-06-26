@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
+{% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        width: auto;
+        height: 4em;
+    }
+
+    span.gray {
+        color: #414141;
+    }
+
+    span.small {
+        font-size: small;
+    }
+    
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<h3>Sales</h3>
+<table tb>
+    <tr>
+		<th>Image</th>
+		<th>Item</th>
+		<th>Status</th>
+		<th>Price</th>
+		<th>Seller</th>
+		<th>Buyer</th>
+		<th>Start</th>
+		<th>End</th>
+    </tr>
+    {% for sale in sales %}
+    <tr>
+        <td>
+            <a href="/hard_asset/asset/{{ sale.hard_asset.id }}">
+                <img asset_image src="/static/assets/hard/{{ sale.hard_asset.get_images()[0] }}" alt="{{ sale.hard_asset.name }} image">
+            </a>
+        </td>
+		<td><a href="/hard_asset/asset/{{ sale.hard_asset.id }}">{{ sale.hard_asset.name }}</a></td>
+		<td>
+			{% if sale.is_over() %}
+				<span class="status false">SOLD</span>
+			{% else %}
+				<span class="status true">FOR SALE</span>
+			{% endif %}
+		</td>
+		<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+		<td>
+			{% set seller = sale.get_seller() %}
+			{% if seller %}
+				<a href="/user/{{seller.id}}">{{ seller.username }}</a>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+		<td>
+			{% set buyers = sale.get_buyer()%}
+			{% if buyers %}
+				<a href="/user/{{buyers.id}}">{{ buyers.username }}</a>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+        <td><span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+        <td>
+			{% if sale.end %}
+				<span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<br>
+
+
+<h3>Purchases</h3>
+<table tb>
+    <tr>
+		<th>Image</th>
+		<th>Item</th>
+		<th>Price</th>
+		<th>Seller</th>
+		<th>Buyer</th>
+		<th>Start</th>
+		<th>End</th>
+    </tr>
+    {% for sale in purchases %}
+    <tr>
+        <td>
+            <a href="/hard_asset/asset/{{ sale.hard_asset.id }}">
+                <img asset_image src="/static/assets/hard/{{ sale.hard_asset.get_images()[0] }}" alt="{{ sale.hard_asset.name }} image">
+            </a>
+        </td>
+		<td><a href="/hard_asset/asset/{{ sale.hard_asset.id }}">{{ sale.hard_asset.name }}</a></td>
+		<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+		<td>
+			{% set seller = sale.get_seller() %}
+			{% if seller %}
+				<a href="/user/{{seller.id}}">{{ seller.username }}</a>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+		<td>
+			{% set buyers = sale.get_buyer()%}
+			{% if buyers %}
+				<a href="/user/{{buyers.id}}">{{ buyers.username }}</a>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+        <td><span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+        <td>
+			{% if sale.end %}
+				<span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

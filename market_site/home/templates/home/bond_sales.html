@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
+{% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        width: auto;
+        height: 4em;
+    }
+
+    span.gray {
+        color: #414141;
+    }
+
+    span.small {
+        font-size: small;
+    }
+    
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+
+<h3>Sales</h3>
+<table tb>
+<tr>
+	<th>Id</th>
+	<th>Company logo</th>
+	<th>Company</th>
+	<th>Price</th>
+	<th>Seller</th>
+	<th>Time</th>
+</tr>
+{% for sale in sales %}
+	<tr>
+		<td>{{ sale.id }}</td>
+		<td>
+			<a href="/assets/l/company/{{ sale.bond.company.id }}">
+				<img company_logo src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
+			</a>
+		</td>
+		<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>
+		<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+		<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
+		<td><span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+	</tr>
+{% endfor %}
+</table>
+
+<br>
+<br>
+
+
+<h3>Purchases</h3>
+<table tb>
+	<tr>
+		<th>Id</th>
+		<th>Company logo</th>
+		<th>Company</th>
+		<th>Price</th>
+		<th>Seller</th>
+		<th>Time</th>
+	</tr>
+	{% for sale in purchases %}
+		<tr>
+			<td>{{ sale.id }}</td>
+			<td>
+				<a href="/assets/l/company/{{ sale.bond.company.id }}">
+					<img company_logo src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
+				</a>
+			</td>
+			<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>
+			<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+			<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
+			<td><span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block style %}
+<style>
+    .panel {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+    }
+
+    img[vertical_logo] {
+        max-height: 8em;
+        width: auto;
+    }
+
+    .info {
+        width: max-content;
+    }
+
+    .container {
+        display: inline-block;
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    div[info] {
+        text-align: left;
+    }
+
+    span[mark] {
+        color: #3c3c3c;
+    }
+
+    a[name] {
+        font-size: 1.1rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.5em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="panel">
+    {% for sale in sales %}
+    <div class="container">
+        <div class="logo">
+            <a href="/hard_asset/asset/{{ sale.hard_asset.id }}">
+            <img vertical_logo src="/static/assets/hard/{{ sale.hard_asset.get_images()[0] }}"
+                alt="{{ sale.hard_asset.name }} image">
+            </a>
+        </div>
+        <br>
+        <a name href="/hard_asset/asset/{{ sale.hard_asset.id }}">{{ sale.hard_asset.name }}</a>
+        <br>
+        <div info>
+            <span mark>Sale price</span>: <span class="m">{{ '{:,.2f}'.format(sale.price) }}</span><br>
+            <span mark>Propery value</span>: <span class="m">{{ '{:,.2f}'.format(sale.hard_asset.value) }}</span><br>
+            <span mark>Current owner</span>: <a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a><br>
+            <span mark>Sale start</span>: <span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> <br>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

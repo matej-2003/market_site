@@ -1,5 +1,8 @@
 # citalnice
 
+float "{:,.2f}".format()
+time .strftime('%d/%m/%Y %H:%M:%S')
+
 # Home
 
 templates/home
@@ -12,10 +15,18 @@ templates/home
 	- bonds			/home/asset/l/bonds
 
 - auctions			/home/auctions/
+- auctions			/home/auctions/finnished
+- auctions			/home/auctions/active
+# - auctions			/home/auctions/resigned_auctions
+
 # - trades			/home/trades/
 - sales				/home/sales/
 	- hard asset sales		/home/sales/asset/h
+
 	- liquid asset sales	/home/sales/asset/l
+		- summary
+	- liquid asset sales	/home/sales/asset/l/stock
+	- liquid asset sales	/home/sales/asset/l/bond
 
 - loans
 	/home/loans

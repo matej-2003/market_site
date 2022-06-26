@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
+{% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        height: auto;
+        width: 7em;
+    }
+
+    img[company_logo_min] {
+        display: inline-block;
+        max-height: 1.7em;
+    }
+
+    span.gray {
+        color: #414141;
+    }
+
+    span.small {
+        font-size: small;
+    }
+    
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+Hard asset sales: <a href="/home/sales/asset/h">Hard asset sales</a><br>
+Liquid asset sales: <a href="/home/sales/asset/l">Liquid asset sales</a><br>
+
+<br>
+
+<h3>Hard assets</h3>
+
+<table>
+	<tr>
+		<th></th>
+		<th>Sold</th>
+		<th>Bought</th>
+		<th>For sale</th>
+	</tr>
+	<tr>
+		<td>Total: </td>
+		<td><span class="m">{{ "{:,.2f}".format(current_user.ha_sold) }}</span></td>
+		<td><span class="m">{{ "{:,.2f}".format(current_user.ha_bought) }}</span></td>
+		<td><span class="m">1</span></td>
+	</tr>
+</table>
+
+
+<h3>Liquid assets</h3>
+
+<table>
+	<tr>
+		<th></th>
+		<th>Sold</th>
+		<th>Bought</th>
+		<th>For sale</th>
+	</tr>
+	<tr>
+		<td>Total: </td>
+		<td><span class="m">{{ "{:,.2f}".format(current_user.la_sold) }}</span></td>
+		<td><span class="m">{{ "{:,.2f}".format(current_user.la_bought) }}</span></td>
+		<td><span class="m">1</span></td>
+	</tr>
+</table>
+{% endblock %}

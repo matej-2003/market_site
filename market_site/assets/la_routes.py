@@ -5,17 +5,17 @@ from market_site.models import *
 from flask_login import login_required
 from sqlalchemy import func, desc
 
-liquid_assets = Blueprint("liquid_assets", __name__)
+liquid_assets = Blueprint("liquid_assets", __name__, url_prefix="/assets/l", template_folder="templates")
 
-@liquid_assets.route('/asset/l')
+@liquid_assets.route('/list')
 @login_required
 def list_liquid_assets():
 	shares = CompanyShareSale.query.all()
 	bonds = CompanyBondSale.query.all()
-	return render_template('hard_assets/asset.html', title='Asset', shares=shares, bonds=bonds)
+	return render_template('assets/hard/asset.html', title='Asset', shares=shares, bonds=bonds)
 
 
-@liquid_assets.route('/assets/l/company/<int:company_id>')
+@liquid_assets.route('/company/<int:company_id>')
 @login_required
 def company(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -23,7 +23,7 @@ def company(company_id):
 
 
 
-@liquid_assets.route('/assets/l/company/<int:company_id>/stock')
+@liquid_assets.route('/company/<int:company_id>/stock')
 @login_required
 def company_stock(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -36,7 +36,7 @@ def company_stock(company_id):
 
 
 
-@liquid_assets.route('/assets/l/company/<int:company_id>/bonds')
+@liquid_assets.route('/company/<int:company_id>/bonds')
 @login_required
 def company_bonds(company_id):
 	company = Company.query.get_or_404(company_id)

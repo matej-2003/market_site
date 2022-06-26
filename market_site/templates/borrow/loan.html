@@ -81,7 +81,7 @@
                             {% for asset in current_user.hard_assets %}
                             <tr>
                                 <td><input type="checkbox" name="{{ asset.id }}"></td>
-                                <td><img min src="/static/hard_assets/{{ asset.get_images()[0] }}"></td>
+                                <td><img min src="/static/assets/hard/{{ asset.get_images()[0] }}"></td>
                                 <td>{{ asset.name }}</td>
                                 <td><span class="m">${{ "{:,.2f}".format(asset.value) }}</span></td>
                             </tr>
@@ -126,7 +126,7 @@
 
             let img_row = row.insertCell(-1);
             let img = ce('img', {
-                'src': '/static/hard_assets/' + datum['images'][0],
+                'src': '/static/assets/hard/' + datum['images'][0],
                 'min': null
             });
             img_row.append(img);
@@ -197,7 +197,7 @@
 /*
                 let img_row = row.insertCell(-1);
                 let img = ce('img', {
-                    'src': '/static/hard_assets/' + i['images'][0],
+                    'src': '/static/assets/hard/' + i['images'][0],
                     'min': null
                 });
                 img_row.append(img);

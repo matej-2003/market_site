@@ -6,7 +6,7 @@ from market_site.models import *
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
-auction = Blueprint("auction", __name__)
+auction = Blueprint("auction", __name__, template_folder="templates")
 
 @auction.route('/borrow', methods=['POST', 'GET'])
 @login_required

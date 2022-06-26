@@ -6,13 +6,7 @@ from market_site.config import PHYSICAL_PERSON
 from flask_login import login_user, logout_user, login_required
 from datetime import datetime
 
-users = Blueprint("users", __name__)
-
-@users.route('/')
-@users.route('/home')
-@login_required
-def home():
-	return render_template('home.html', title='Home')
+users = Blueprint("users", __name__, template_folder="templates")
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
@@ -32,7 +26,8 @@ def login():
 			if next_page:
 				return redirect(next_page)
 			else:
-				return redirect(url_for('users.home'))
+				# return redirect(url_for('home.home'))
+				return redirect('/home')
 		else:
 			flash('Login unsucessfull!', 'error')
 

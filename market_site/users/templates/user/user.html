@@ -1,0 +1,218 @@
+{% extends "layout.html" %} {% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        height: auto;
+        width: 7em;
+    }
+    
+    img[company_logo_min] {
+        display: inline-block;
+        max-height: 1.7em;
+    }
+    
+    span.gray {
+        color: #414141;
+    }
+    
+    span.small {
+        font-size: small;
+    }
+    
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+    
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+My auctions: <a href="/auctions/user/{{ current_user.id }}">auctions</a><br>
+My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
+
+<br>
+<table tb>
+    <tr>
+        <td>ID</td>
+        <td>{{ user.id }}</td>
+        <td>Username</td>
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{ user.email }}</td>
+        <td>Full name</td>
+        <td>{{ user.full_name }}</td>
+    </tr>
+    <tr>
+        <td>Balance</td>
+        <td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
+        <td>Type</td>
+        <td>
+            {% if user.type == 0 %} LEGAL_PERSON {% else %} PHYSICAL_PERSON {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>Last login</td>
+        <td><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <td>Date created</td>
+        <td><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+    </tr>
+</table>
+
+<br>
+
+<div class="transactions collapsable">
+    <h3>Payments made</h3>
+    <div>
+        <a href="/transaction?receipient_id={{user.id}}">
+        <button>Make transactions</button>
+        </a>
+        <br>
+        <br>
+        Total payments made: <span class="m">{{ '{:,.2f}'.format(user.total_payments_made) }}</span>
+        <table tb>
+            <tr>
+                <th>Amount</th>
+                <th>Receipient</th>
+                <th>Time</th>
+                <th>Info</th>
+            </tr>
+            {% for payment in user.payments_made()[-10:] %}
+            <tr>
+                <td><span class="m">{{ payment.amount }}</span></td>
+                <td>{{ payment.payee.username }}</td>
+                <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                <td>{{ payment.info }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <h3>Payments received</h3>
+    <div>
+        Total payments received: <span class="m">{{ '{:,.2f}'.format(user.total_payments_received) }}</span>
+        <table tb>
+            <tr>
+                <th>Amount</th>
+                <th>Payer</th>
+                <th>Time</th>
+                <th>Info</th>
+            </tr>
+            {% for payment in user.payments_received()[-10:] %}
+            <tr>
+                <td><span class="m">{{ payment.amount }}</span></td>
+                <td>{{ payment.payer.username }}</td>
+                <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                <td>{{ payment.info }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<br>
+
+<div class="hard_assets collapsable">
+    <h3>Hard assets</h3>
+    <div class="container">
+        {% for asset in user.hard_assets %}
+        <div class="asset_item">
+            <div>
+                <a href="/hard_asset/asset/{{ asset.id }}">
+                    <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+                </a>
+            </div>
+            <div>
+                <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
+                <span class="gray">Value: </span><span class="m">{{ asset.value }}</span><br>
+                <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
+                <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
+                <span class="gray">Status: </span> {% if asset.is_on_sale() %}
+                <span class="status small for_sale"></span> {% elif asset.is_on_auction() %}
+                <span class="status small auction"></span> {% else %}
+                <span class="status small not_for_sale"></span> {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<br>
+
+<div class="liquid_assets collapsable">
+    <h3>Company shares</h3>
+    <div>
+        <table tb>
+            <tr>
+                <th>Company logo</th>
+                <th>Company Name</th>
+                <th>Share value</th>
+                <th>Number of shares</th>
+            </tr>
+            {% for share, company, share_number in user.shares() %}
+            <tr>
+                <td>
+                    <a href="/assets/l/company/{{ company.id }}">
+                        <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+                    </a>
+                </td>
+                <td><a href="/assets/l/company/{{ company.id }}">{{ company.name }}</a></td>
+                <td><span class="m">{{ "{:,.2f}".format(company.share_value * share_number ) }}</span></td>
+                <td>{{ share_number }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <h3>Company bonds</h3>
+    <div>
+        <table tb>
+            <tr>
+                <th>Company logo</th>
+                <th>Company Name</th>
+                <th>Bonds value</th>
+                <th>Bonds interest rate</th>
+                <th>Bonds full value</th>
+                <th>Number of bonds</th>
+            </tr>
+            {% for bond, company, bond_number in user.bonds() %}
+            <tr>
+                <td>
+                    <a href="/assets/l/company/{{ company.id }}">
+                        <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+                    </a>
+                </td>
+                <td><a href="/assets/l/company/{{ company.id }}">{{ company.name }}</a></td>
+                <td><span class="m">{{ "{:,.2f}".format(bond.value * bond_number) }}</span></td>
+                <td><span class="p">{{ "{:,.2f}".format(bond.interest_rate) }}</span></td>
+                <td><span class="m">{{ "{:,.2f}".format(bond.full_value() * bond_number) }}</span></td>
+                <td>{{ bond_number }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $("div.collapsable").each(function() {
+        $(this).accordion({
+            collapsible: true,
+            active: false,
+            heightStyle: "content",
+        });
+    });
+</script>
+{% endblock %}

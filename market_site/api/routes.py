@@ -4,9 +4,9 @@ from market_site.models import *
 from flask_login import login_required
 import json
 
-api = Blueprint("api", __name__)
+api = Blueprint("api", __name__, url_prefix="/api")
 
-@api.route('/api/user/<int:user_id>/hard_assets')
+@api.route('/user/<int:user_id>/hard_assets')
 @login_required
 def api_user_hard_assets(user_id):
 	user = User.query.get_or_404(user_id)
@@ -17,7 +17,7 @@ def api_user_hard_assets(user_id):
 
 
 
-@api.route('/api/company/<int:company_id>/stocks')
+@api.route('/company/<int:company_id>/stocks')
 @login_required
 def company_stock_data(company_id):
 	q = db.session.query(
@@ -37,7 +37,7 @@ def company_stock_data(company_id):
 
 
 
-@api.route('/api/company/<int:company_id>/bonds')
+@api.route('/company/<int:company_id>/bonds')
 @login_required
 def company_bond_data(company_id):
 	q = db.session.query(
