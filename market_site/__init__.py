@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from flask_breadcrumbs import Breadcrumbs
 from market_site.config import Config
 
 db = SQLAlchemy()
@@ -16,7 +15,6 @@ login_manager.login_message_category = 'info'
 def create_app(config_class=Config):
 	app = Flask(__name__)
 	app.config.from_object(Config)
-	Breadcrumbs(app=app)
 	
 	db.init_app(app)
 	bc.init_app(app)

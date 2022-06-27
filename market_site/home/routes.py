@@ -1,5 +1,4 @@
 from flask import render_template, Blueprint, request
-from flask_breadcrumbs import register_breadcrumb, default_breadcrumb_root
 from market_site import db
 from market_site.models import *
 from market_site.config import *
@@ -7,23 +6,19 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_
 
 home = Blueprint("home", __name__, url_prefix="/home", template_folder="templates")
-default_breadcrumb_root(home, '.')
 
 @home.route('/')
 @login_required
-@register_breadcrumb(home, '.', 'Home', order=0)
 def user_home():
 	return render_template('home/home.html', title='Home')
 
 @home.route('/assets')
 @login_required
-@register_breadcrumb(home, '.', 'Assets', order=1)
 def home_assets():
 	return render_template('home/assets.html', title='My assets')
 
 @home.route('/assets/h')
 @login_required
-# @register_breadcrumb(home, '.Home.Assets', 'Hard', order=0)
 def home_hard_assets():
 	page = request.args.get('page', 1, type=int)
 	hard_assets = db.session.query(HardAsset)\
@@ -33,13 +28,11 @@ def home_hard_assets():
 
 @home.route('/assets/l')
 @login_required
-# @register_breadcrumb(home, '.Home.Assets', 'Liquid', order=1)
 def home_liquid_assets():
 	return render_template('home/liquid_assets.html', title='Liquid assets')
 
 @home.route('/assets/l/stock')
 @login_required
-# @register_breadcrumb(home, '.Home.Assets.Liquid', 'Stock')
 def home_stock():
 	page = request.args.get('page', 1, type=int)
 	stock = current_user.shares_().paginate(page=page, per_page=5)
@@ -47,7 +40,6 @@ def home_stock():
 
 @home.route('/assets/l/bonds')
 @login_required
-# @register_breadcrumb(home, '.Home.Assets.Liquid', 'Bonds')
 def home_bonds():
 	page = request.args.get('page', 1, type=int)
 	bonds = current_user.bonds_().paginate(page=page, per_page=5)
@@ -59,7 +51,6 @@ def home_bonds():
 
 @home.route('/auctions')
 @login_required
-# @register_breadcrumb(home, '.Home', 'Auctions')
 def home_auctions():
 	auctions = db.session.query(Auction)\
 		.where(Auction.seller_id == current_user.id).all()
@@ -69,14 +60,12 @@ def home_auctions():
 
 @home.route('/auctions/sale')
 @login_required
-# @register_breadcrumb(home, '.Home.Auctions', 'Sale')
 def home_sale_auctions():
 	return render_template('home/sales_auction.html', title='Sales auctions')
 
 
 @home.route('/auctions/sale/active')
 @login_required
-# @register_breadcrumb(home, '.Home.Auction.Sale', 'Active')
 def home_sale_auctions_active():
 	auctions = db.session.query(Auction)\
 		.where(Auction.seller_id == current_user.id)\
@@ -85,7 +74,6 @@ def home_sale_auctions_active():
 
 @home.route('/auctions/sale/finnished')
 @login_required
-# @register_breadcrumb(home, '.Home.Auction.Sale', 'Finnished')
 def home_sale_auctions_finnished():
 	auctions = db.session.query(Auction)\
 		.where(Auction.seller_id == current_user.id)\
@@ -95,14 +83,12 @@ def home_sale_auctions_finnished():
 
 @home.route('/auctions/purchase')
 @login_required
-# @register_breadcrumb(home, '.Home.Auctions', 'Purchase')
 def home_purchase_auctions():
 	return render_template('home/purchase_auction.html', title='Purchases auctions')
 
 
 @home.route('/auctions/purchase/active')
 @login_required
-# @register_breadcrumb(home, '.Home.Auctions.Purchase', 'Active')
 def home_purchase_auctions_active():
 	auctions = db.session.query(Auction)\
 		.where(Auction.buyer_id == current_user.id)\
@@ -111,7 +97,6 @@ def home_purchase_auctions_active():
 
 @home.route('/auctions/purchase/finnished')
 @login_required
-# @register_breadcrumb(home, '.Home.Auctions.Purchase', 'Finnished')
 def home_purchases_auctions_finnished():
 	auctions = db.session.query(Auction)\
 		.where(Auction.buyer_id == current_user.id)\
