@@ -49,13 +49,13 @@
         {% if not auction.is_over() %}
             <div class="container">
                 <div class="logo">
-                    <a href="/market/auction/{{ auction.id }}">
+                    <a href="/auction/{{ auction.id }}">
                     <img vertical_logo src="/static/assets/hard/{{ auction.hard_asset.get_images()[0] }}"
                         alt="{{ auction.hard_asset.name }} image">
                     </a>
                 </div>
                 <br>
-                <a name href="/market/auction/{{ auction.id }}">{{ auction.hard_asset.name }}</a>
+                <a name href="/auction/{{ auction.id }}">{{ auction.hard_asset.name }}</a>
                 <br>
                 <div info>
                     <span mark>Auction price</span>: <span class="m">{{ '{:,.2f}'.format(auction.final_price) }}</span><br>

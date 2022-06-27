@@ -29,28 +29,28 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="/hard_asset/asset/{{ asset.id }}/sale_history">sale history</a>
+            <a href="/asset/h/{{ asset.id }}/sale_history">sale history</a>
         </td>
     </tr>
     <tr>
         <td colspan="2">
             {% if asset.owner == current_user %}
                 {% if asset.is_on_sale() %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/sell"><button>EDIT SALE</button></a>
+                    <a href="/asset/h/{{ asset.id }}/sell"><button>EDIT SALE</button></a>
                 {% else %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/sell"><button>SELL</button></a>
+                    <a href="/asset/h/{{ asset.id }}/sell"><button>SELL</button></a>
                 {% endif %}
 
                 {% if asset.is_on_auction() %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/auction"><button>EDIT AUCTION</button></a>
+                    <a href="/asset/h/{{ asset.id }}/auction"><button>EDIT AUCTION</button></a>
                 {% else %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/auction"><button>PUT UP FOR AUCTION</button></a>
+                    <a href="/asset/h/{{ asset.id }}/auction"><button>PUT UP FOR AUCTION</button></a>
                 {% endif %}
             {% else %}
                 {% if asset.is_on_sale() %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/sale"><button>BUY</button></a>
+                    <a href="/asset/h/{{ asset.id }}/sale"><button>BUY</button></a>
                 {% elif asset.is_on_auction() %}
-                    <a href="/hard_asset/asset/{{ asset.id }}/auction"><button>BUY AT AUCTION</button></a>
+                    <a href="/asset/h/{{ asset.id }}/auction"><button>BUY AT AUCTION</button></a>
                 {% else %}
                     <span class="status not_for_sale"></span>
                 {% endif %}

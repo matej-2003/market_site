@@ -372,6 +372,23 @@ for a in auctions:
         b.place_bid(a.final_price + 10)
         print(a.id, b.user.username, a.bids)
 
+
+
+for u in users:
+    l = BankLoan(
+        asset = random.choice(users.hard_assets),
+        amount = asset.value,
+        borrower_id = u.id,
+        bank_id = random.choice(banks).id,
+        interest_rate = random.uniform(1.01, 1.2),
+        due_date = datetime.now() + datetime.timedelta(days=random.randint(1, 10)),
+        hard_asset_id = asset.id,
+    )
+    db.session.add(l)
+db.session.commit()
+
+
+
 # GET USERS SHARES
 # SELECT users.username, users.id, companies.name as company_name, companies.id, count(company_shares.company_id) as number_of_shares
 # FROM company_shares

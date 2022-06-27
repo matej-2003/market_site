@@ -4,34 +4,9 @@
 {% endblock %}
 {% block style %}
 <style>
-    img[asset_image] {
+	img[company_logo_min] {
         display: inline-block;
-        width: auto;
-        height: 4em;
-    }
-
-    span.gray {
-        color: #414141;
-    }
-
-    span.small {
-        font-size: small;
-    }
-    
-    .container {
-        display: inline-grid;
-        grid-template-columns: max-content max-content;
-        border: 1px solid #c0c0c0;
-        background-color: #c0c0c0;
-        grid-gap: 1px;
-    }
-
-    .asset_item {
-        display: flex;
-        flex-direction: row;
-        padding: 0.5em;
-        gap: 0.5em;
-        background-color: #fff;
+        max-height: 1.7em;
     }
 </style>
 {% endblock %}
@@ -53,7 +28,7 @@
 		<td>{{ sale.id }}</td>
 		<td>
 			<a href="/assets/l/company/{{ sale.bond.company.id }}">
-				<img company_logo src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
+				<img company_logo_min src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
 			</a>
 		</td>
 		<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>
@@ -83,7 +58,7 @@
 			<td>{{ sale.id }}</td>
 			<td>
 				<a href="/assets/l/company/{{ sale.bond.company.id }}">
-					<img company_logo src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
+					<img company_logo_min src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
 				</a>
 			</td>
 			<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>

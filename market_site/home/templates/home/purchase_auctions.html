@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
+{% block style %}
+<style>
+    img[asset_image] {
+        display: inline-block;
+        width: auto;
+        height: 4em;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+Active auctions: <a href="{{ url_for('home.home_purchase_auctions_active') }}">active auctions</a><br>
+Finnished auctions: <a href="{{ url_for('home.home_purchases_auctions_finnished') }}">finnished auctions</a><br>
+
+<br>
+
+<table tb>
+    <tr>
+        <th>Image</th>
+		<th>Status</th>
+        <th>Item name</th>
+        <th>Seller</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Initial price</th>
+        <th>Final price</th>
+    </tr>
+    {% for auction in auctions %}
+    <tr>
+        <td>
+            <a href="/hard_asset/asset/{{ auction.hard_asset.id }}">
+                <img asset_image src="/static/assets/hard/{{ auction.hard_asset.get_images()[0] }}" alt="{{ auction.hard_asset.name }} image">
+            </a>
+        </td>
+		<td>
+			{% if auction.is_over() %}
+				<span class="status false">FINNISHED</span>
+			{% else %}
+				<span class="status true">IN PROGRESS</span>
+			{% endif %}
+		</td>
+        <td><a href="/hard_asset/asset/{{ auction.hard_asset.id }}">{{ auction.hard_asset.name }}</a></td>
+		<td>
+			{% set seller = auction.get_seller() %}
+			{% if seller %}
+				<a href="/user/{{seller.id}}">{{ seller.username }}</a>
+			{% else %}
+				/
+			{% endif %}
+		</td>
+        <td><span class="t">{{ auction.start.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+        <td><span class="t">{{ auction.end.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+
+        <td><span class="m">{{ "{:,.2f}".format(auction.initial_price) }}</span></td>
+        <td><span class="m">{{ "{:,.2f}".format(auction.final_price) }}</span></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

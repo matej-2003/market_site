@@ -45,6 +45,9 @@ class User(db.Model, UserMixin):
 	la_sold = db.Column(db.Float, nullable=True, default=0)
 	la_bought = db.Column(db.Float, nullable=True, default=0)
 
+	def get_debt(self):
+		return sum([i.amount for i in self.loans])
+
 	def get_shares(self, company):
 		return db.session.query(CompanyShare).filter_by(company_id=company.id, owner_id=self.id).all()
 
@@ -67,22 +70,28 @@ class User(db.Model, UserMixin):
 		return 0
 
 	def shares(self):
+		return self.shares_().all()
+	
+	def shares_(self):
 		q = db.session.query(CompanyShare, Company, func.count(CompanyShare.company_id).label('share_number'))\
 			.join(User, CompanyShare.owner_id == User.id)\
 			.join(Company, CompanyShare.company_id == Company.id)\
 			.where(User.id == self.id)\
 			.group_by(Company.name)\
 			.order_by(desc('share_number'))
-		return q.all()
+		return q
 
 	def bonds(self):
+		return self.bonds_().all()
+
+	def bonds_(self):
 		q = db.session.query(CompanyBond, Company, func.count(CompanyBond.company_id).label('bond_number'))\
 			.join(User, CompanyBond.owner_id == User.id)\
 			.join(Company, CompanyBond.company_id == Company.id)\
 			.where(User.id == self.id)\
 			.group_by(Company.name)\
 			.order_by(desc('bond_number'))
-		return q.all()
+		return q
 
 	def payments_received(self):
 		return Transaction.query.filter_by(payee_id=self.id).all()
@@ -467,6 +476,9 @@ class BankLoan(db.Model):
 	def full_cost(self):
 		return self.amount * self.interest_rate
 
+	def pay(self):
+		self.bank.legal_person.pay(self.amount, self.borrower)
+
 	def set_mortgage(self, hard_asset):
 		if hard_asset.value >= self.full_cost():
 			self.hard_asset_id = hard_asset.id
@@ -489,33 +501,33 @@ class BankLoan(db.Model):
 
 
 
-class PersonalLoans(db.Model):
-	__tablename__ = 'personal_loans'
-	id = db.Column(db.Integer, primary_key=True)
-	amount = db.Column(db.Float, nullable=False, default=1)
-	borrower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-	borrower = db.relationship("User", foreign_keys=[borrower_id])
-	lender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-	lender = db.relationship("User", foreign_keys=[lender_id])
-	status = db.Column(db.String(20), nullable=False, default=UNPAID)
-	interest_rate = db.Column(db.Float, nullable=False, default=1)
-	date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
-	due_date = db.Column(db.DateTime, nullable=True)
+# class PersonalLoans(db.Model):
+# 	__tablename__ = 'personal_loans'
+# 	id = db.Column(db.Integer, primary_key=True)
+# 	amount = db.Column(db.Float, nullable=False, default=1)
+# 	borrower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+# 	borrower = db.relationship("User", foreign_keys=[borrower_id])
+# 	lender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+# 	lender = db.relationship("User", foreign_keys=[lender_id])
+# 	status = db.Column(db.String(20), nullable=False, default=UNPAID)
+# 	interest_rate = db.Column(db.Float, nullable=False, default=1)
+# 	date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+# 	due_date = db.Column(db.DateTime, nullable=True)
 
-	def full_cost(self):
-		return self.amount * self.interest_rate
+# 	def full_cost(self):
+# 		return self.amount * self.interest_rate
 
-	def repay_loan(self):
-		cost = self.full_cost()
-		if self.borrower.balance >= cost:
-			self.borrower.pay(cost, self.lender)
-			self.status = REPAID
-		else:
-			self.status = DEFAULT
-		db.session.commit()
+# 	def repay_loan(self):
+# 		cost = self.full_cost()
+# 		if self.borrower.balance >= cost:
+# 			self.borrower.pay(cost, self.lender)
+# 			self.status = REPAID
+# 		else:
+# 			self.status = DEFAULT
+# 		db.session.commit()
 
-	def __repr__(self):
-		return f'PersonalLoan({self.id}, amount={self.amount}, status={self.status})'
+# 	def __repr__(self):
+# 		return f'PersonalLoan({self.id}, amount={self.amount}, status={self.status})'
 
 
 

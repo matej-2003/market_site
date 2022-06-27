@@ -11,7 +11,7 @@ templates/home
 - asset overview	/home/assets
 - hard assets		/home/asset/h
 - liquid assets		/home/asset/l
-	- shares		/home/asset/l/shares
+	- stock			/home/asset/l/stock
 	- bonds			/home/asset/l/bonds
 
 - auctions			/home/auctions/
@@ -31,7 +31,7 @@ templates/home
 - loans
 	/home/loans
 	/home/loans/bank
-	/home/loans/personal
+	<!-- /home/loans/personal -->
 
 - transactions
 	/home/transactions

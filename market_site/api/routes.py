@@ -6,7 +6,7 @@ import json
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
-@api.route('/user/<int:user_id>/hard_assets')
+@api.route('/user/<int:user_id>/assets/h')
 @login_required
 def api_user_hard_assets(user_id):
 	user = User.query.get_or_404(user_id)

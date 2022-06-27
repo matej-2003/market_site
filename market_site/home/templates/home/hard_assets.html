@@ -7,11 +7,6 @@
         width: 7em;
     }
 
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-
     span.gray {
         color: #414141;
     }
@@ -39,30 +34,50 @@
 {% endblock %}
 {% block content %}
 
-<h3>Hard assets</h3>
 <div class="container">
-    {% for asset in current_user.hard_assets %}
-    <div class="asset_item">
-        <div>
-            <a href="/hard_asset/asset/{{ asset.id }}">
-                <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
-            </a>
+    {% for asset in hard_assets.items %}
+        <div class="asset_item">
+            <div>
+                <a href="/hard_asset/asset/{{ asset.id }}">
+                    <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+                </a>
+            </div>
+            <div>
+                <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
+                <span class="gray">Value: </span><span class="m">{{ "{:,.2f}".format(asset.value) }}</span><br>
+                <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
+                <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
+                <span class="gray">Status: </span>
+                {% if asset.is_on_sale() %}
+                    <span class="status small for_sale"></span>
+                {% elif asset.is_on_auction() %}
+                    <span class="status small auction"></span>
+                {% else %}
+                    <span class="status small not_for_sale"></span>
+                {% endif %}
+            </div>
         </div>
-        <div>
-            <span class="gray">Name: </span><a href="/hard_asset/asset/{{ asset.id }}">{{ asset.name }}</a><br>
-            <span class="gray">Value: </span><span class="m">{{ "{:,.2f}".format(asset.value) }}</span><br>
-            <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
-            <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
-            <span class="gray">Status: </span>
-            {% if asset.is_on_sale() %}
-                <span class="status small for_sale"></span>
-            {% elif asset.is_on_auction() %}
-                <span class="status small auction"></span>
-            {% else %}
-                <span class="status small not_for_sale"></span>
-            {% endif %}
-        </div>
-    </div>
     {% endfor %}
 </div>
+{% if hard_assets.pages > 1 %}
+    <div class="pagination">
+        {% if hard_assets.has_prev %}
+            <a  href="{{ url_for('home.home_hard_assets', page=hard_assets.prev_num) }}">&laquo;</a>
+        {% endif %}
+        {% for page_num in hard_assets.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+            {% if page_num %}
+                {% if hard_assets.page == page_num %}
+                    <a class="current" href="{{ url_for('home.home_hard_assets', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a href="{{ url_for('home.home_hard_assets', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                ...
+            {% endif %}
+        {% endfor %}
+        {% if hard_assets.has_next %}
+            <a href="{{ url_for('home.home_hard_assets', page=hard_assets.next_num) }}">&raquo;</a>
+        {% endif %}
+    </div>
+{% endif %}
 {% endblock %}
