@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from market_site.config import Config
+import functools
 
 db = SQLAlchemy()
 # db.create_all()
@@ -11,6 +12,15 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
+def breadcrumb(path):
+	def decorator_breadcrumb(func):
+		@functools.wraps(func)
+		def wrapper_breadcrumb(*args, **kwargs):
+			links = path.split('/')
+			template = func(*args, **kwargs).render(breadcrumbs=links)
+			return template
+		return wrapper_breadcrumb
+	return decorator_breadcrumb
 
 def create_app(config_class=Config):
 	app = Flask(__name__)

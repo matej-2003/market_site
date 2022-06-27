@@ -94,7 +94,7 @@
             <div>
                 {% if breadcrumbs  %}
                     {% for breadcrumb in breadcrumbs %}
-                        <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
+                        <a href="#">{{ breadcrumb }}</a>
                         {{ '/' if not loop.last }}
                     {% endfor %}
                 {% endif %}

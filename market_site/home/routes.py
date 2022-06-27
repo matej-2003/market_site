@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request
-from market_site import db
+from market_site import db, breadcrumb
 from market_site.models import *
 from market_site.config import *
 from flask_login import login_required, current_user
@@ -9,6 +9,7 @@ home = Blueprint("home", __name__, url_prefix="/home", template_folder="template
 
 @home.route('/')
 @login_required
+@breadcrumb('Home')
 def user_home():
 	return render_template('home/home.html', title='Home')
 
