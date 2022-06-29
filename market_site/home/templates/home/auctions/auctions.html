@@ -1,8 +1,8 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-Sales auctions: <a href="{{ url_for('home.home_sale_auctions') }}">sales auctions</a><br>
-Purchase auctions: <a href="{{ url_for('home.home_purchase_auctions') }}">purchase auctions</a><br>
+Sales auctions: {{ link(url_for('home.home_sale_auctions'), 'sales auctions') }}<br>
+Purchase auctions: {{ link(url_for('home.home_purchase_auctions'), 'purchase auctions') }}<br>
 
 <table>
 </table>

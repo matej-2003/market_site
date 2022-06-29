@@ -1,8 +1,8 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-Hard asset sales: <a href="/home/sales/asset/h">hard asset sales</a><br>
-Liquid asset sales: <a href="/home/sales/asset/l">liquid asset sales</a><br>
+Hard asset sales: {{ link(url_for('home.home_ha_sales_overview'), 'hard asset sales') }}<br>
+Liquid asset sales: {{ link(url_for('home.home_la_sales_overview'), 'liquid asset sales') }}<br>
 
 <br>
 
@@ -17,9 +17,9 @@ Liquid asset sales: <a href="/home/sales/asset/l">liquid asset sales</a><br>
 	</tr>
 	<tr>
 		<td>Total: </td>
-		<td><span class="m">{{ current_user.ha_sold | price }}</span></td>
-		<td><span class="m">{{ current_user.ha_bought | price }}</span></td>
-		<td><span class="m">1</span></td>
+		<td>{{ current_user.ha_sold | price }}</td>
+		<td>{{ current_user.ha_bought | price }}</td>
+		<td>{{ 1 | price }}</td>
 	</tr>
 </table>
 
@@ -35,9 +35,9 @@ Liquid asset sales: <a href="/home/sales/asset/l">liquid asset sales</a><br>
 	</tr>
 	<tr>
 		<td>Total: </td>
-		<td><span class="m">{{ current_user.la_sold | price }}</span></td>
-		<td><span class="m">{{ current_user.la_bought | price }}</span></td>
-		<td><span class="m">1</span></td>
+		<td>{{ current_user.la_sold | price }}</td>
+		<td>{{ current_user.la_bought | price }}</td>
+		<td>{{ 1 | price }}</td>
 	</tr>
 </table>
 {% endblock %}

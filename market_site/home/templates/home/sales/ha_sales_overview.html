@@ -1,0 +1,7 @@
+{% extends "home/template.html" %}
+{% block content %}
+
+Hard asset sales: {{ link(url_for('home.home_ha_sales'), 'hard asset sales') }}<br>
+Hard asset purchases: {{ link(url_for('home.home_ha_purchases'), 'hard asset purchases') }}<br>
+
+{% endblock %}

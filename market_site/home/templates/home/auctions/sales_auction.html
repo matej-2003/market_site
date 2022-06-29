@@ -1,20 +1,7 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-Active auctions: <a href="{{ url_for('home.home_sale_auctions_active') }}">active auctions</a><br>
-Finnished auctions: <a href="{{ url_for('home.home_sale_auctions_finnished') }}">finnished auctions</a><br>
-<br>
+Active auctions: {{ link(url_for('home.home_sale_auctions_active'), 'active auctions') }}<br>
+Finnished auctions: {{ link(url_for('home.home_sale_auctions_finnished'), 'finnished auctions') }}<br>
 
-<table tb>
-    <tr>
-        <th>Image</th>
-		<th>Status</th>
-        <th>Item name</th>
-        <th>Buyer</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Initial price</th>
-        <th>Final price</th>
-    </tr>
-</table>
 {% endblock %}

@@ -1,11 +1,10 @@
-from flask import render_template, Blueprint, request
+from flask import render_template
 from market_site import db
 from market_site.models import *
 from market_site.config import *
 from . import home
 from flask_login import login_required, current_user
 from flask_breadcrumbs import register_breadcrumb
-from sqlalchemy import or_
 
 
 @home.route('/loans')

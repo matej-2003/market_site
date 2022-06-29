@@ -5,7 +5,6 @@ from market_site.config import *
 from . import home
 from flask_login import login_required, current_user
 from flask_breadcrumbs import register_breadcrumb
-from sqlalchemy import or_
 
 
 
@@ -45,6 +44,8 @@ def home_sale_auctions_finnished():
 	return render_template('home/auctions/sales_auctions.html', title='Finnished sales auctions', auctions=auctions)
 
 
+
+
 @home.route('/auctions/purchase')
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_purchase_auctions', 'Purchases')
@@ -64,7 +65,7 @@ def home_purchase_auctions_active():
 @home.route('/auctions/purchase/finnished')
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_purchase_auctions.home_purchase_auctions_finnished', 'Finnished')
-def home_purchases_auctions_finnished():
+def home_purchase_auctions_finnished():
 	auctions = db.session.query(Auction)\
 		.where(Auction.buyer_id == current_user.id)\
 		.where(Auction.is_over(Auction) == True).all()

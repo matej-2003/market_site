@@ -18,7 +18,7 @@ def login():
 			return redirect(url_for('users.login'))
 	
 		if bc.check_password_hash(user.password, form.password.data):
-			user.last_login = datetime.utcnow()
+			user.last_login = datetime.now()
 			db.session.commit()
 			
 			login_user(user, remember=form.remember.data)
@@ -42,7 +42,9 @@ def logout():
 @users.route('/users', methods=['POST', 'GET'])
 @login_required
 def user_list():
-	users = User.query.filter_by(type=PHYSICAL_PERSON).all()
+	page = request.args.get('page', 1, type=int)
+	users = User.query.filter_by(type=PHYSICAL_PERSON)\
+			.paginate(page=page, per_page=15)
 	return render_template('user/users.html', title='Users', users=users)
 
 @users.route('/user/<int:user_id>', methods=['POST', 'GET'])

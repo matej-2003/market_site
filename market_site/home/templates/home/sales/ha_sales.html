@@ -1,0 +1,62 @@
+{% extends "home/template.html" %}
+{% block content %}
+
+<h3>Sales</h3>
+<table tb>
+    <tr>
+		<th>Image</th>
+		<th>Item</th>
+		<th>Status</th>
+		<th>Price</th>
+		<th>Seller</th>
+		<th>Buyer</th>
+		<th>Start</th>
+		<th>End</th>
+    </tr>
+    {% for sale in sales.items %}
+    <tr>
+        <td>
+			{{ ha_image(sale.hard_asset) }}
+        </td>
+		<td>{{ ha_link(sale.hard_asset) }}</td>
+		<td>
+			{% if sale.is_over() %}
+				<span class="status false">SOLD</span>
+			{% else %}
+				<span class="status true">FOR SALE</span>
+			{% endif %}
+		</td>
+		<td>{{ sale.price | price }}</td>
+		<td>
+			{% set seller = sale.get_seller() %}
+			{% if seller %}
+				{{ user_link(seller) }}
+			{% else %}
+				/
+			{% endif %}
+		</td>
+		<td>
+			{% set buyer = sale.get_buyer()%}
+			{% if buyer %}
+				{{ user_link(buyer) }}
+			{% else %}
+				/
+			{% endif %}
+		</td>
+        <td>{{ sale.start | time }}</td>
+        <td>
+			{% if sale.end %}
+				{{ sale.end | time }}
+			{% else %}
+				/
+			{% endif %}
+		</td>
+    </tr>
+    {% endfor %}
+</table>
+{% if purchase %}
+	{{ pagination(sales, 'home.home_ha_purchases') }}
+{% else %}
+	{{ pagination(sales, 'home.home_ha_sales') }}
+{% endif %}
+{% endblock %}

@@ -15,9 +15,9 @@
             {{ company_image(company) }}
         </td>
         <td>{{ company_link(company) }}</td>
-        <td>{{ bond.value * bond_number | price }}</td>
+        <td>{{ (bond.value * bond_number) | price }}</td>
         <td>{{ bond.interest_rate | percent }}</td>
-        <td>{{ bond.full_value() * bond_number  | price}}</td>
+        <td>{{ (bond.full_value() * bond_number)  | price}}</td>
         <td>{{ bond_number }}</td>
     </tr>
     {% endfor %}

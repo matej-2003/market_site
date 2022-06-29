@@ -44,7 +44,9 @@
         {% if current_user.is_authenticated and request.route != "/login" %}
             <nav>
                 <div>
-                    <img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
+                    <a href="/home">
+                        <img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
+                    </a>
                     <br>
                     <b>
                         <!-- LEGAL_PERSON == 0 -->
@@ -76,7 +78,7 @@
             </div>
 
             {% if current_user.is_authenticated %}
-                <b>Your balance:</b>{{ current_user.balance | price }}
+                <b>Your balance:</b> {{ current_user.balance | price }}
                 <br>
                 <br>
             {% endif %}

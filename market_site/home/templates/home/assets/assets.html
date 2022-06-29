@@ -1,5 +1,5 @@
 {% extends "home/template.html" %}
 {% block content %}
-Hard assets: <a href="/home/assets/h">hard assets</a><br>
-Liquid assets: <a href="/home/assets/l">liquid assets</a><br>
+Hard assets: {{ link(url_for('home.home_hard_assets'), 'hard assets') }}<br>
+Liquid assets: {{ link(url_for('home.home_liquid_assets'), 'liquid assets') }}<br>
 {% endblock %}

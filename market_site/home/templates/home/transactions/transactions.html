@@ -2,19 +2,28 @@
 {% block content %}
 <table>
     <tr>
-        <th>Payer</th>
+        <th>{{ 'Payee' if made else 'Payer'}}</th>
         <th>Amount</th>
         <th>Time</th>
         <th>Info</th>
     </tr>
     {% for transaction in transactions.items %}
     <tr>
-        <td>{{ user_link(transaction.payee) }}</td>
+        {% if made %}
+            <td>{{ user_link(transaction.payer) }}</td>
+        {% else %}
+            <td>{{ user_link(transaction.payee) }}</td>
+        {% endif %}
+
         <td>{{ transaction.amount | price }}</td>
         <td>{{ transaction.time | time }}</td>
         <td>{{ transaction.info | info }}</td>
     </tr>
     {% endfor %}
 </table>
-{{ pagination(transactions, 'home.home_transactions') }}
+{% if made %}
+    {{ pagination(transactions, 'home.home_transactions_made') }}
+{% else %}
+    {{ pagination(transactions, 'home.home_transactions_received') }}
+{% endif %}
 {% endblock %}

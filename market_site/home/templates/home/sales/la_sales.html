@@ -1,0 +1,7 @@
+{% extends "home/template.html" %}
+{% block content %}
+
+Stock sales: {{ link(url_for('home.home_stock_sales_overview'), 'stock sales') }}<br>
+Bond sales: {{ link(url_for('home.home_bond_sales_overview'), 'bond sales') }}<br>
+
+{% endblock %}

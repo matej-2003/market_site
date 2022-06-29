@@ -22,13 +22,13 @@
         <th>Last login</th>
         <th>Date created</th>
     </tr>
-    {% for user in users %}
+    {% for user in users.items %}
         <tr data-link="/user/{{ user.id }}">
 			<td>{{ user.id }}</td>
-			<td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+			<td>{{ user_link(user) }}</a></td>
 			<td>{{ user.email }}</td>
 			<td>{{ user.full_name }}</td>
-			<td><span class="m">{{ user.balance | price }}</span></td>
+			<td>{{ user.balance | price }}</td>
 			<td small>
 				{% if user.type == 0 %}
 					LEGAL_PERSON
@@ -36,9 +36,10 @@
 					PHYSICAL_PERSON
 				{% endif %}
 			</td>
-			<td small><span class="t">{{ user.last_login | time }}</span></td>
-			<td small><span class="t">{{ user.date_created | time }}</span></td>
+			<td small>{{ user.last_login | time }}</td>
+			<td small>{{ user.date_created | time }}</td>
         </tr>
     {% endfor %}
 </table>
+{{ pagination(users, 'users.user_list') }}
 {% endblock %}

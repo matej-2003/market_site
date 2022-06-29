@@ -1,60 +1,37 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-
 <h3>Sales</h3>
+
 <table tb>
 <tr>
 	<th>Id</th>
 	<th>Company logo</th>
 	<th>Company</th>
 	<th>Price</th>
-	<th>Seller</th>
+	<th>{{ 'Seller' if purchase else 'Buyer'}}</th>
 	<th>Time</th>
 </tr>
-{% for sale in sales %}
+{% for sale in sales.items %}
 	<tr>
 		<td>{{ sale.id }}</td>
 		<td>
-			<a href="/assets/l/company/{{ sale.bond.company.id }}">
-				<img company_logo_min src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
-			</a>
+			{{ company_image(sale.bond.company)}}
 		</td>
-		<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>
-		<td><span class="m">{{ sale.price | price }}</span></td>
-		<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
-		<td><span class="t">{{ sale.end | time }}</span></td>
+		<td>{{ company_link(sale.bond.company) }}</td>
+		<td>{{ sale.price | price }}</td>
+		{% if purchase %}
+			<td>{{ user_link(sale.get_seller()) }}</td>
+		{% else %}
+			<td>{{ user_link(sale.get_buyer()) }}</td>
+		{% endif %}
+		<td>{{ sale.end | time }}</td>
 	</tr>
 {% endfor %}
 </table>
-
-<br>
-<br>
-
-
-<h3>Purchases</h3>
-<table tb>
-	<tr>
-		<th>Id</th>
-		<th>Company logo</th>
-		<th>Company</th>
-		<th>Price</th>
-		<th>Seller</th>
-		<th>Time</th>
-	</tr>
-	{% for sale in purchases %}
-		<tr>
-			<td>{{ sale.id }}</td>
-			<td>
-				<a href="/assets/l/company/{{ sale.bond.company.id }}">
-					<img company_logo_min src="/static/companies/{{ sale.bond.company.get_images()[0] }}" alt="{{ sale.bond.company.name }} image">
-				</a>
-			</td>
-			<td><a href="/assets/l/company/{{ sale.bond.company.id }}">{{ sale.bond.company.name }}</a></td>
-			<td><span class="m">{{ sale.price | price }}</span></td>
-			<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
-			<td><span class="t">{{ sale.end | time }}</span></td>
-		</tr>
-	{% endfor %}
-	</table>
+{% if purchase %}
+	{{ pagination(sales, 'home.home_ha_purchases') }}
+{% else %}
+	{{ pagination(sales, 'home.home_ha_sales') }}
+{% endif %}
 {% endblock %}

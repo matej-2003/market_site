@@ -1,8 +1,8 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-Bank loans: <a href="/home/loans/bank">bank loans</a><br>
-Personal loans: <a href="/home/loans/personal">personal loans</a><br>
+Bank loans: {{ link(url_for('home.home_bank_loans'), 'bank loans') }}<br>
+Personal loans: {{ link(url_for('home.home_personal_loans'), 'personal loans') }}<br>
 
 <br>
 

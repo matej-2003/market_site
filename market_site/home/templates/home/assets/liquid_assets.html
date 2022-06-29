@@ -1,6 +1,6 @@
 {% extends "home/template.html" %}
 {% block content %}
 
-Stock: <a href="/home/assets/l/stock">stock</a><br>
-Bonds: <a href="/home/assets/l/bonds">bonds</a><br>
+Stock: {{ link(url_for('home.home_stock'), 'stock') }}<br>
+Bonds: {{ link(url_for('home.home_bonds'), 'bonds') }}<br>
 {% endblock %}

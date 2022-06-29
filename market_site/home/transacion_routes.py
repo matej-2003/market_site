@@ -12,12 +12,7 @@ from sqlalchemy import or_
 @login_required
 @register_breadcrumb(home, '.home_transactions', 'Transactions')
 def home_transactions():
-	page = request.args.get('page', 1, type=int)
-	transactions = db.session.query(Transaction)\
-		.where(or_(Transaction.payee_id == current_user.id, Transaction.payer_id == current_user.id))\
-		.order_by(Transaction.time.desc())\
-		.paginate(page=page, per_page=20)
-	return render_template('home/transactions/transactions.html', title='Transactions', transactions=transactions)
+	return render_template('home/transactions/transactions_overview.html', title='Transactions')
 
 @home.route('/transactions/made')
 @login_required
@@ -27,8 +22,8 @@ def home_transactions_made():
 	transactions = db.session.query(Transaction)\
 		.where(Transaction.payee_id == current_user.id)\
 		.order_by(Transaction.time.desc())\
-		.paginate(page=page, per_page=20)
-	return render_template('home/transactions/transactions.html', title='Transactions', transactions=transactions)
+		.paginate(page=page, per_page=30)
+	return render_template('home/transactions/transactions.html', title='Transactions made', transactions=transactions, made=True)
 
 @home.route('/transactions/received')
 @login_required
@@ -38,6 +33,5 @@ def home_transactions_received():
 	transactions = db.session.query(Transaction)\
 		.where(Transaction.payer_id == current_user.id)\
 		.order_by(Transaction.time.desc())\
-		.paginate(page=page, per_page=20)
-	# print(transactions.pages)
-	return render_template('home/transactions/transactions.html', title='Transactions', transactions=transactions)
+		.paginate(page=page, per_page=30)
+	return render_template('home/transactions/transactions.html', title='Transactions received', transactions=transactions)

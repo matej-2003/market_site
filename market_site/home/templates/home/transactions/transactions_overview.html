@@ -1,0 +1,7 @@
+{% extends "home/template.html" %}
+{% block content %}
+
+Transactions made: {{ link(url_for('home.home_transactions_made'), 'transactions made') }}<br>
+Transactions received: {{ link(url_for('home.home_transactions_received'), 'transactions received') }}<br>
+
+{% endblock %}
