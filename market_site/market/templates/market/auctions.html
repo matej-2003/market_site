@@ -58,10 +58,10 @@
                 <a name href="/auction/{{ auction.id }}">{{ auction.hard_asset.name }}</a>
                 <br>
                 <div info>
-                    <span mark>Auction price</span>: <span class="m">{{ '{:,.2f}'.format(auction.final_price) }}</span><br>
-                    <span mark>Propery value</span>: <span class="m">{{ '{:,.2f}'.format(auction.hard_asset.value) }}</span><br>
+                    <span mark>Auction price</span>: <span class="m">{{ auction.final_price | price }}</span><br>
+                    <span mark>Propery value</span>: <span class="m">{{ auction.hard_asset.value | price }}</span><br>
                     <span mark>Current owner</span>: <a href="/user/{{ auction.get_seller().id }}">{{ auction.get_seller().username }}</a><br>
-                    <span mark>Auction start</span>: <span class="t">{{ auction.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> <br>
+                    <span mark>Auction start</span>: <span class="t">{{ auction.start | time }}</span> <br>
                     <span mark>Status</span>:
 						{% set status = auction.is_bidder(current_user) %}
 						{% if status %}

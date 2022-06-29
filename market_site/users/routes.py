@@ -31,7 +31,7 @@ def login():
 		else:
 			flash('Login unsucessfull!', 'error')
 
-	return render_template('login.html', title='', form=form, not_show_nav=True)
+	return render_template('login.html', title='', form=form)
 
 @users.route('/logout')
 def logout():

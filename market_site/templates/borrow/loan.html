@@ -83,7 +83,7 @@
                                 <td><input type="checkbox" name="{{ asset.id }}"></td>
                                 <td><img min src="/static/assets/hard/{{ asset.get_images()[0] }}"></td>
                                 <td>{{ asset.name }}</td>
-                                <td><span class="m">${{ "{:,.2f}".format(asset.value) }}</span></td>
+                                <td><span class="m">${{ asset.value | price }}</span></td>
                             </tr>
                             {% endfor %}
                         </table> -->

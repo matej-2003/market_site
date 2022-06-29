@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td>Your share value</td>
-                        <td><span class="m">{{ '{:.2f}'.format(current_user.share_value(company)) }}</span></td>
+                        <td><span class="m">{{ current_user.share_value(company) | price }}</span></td>
                     </tr>
                     <tr>
                         <td colspan="2">

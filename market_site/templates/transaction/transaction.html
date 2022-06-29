@@ -10,7 +10,7 @@
             </tr>
             <tr>
                 <td>Amount:</td>
-                <td><input name="amount" type="number" min="0.01" max="{{ "{:,.2f}".format(current_user.balance) }}" step="0.01"></td>
+                <td><input name="amount" type="number" min="0.01" max="{{ current_user.balance | price }}" step="0.01"></td>
             </tr>
             <tr>
                 <td colspan="2">

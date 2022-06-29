@@ -57,7 +57,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
     </tr>
     <tr>
         <td>Balance</td>
-        <td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
+        <td><span class="m">{{ user.balance | price }}</span></td>
         <td>Type</td>
         <td>
             {% if user.type == 0 %} LEGAL_PERSON {% else %} PHYSICAL_PERSON {% endif %}
@@ -65,9 +65,9 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
     </tr>
     <tr>
         <td>Last login</td>
-        <td><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <td><span class="t">{{ user.last_login | time }}</span> </td>
         <td>Date created</td>
-        <td><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <td><span class="t">{{ user.date_created | time }}</span> </td>
     </tr>
 </table>
 
@@ -81,7 +81,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
         </a>
         <br>
         <br>
-        Total payments made: <span class="m">{{ '{:,.2f}'.format(user.total_payments_made) }}</span>
+        Total payments made: <span class="m">{{ user.total_payments_made | price }}</span>
         <table tb>
             <tr>
                 <th>Amount</th>
@@ -93,7 +93,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
             <tr>
                 <td><span class="m">{{ payment.amount }}</span></td>
                 <td>{{ payment.payee.username }}</td>
-                <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                <td><span class="t">{{ payment.time | time }}</span></td>
                 <td>{{ payment.info }}</td>
             </tr>
             {% endfor %}
@@ -102,7 +102,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
 
     <h3>Payments received</h3>
     <div>
-        Total payments received: <span class="m">{{ '{:,.2f}'.format(user.total_payments_received) }}</span>
+        Total payments received: <span class="m">{{ user.total_payments_received | price }}</span>
         <table tb>
             <tr>
                 <th>Amount</th>
@@ -114,7 +114,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
             <tr>
                 <td><span class="m">{{ payment.amount }}</span></td>
                 <td>{{ payment.payer.username }}</td>
-                <td><span class="t">{{ payment.time.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+                <td><span class="t">{{ payment.time | time }}</span></td>
                 <td>{{ payment.info }}</td>
             </tr>
             {% endfor %}
@@ -169,7 +169,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
                     </a>
                 </td>
                 <td><a href="/assets/l/company/{{ company.id }}">{{ company.name }}</a></td>
-                <td><span class="m">{{ "{:,.2f}".format(company.share_value * share_number ) }}</span></td>
+                <td><span class="m">{{ company.share_value * share_number  | price }}</span></td>
                 <td>{{ share_number }}</td>
             </tr>
             {% endfor %}
@@ -195,9 +195,9 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
                     </a>
                 </td>
                 <td><a href="/assets/l/company/{{ company.id }}">{{ company.name }}</a></td>
-                <td><span class="m">{{ "{:,.2f}".format(bond.value * bond_number) }}</span></td>
-                <td><span class="p">{{ "{:,.2f}".format(bond.interest_rate) }}</span></td>
-                <td><span class="m">{{ "{:,.2f}".format(bond.full_value() * bond_number) }}</span></td>
+                <td>{{ bond.value * bond_number | price }}></td>
+                <td>{{ bond.interest_rate | percent }}></td>
+                <td>{{ bond.full_value() * bond_number | price  }}></td>
                 <td>{{ bond_number }}</td>
             </tr>
             {% endfor %}

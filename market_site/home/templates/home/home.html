@@ -15,7 +15,7 @@
     </tr>
     <tr>
         <td>Balance</td>
-        <td><span class="m">{{ "{:,.2f}".format(current_user.balance) }}</span></td>
+        <td>{{ current_user.balance | price }}</td>
         <td>Type</td>
         <td>
             <span class="small">{% if current_user.type == 0 %} LEGAL_PERSON {% else %} PHYSICAL_PERSON {% endif %}</span>
@@ -23,9 +23,9 @@
     </tr>
     <tr>
         <td>Last login</td>
-        <td><span class="t">{{ current_user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <td>{{ current_user.last_login | time }}</td>
         <td>Date created</td>
-        <td><span class="t">{{ current_user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+        <td>{{ current_user.date_created | time }}</td>
     </tr>
 </table>
 

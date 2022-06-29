@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <td colspan="2">Company value</td>
-        <td colspan="2"><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
+        <td colspan="2"><span class="m">{{ company.value | price }}</span></td>
     </tr>
     <tr>
         <td colspan="2">Total bonds</td>
@@ -43,8 +43,8 @@
     <tr>
         <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
         <td>{{ bond_number }}</td>
-        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.value) }}</span></td>
-        <td><span class="m">{{ "{:,.2f}".format(bond_number * bond.full_value()) }}</span></td>
+        <td><span class="m">{{ bond_number * bond.value | price }}</span></td>
+        <td><span class="m">{{ bond_number * bond.full_value( | price) }}</span></td>
     </tr>
     {% endfor %}
 </table>

@@ -57,10 +57,10 @@
         <a name href="/hard_asset/asset/{{ sale.hard_asset.id }}">{{ sale.hard_asset.name }}</a>
         <br>
         <div info>
-            <span mark>Sale price</span>: <span class="m">{{ '{:,.2f}'.format(sale.price) }}</span><br>
-            <span mark>Propery value</span>: <span class="m">{{ '{:,.2f}'.format(sale.hard_asset.value) }}</span><br>
+            <span mark>Sale price</span>: <span class="m">{{ sale.price | price }}</span><br>
+            <span mark>Propery value</span>: <span class="m">{{ sale.hard_asset.value | price }}</span><br>
             <span mark>Current owner</span>: <a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a><br>
-            <span mark>Sale start</span>: <span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> <br>
+            <span mark>Sale start</span>: <span class="t">{{ sale.start | time }}</span> <br>
         </div>
     </div>
     {% endfor %}

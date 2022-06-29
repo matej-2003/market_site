@@ -1,15 +1,4 @@
-{% extends "layout.html" %}
-{% block meta_tags %}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
-{% endblock %}
-{% block style %}
-<style>
-    img[bank_logo_min] {
-        display: inline-block;
-        max-height: 1.5rem;
-    }
-</style>
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 
 
@@ -34,11 +23,11 @@
             </td>
             <td><a href="/borrow/bank/{{ bank.id }}">{{ bank.name }}</a></td>
             <td>{{ loan.status }}</td>
-            <td><span class="m">{{ "{:,.2f}".format(loan.amount) }}</span></td>
-            <td><span class="p">{{ "{:,.2f}".format((loan.interest_rate - 1) * 100) }}</span></td>
-            <td><span class="m">{{ "{:,.2f}".format(loan.full_cost()) }}</span></td>
-            <td><span class="t">{{ loan.due_date.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
-            <td><span class="t">{{ loan.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+            <td><span class="m">{{ loan.amount | price }}</span></td>
+            <td><span class="p">{{ (loan.interest_rate - 1) * 100 | price }}</span></td>
+            <td><span class="m">{{ loan.full_cost() | price }}</span></td>
+            <td><span class="t">{{ loan.due_date | time }}</span></td>
+            <td><span class="t">{{ loan.date_created | time }}</span></td>
             <td>{{ asset.name }}</td>
         </tr>
     {% endfor %}

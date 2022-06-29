@@ -46,7 +46,7 @@
         <tr>
             <td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
             <td><a href="/user/{{ sale.get_buyer().id }}">{{ sale.get_buyer().username }}</a></td>
-            <td><span class="m">{{ '{:,.2f}'.format(sale.price) }}</span></td>
+            <td><span class="m">{{ sale.price | price }}</span></td>
             <td>
                 {% if sale.status == 0 %}
                     <span class="status for_sale"></span>
@@ -54,10 +54,10 @@
                     <span class="status sold"></span>
                 {% endif %}
             </td>
-            <td><span class="t">{{ sale.start.strftime('%d/%m/%Y %H:%M:%S') }}</span> </td>
+            <td><span class="t">{{ sale.start | time }}</span> </td>
             <td>
                 {% if sale.end %}
-                    <span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span> 
+                    <span class="t">{{ sale.end | time }}</span> 
                 {% endif %}
             </td>
         </tr>

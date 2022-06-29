@@ -26,7 +26,7 @@
     </tr>
     <tr>
         <td colspan="1">Company value</td>
-        <td colspan="20"><span class="m">{{ '{:,.2f}'.format(company.value) }}</span></td>
+        <td colspan="20"><span class="m">{{ company.value | price }}</span></td>
     </tr>
     <tr>
         <td colspan="1">Total bonds</td>
@@ -54,9 +54,9 @@ Last sale price: <span class="m">{{ company.share_value }}</span>
             <td>
                 {% set returns = (sale.price - company.share_value) / company.share_value * 100 %}
                 {% if returns < 0 %}
-                    <span class="p neg">{{ "{:,.2f}".format(returns) }}</span>
+                    <span class="p neg">{{ returns | price }}</span>
                 {% elif returns > 0 %}
-                    <span class="p pos">{{ "{:,.2f}".format(returns) }}</span>
+                    <span class="p pos">{{ returns | price }}</span>
                 {% endif %}
             </td>
             <td><span class="m">{{ sale.price * share_number }}</span></td>

@@ -1,7 +1,4 @@
-{% extends "layout.html" %}
-{% block meta_tags %}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 
 Hard asset sales: <a href="/home/sales/asset/h">hard asset sales</a><br>
@@ -20,8 +17,8 @@ Liquid asset sales: <a href="/home/sales/asset/l">liquid asset sales</a><br>
 	</tr>
 	<tr>
 		<td>Total: </td>
-		<td><span class="m">{{ "{:,.2f}".format(current_user.ha_sold) }}</span></td>
-		<td><span class="m">{{ "{:,.2f}".format(current_user.ha_bought) }}</span></td>
+		<td><span class="m">{{ current_user.ha_sold | price }}</span></td>
+		<td><span class="m">{{ current_user.ha_bought | price }}</span></td>
 		<td><span class="m">1</span></td>
 	</tr>
 </table>
@@ -38,8 +35,8 @@ Liquid asset sales: <a href="/home/sales/asset/l">liquid asset sales</a><br>
 	</tr>
 	<tr>
 		<td>Total: </td>
-		<td><span class="m">{{ "{:,.2f}".format(current_user.la_sold) }}</span></td>
-		<td><span class="m">{{ "{:,.2f}".format(current_user.la_bought) }}</span></td>
+		<td><span class="m">{{ current_user.la_sold | price }}</span></td>
+		<td><span class="m">{{ current_user.la_bought | price }}</span></td>
 		<td><span class="m">1</span></td>
 	</tr>
 </table>

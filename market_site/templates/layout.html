@@ -1,3 +1,4 @@
+{% from "macros.html" import link, ha_link, company_link, company_image, ha_image, ha_compact, pagination, user_link with context %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +41,7 @@
     </header>
 
     <div main>
-        {% if not not_show_nav %}
+        {% if current_user.is_authenticated and request.route != "/login" %}
             <nav>
                 <div>
                     <img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
@@ -75,7 +76,7 @@
             </div>
 
             {% if current_user.is_authenticated %}
-                <b>Your balance:</b> <span class="m">{{ "{:,.2f}".format(current_user.balance) }}</span>
+                <b>Your balance:</b>{{ current_user.balance | price }}
                 <br>
                 <br>
             {% endif %}
@@ -93,10 +94,10 @@
 
             <div>
                 {% if breadcrumbs  %}
-                    {% for breadcrumb in breadcrumbs %}
-                        <a href="#">{{ breadcrumb }}</a>
-                        {{ '/' if not loop.last }}
-                    {% endfor %}
+                    {%- for breadcrumb in breadcrumbs -%}
+                        <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
+                        {{ '/ ' if not loop.last }}
+                    {%- endfor -%}
                 {% endif %}
             </div>
             <br>

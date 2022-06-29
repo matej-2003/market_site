@@ -1,15 +1,4 @@
-{% extends "layout.html" %}
-{% block meta_tags %}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
-{% endblock %}
-{% block style %}
-<style>
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-</style>
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 
 
@@ -32,9 +21,9 @@
 				</a>
 			</td>
 			<td><a href="/assets/l/company/{{ sale.share.company.id }}">{{ sale.share.company.name }}</a></td>
-			<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+			<td><span class="m">{{ sale.price | price }}</span></td>
 			<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
-			<td><span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+			<td><span class="t">{{ sale.end | time }}</span></td>
 		</tr>
 	{% endfor %}
 </table>
@@ -62,9 +51,9 @@
 				</a>
 			</td>
 			<td><a href="/assets/l/company/{{ sale.share.company.id }}">{{ sale.share.company.name }}</a></td>
-			<td><span class="m">{{ "{:,.2f}".format(sale.price) }}</span></td>
+			<td><span class="m">{{ sale.price | price }}</span></td>
 			<td><a href="/user/{{ sale.get_seller().id }}">{{ sale.get_seller().username }}</a></td>
-			<td><span class="t">{{ sale.end.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+			<td><span class="t">{{ sale.end | time }}</span></td>
 		</tr>
 	{% endfor %}
 	</table>

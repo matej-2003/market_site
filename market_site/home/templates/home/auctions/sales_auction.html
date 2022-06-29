@@ -1,16 +1,4 @@
-{% extends "layout.html" %}
-{% block meta_tags %}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
-{% endblock %}
-{% block style %}
-<style>
-    img[asset_image] {
-        display: inline-block;
-        width: auto;
-        height: 4em;
-    }
-</style>
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 
 Active auctions: <a href="{{ url_for('home.home_sale_auctions_active') }}">active auctions</a><br>

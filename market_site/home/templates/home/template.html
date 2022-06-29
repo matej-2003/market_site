@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block meta_tags %}
+	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+{% endblock %}
+{% block style %}
+<style>
+    img[bank_logo_min] {
+        display: inline-block;
+        max-height: 1.5rem;
+    }
+
+    img[company_logo_min] {
+        display: inline-block;
+        max-height: 1.7em;
+    }
+
+    img[asset_image] {
+        display: inline-block;
+        height: auto;
+        width: 7em;
+    }
+    
+    span.gray {
+        color: #414141;
+    }
+
+    span.small {
+        font-size: small;
+    }
+    
+    .container {
+        display: inline-grid;
+        grid-template-columns: max-content max-content;
+        border: 1px solid #c0c0c0;
+        background-color: #c0c0c0;
+        grid-gap: 1px;
+    }
+
+    .asset_item {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em;
+        gap: 0.5em;
+        background-color: #fff;
+    }
+</style>
+{% endblock %}

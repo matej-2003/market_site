@@ -28,7 +28,7 @@
 			<td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
 			<td>{{ user.email }}</td>
 			<td>{{ user.full_name }}</td>
-			<td><span class="m">{{ "{:,.2f}".format(user.balance) }}</span></td>
+			<td><span class="m">{{ user.balance | price }}</span></td>
 			<td small>
 				{% if user.type == 0 %}
 					LEGAL_PERSON
@@ -36,8 +36,8 @@
 					PHYSICAL_PERSON
 				{% endif %}
 			</td>
-			<td small><span class="t">{{ user.last_login.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
-			<td small><span class="t">{{ user.date_created.strftime('%d/%m/%Y %H:%M:%S') }}</span></td>
+			<td small><span class="t">{{ user.last_login | time }}</span></td>
+			<td small><span class="t">{{ user.date_created | time }}</span></td>
         </tr>
     {% endfor %}
 </table>

@@ -59,7 +59,7 @@
         <br>
         <br>
         <div info>
-            <span mark>Value</span>: <span class="m">{{ '{:,.2f}'.format(company.value) }}</span>
+            <span mark>Value</span>: <span class="m">{{ company.value | price }}</span>
             <br>
             <span mark>Bond number</span>: {{ company.bond_number() }}
         </div>

@@ -1,0 +1,73 @@
+{% macro link(path, name) %}
+    <a href="{{ path }}">{{ name }}</a>
+{% endmacro %}
+
+{% macro user_link(user) %}
+    {{ link(url_for('users.user', user_id=user.id), user.username) }}
+{% endmacro %}
+
+{% macro ha_link(asset) %}
+    {{ link(url_for('hard_assets.hard_asset', hard_asset_id=asset.id), asset.name) }}
+{% endmacro %}
+
+{% macro ha_image(asset) %}
+    <a href="{{ url_for('hard_assets.hard_asset', hard_asset_id=asset.id) }}">
+        <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+    </a>
+{% endmacro %}
+
+{% macro company_link(company) %}
+    {{ link(url_for('liquid_assets.company', company_id=company.id), company.name) }}
+{% endmacro %}
+
+{% macro company_image(company) %}
+    <a href="{{ url_for('liquid_assets.company', company_id=company.id) }}">
+        <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+    </a>
+{% endmacro %}
+
+{% macro ha_compact(asset) %}
+<div class="asset_item">
+    <div>
+        {{ ha_image(asset) }}
+    </div>
+    <div>
+        <span class="gray">Name: </span>{{ ha_link(asset) }}</a><br>
+        <span class="gray">Value: </span>{{ asset.value | price }}<br>
+        <span class="gray">Type: </span><span class="small">{{ asset.type }}</span><br>
+        <span class="gray">Info: </span><span class="small">{{ asset.info }}</span><br>
+        <span class="gray">Status: </span>
+        {% if asset.is_on_sale() %}
+            <span class="status small for_sale"></span>
+        {% elif asset.is_on_auction() %}
+            <span class="status small auction"></span>
+        {% else %}
+            <span class="status small not_for_sale"></span>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro pagination(items, func) %}
+    {% if items.pages > 1 %}
+        <div class="pagination">
+            {% if items.has_prev %}
+                <a  href="{{ url_for(func, page=items.prev_num) }}">&laquo;</a>
+            {% endif %}
+            {% for page_num in items.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                {% if page_num %}
+                    {% if items.page == page_num %}
+                        <a class="current" href="{{ url_for(func, page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a href="{{ url_for(func, page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                    ...
+                {% endif %}
+            {% endfor %}
+            {% if items.has_next %}
+                <a href="{{ url_for(func, page=items.next_num) }}">&raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

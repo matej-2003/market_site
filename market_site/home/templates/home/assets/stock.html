@@ -1,12 +1,4 @@
-{% extends "layout.html" %}
-{% block style %}
-<style>
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-</style>
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 <table tb>
     <tr>
@@ -18,36 +10,13 @@
     {% for share, company, share_number in stock.items %}
     <tr>
         <td>
-            <a href="/assets/l/company/{{ company.id }}">
-                <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}"
-                    alt="{{ company.name }} image">
-            </a>
+            {{ company_image(company) }}
         </td>
-        <td><a href="/assets/l/company/{{ company.id }}">{{ company.name }}</a></td>
-        <td><span class="m">{{ "{:,.2f}".format(company.share_value * share_number ) }}</span></td>
+        <td>{{ company_link(company) }}</td>
+        <td><span class="m">{{ company.share_value * share_number  | price }}</span></td>
         <td>{{ share_number }}</td>
     </tr>
     {% endfor %}
 </table>
-{% if stock.pages > 1 %}
-    <div class="pagination">
-        {% if stock.has_prev %}
-            <a  href="{{ url_for('home.home_stock', page=stock.prev_num) }}">&laquo;</a>
-        {% endif %}
-        {% for page_num in stock.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
-            {% if page_num %}
-                {% if stock.page == page_num %}
-                    <a class="current" href="{{ url_for('home.home_stock', page=page_num) }}">{{ page_num }}</a>
-                {% else %}
-                    <a href="{{ url_for('home.home_stock', page=page_num) }}">{{ page_num }}</a>
-                {% endif %}
-            {% else %}
-                ...
-            {% endif %}
-        {% endfor %}
-        {% if stock.has_next %}
-            <a href="{{ url_for('home.home_stock', page=stock.next_num) }}">&raquo;</a>
-        {% endif %}
-    </div>
-{% endif %}
+{{ pagination(stock, 'home.home_stock') }}
 {% endblock %}

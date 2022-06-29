@@ -1,11 +1,4 @@
-{% extends "layout.html" %}
-{% block meta_tags %}
-	<link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
-{% endblock %}
-{% block style %}
-<style>
-</style>
-{% endblock %}
+{% extends "home/template.html" %}
 {% block content %}
 
 Bank loans: <a href="/home/loans/bank">bank loans</a><br>
@@ -23,8 +16,8 @@ Personal loans: <a href="/home/loans/personal">personal loans</a><br>
 		<th>Security value</th>
 	</tr>
 	<tr>
-		<td><span class="m">{{ "{:,.2f}".format(1) }}</span></td>
-		<td><span class="m">{{ "{:,.2f}".format(1) }}</span></td>
+		<td><span class="m">{{ 1 | price }}</span></td>
+		<td><span class="m">{{ 1 | price }}</span></td>
 		<td><span class="m">1</span></td>
 		<td><span class="m">1</span></td>
 	</tr>
