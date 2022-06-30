@@ -23,7 +23,7 @@ def auctions():
 @market.route('/assets/h')
 @login_required
 def market_hard_assets():
-	return render_template('assets/hard/index.html', title='Hard asset')
+	return render_template('market/ha_market_overview.html', title='Hard asset')
 
 @market.route('/assets/h/<string:category>')
 @login_required
@@ -59,30 +59,30 @@ def market_hard_asset_category(category):
 
 
 
-@market.route('/assets/liquid')
+@market.route('/assets/l')
 @login_required
 def market_liquid_assets():
-	return render_template('assets/liquid/index.html', title='Liquid asset')
+	return render_template('market/la_market_overview.html', title='Liquid asset')
 
 
 
-@market.route('/assets/liquid/bonds')
+@market.route('/assets/l/bonds')
 @login_required
 def market_bonds():
 	companies = Company.query.all()
-	return render_template('assets/liquid/bond_market.html', title='Bond market', companies=companies)
+	return render_template('market/bond_market.html', title='Bond market', companies=companies)
 
 
 
-@market.route('/assets/liquid/stocks')
+@market.route('/assets/l/stocks')
 @login_required
 def market_stocks():
 	companies = Company.query.all()
-	return render_template('assets/liquid/stock_market.html', title='Stock market', companies=companies)
+	return render_template('market/stock_market.html', title='Stock market', companies=companies)
 
 
 
-@market.route('/assets/liquid/stocks/<int:company_id>/sell', methods = ['GET', 'POST'])
+@market.route('/assets/l/stocks/<int:company_id>/sell', methods = ['GET', 'POST'])
 @login_required
 def market_sell_stock(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -107,11 +107,11 @@ def market_sell_stock(company_id):
 						db.session.commit()
 		except ValueError:
 			flash('value error', 'error')
-	return render_template('assets/liquid/company_stock_sell.html', title='Company stock market', company=company, user_share_number=current_user.share_number(company))
+	return render_template('market/company_stock_sell.html', title='Company stock market', company=company, user_share_number=current_user.share_number(company))
 
 
 
-@market.route('/assets/liquid/bonds/<int:company_id>/sell', methods = ['GET', 'POST'])
+@market.route('/assets/l/bonds/<int:company_id>/sell', methods = ['GET', 'POST'])
 @login_required
 def market_sell_bond(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -138,12 +138,12 @@ def market_sell_bond(company_id):
 				flash('You canot sell bonds you don\'t have', 'error')
 		except ValueError:
 			flash('value error', 'error')
-	return render_template('assets/liquid/company_bond_sell.html', title='Company bond market', company=company, user_bond_number=current_user.bond_number(company))
+	return render_template('market/company_bond_sell.html', title='Company bond market', company=company, user_bond_number=current_user.bond_number(company))
 
 
 
 
-@market.route('/assets/liquid/stocks/<int:company_id>', methods = ['GET', 'POST'])
+@market.route('/assets/l/stocks/<int:company_id>', methods = ['GET', 'POST'])
 @login_required
 def stock_market(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -161,11 +161,11 @@ def stock_market(company_id):
 		.where(Company.id == company_id, CompanyShareSale.status == FOR_SALE)\
 		.group_by(User.id, CompanyShareSale.price)\
 		.order_by(desc('share_number'))
-	return render_template('assets/liquid/company_stock_market.html', title='Company stock market', company=company, share_sales=share_sales.all())
+	return render_template('market/company_stock_market.html', title='Company stock market', company=company, share_sales=share_sales.all())
 
 
 
-@market.route('/assets/liquid/bonds/<int:company_id>', methods = ['GET', 'POST'])
+@market.route('/assets/l/bonds/<int:company_id>', methods = ['GET', 'POST'])
 @login_required
 def bond_market(company_id):
 	company = Company.query.get_or_404(company_id)
@@ -180,4 +180,4 @@ def bond_market(company_id):
 	.where(CompanyBond.company_id == 6, CompanyBondSale.status == FOR_SALE)\
 	.group_by(CompanyBond.owner_id, CompanyBond.value, CompanyBond.interest_rate, CompanyBondSale.price)\
 	.order_by(CompanyBond.owner_id, CompanyBond.value, CompanyBond.interest_rate, CompanyBondSale.price)
-	return render_template('assets/liquid/company_bond_market.html', title='Company bond market', company=company, bond_sales=bond_sales.all())
+	return render_template('market/company_bond_market.html', title='Company bond market', company=company, bond_sales=bond_sales.all())

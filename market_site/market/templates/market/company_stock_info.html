@@ -2,11 +2,6 @@
 {% block style %}
 
 <style>
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-
     table {
         width: 100%;
     }
@@ -27,7 +22,7 @@
     </tr>
     <tr>
         <td colspan="2">Company value</td>
-        <td colspan="2"><span class="m">{{ company.value | price }}</span></td>
+        <td colspan="2">{{ company.value | price }}</td>
     </tr>
     <tr>
         <td colspan="2">Total shares</td>
@@ -41,10 +36,10 @@
     </tr>
     {% for share_number, user in shares %}
     <tr>
-        <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+        <td>{{ user_link(user) }}</td>
         <td>{{ share_number }}</td>
-        <td><span class="m">{{ share_number * company.share_value | price }}</span></td>
-        <td><span class="p">{{ share_number / company.share_number( | price * 100) }}</span></td>
+        <td>{{ share_number * company.share_value | price }}</td>
+        <td>{{ share_number / company.share_number() * 100  | price }}</td>
     </tr>
     {% endfor %}
 </table>

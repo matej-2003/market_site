@@ -12,7 +12,7 @@ liquid_assets = Blueprint("liquid_assets", __name__, url_prefix="/assets/l", tem
 def list_liquid_assets():
 	shares = CompanyShareSale.query.all()
 	bonds = CompanyBondSale.query.all()
-	return render_template('assets/hard/asset.html', title='Asset', shares=shares, bonds=bonds)
+	return render_template('assets/liquid/asset.html', title='Asset', shares=shares, bonds=bonds)
 
 
 @liquid_assets.route('/company/<int:company_id>')
