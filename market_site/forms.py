@@ -1,12 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DecimalField, SelectField
-from wtforms.fields.html5 import DateTimeField
-# from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DecimalField, SelectField, DateTimeField
+from wtforms.validators import DataRequired, Length
 from market_site.models import Bank
 
 class TransactionForm(FlaskForm):
+    receipient_id = IntegerField('Receipient id', validators=[DataRequired(), Length(min=1, max=20)])
     amount = DecimalField('Amount', places=2, rounding=None)
-    receipient_id = IntegerField('Receipient id')
     submit = SubmitField('Confirm the payment')
 
 class HardAssetSaleForm(FlaskForm):

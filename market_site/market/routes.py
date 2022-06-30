@@ -50,7 +50,7 @@ def market_hard_asset_category(category):
 		.join(HardAsset, HardAssetSale.hard_asset_id==HardAsset.id)\
 		.where(HardAssetSale.status == FOR_SALE, HardAsset.type == type).all()
 	title = type.lower().replace('_', ' ').capitalize()
-	return render_template('assets/hard/market.html', title=title, sales=sales)
+	return render_template('market/ha_market.html', title=title, sales=sales)
 
 
 

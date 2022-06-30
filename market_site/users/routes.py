@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from market_site import bc, db
-from market_site.users.forms import LoginForm
+from market_site.users.forms import LoginForm, TransactionForm
 from market_site.models import User
-from market_site.config import PHYSICAL_PERSON
-from flask_login import login_user, logout_user, login_required
+from market_site.config import PHYSICAL_PERSON, TRANSACTIO_ERROR
+from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
 users = Blueprint("users", __name__, template_folder="templates")
@@ -16,11 +16,11 @@ def login():
 		if not user:
 			flash('user not found!!!', 'error')
 			return redirect(url_for('users.login'))
-	
+
 		if bc.check_password_hash(user.password, form.password.data):
 			user.last_login = datetime.now()
 			db.session.commit()
-			
+
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')
 			if next_page:
@@ -33,6 +33,35 @@ def login():
 
 	return render_template('login.html', title='', form=form)
 
+@users.route('/make_transaction', methods=['GET', 'POST'])
+@login_required
+def make_transaction():
+	form = TransactionForm()
+	receipient_id = request.args.get('receipient_id', None, type=int)
+	amount = request.args.get('amount', None, type=float)
+
+	if receipient_id:
+		form.receipient_id.data = receipient_id
+	if amount:
+		form.amount.data = amount
+
+	if form.validate_on_submit():
+		user = User.query.get(form.receipient_id.data)
+		if not user or receipient_id == current_user.id:
+			flash('user not found!!!', 'error')
+			redirect(url_for('users.make_transaction'))
+
+		if not (form.amount.data > 0 and form.amount.data <= current_user.balance):
+			flash('amount error amount must > 0 and smaller than your balance', 'error')
+			redirect(url_for('users.make_transaction'))
+		result = current_user.pay(float(form.amount.data), user, info=form.info.data)
+		if result == TRANSACTIO_ERROR:
+			flash(result, 'error')
+		else:
+			flash(result, 'success')
+	return render_template('transaction/make_transaction.html', title='Make Transaction', form=form)
+
+
 @users.route('/logout')
 def logout():
 	logout_user()
@@ -43,8 +72,9 @@ def logout():
 @login_required
 def user_list():
 	page = request.args.get('page', 1, type=int)
-	users = User.query.filter_by(type=PHYSICAL_PERSON)\
-			.paginate(page=page, per_page=15)
+	# users = User.query.filter_by(type=PHYSICAL_PERSON)\
+	# 		.paginate(page=page, per_page=15)
+	users = User.query.paginate(page=page, per_page=15)
 	return render_template('user/users.html', title='Users', users=users)
 
 @users.route('/user/<int:user_id>', methods=['POST', 'GET'])

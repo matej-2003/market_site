@@ -15,28 +15,33 @@ templates/home
 	- bonds			/home/asset/l/bonds
 
 - auctions			/home/auctions/
-- auctions			/home/auctions/finnished
-- auctions			/home/auctions/active
+	- sales			./sale/
+	- purchase		./purchase/
+		- auctions			./finnished
+		- auctions			./active
 # - auctions			/home/auctions/resigned_auctions
 
-# - trades			/home/trades/
-- sales				/home/sales/
+- sales						/home/sales/
 	- hard asset sales		/home/sales/asset/h
+		- sales				./sales
+		- purchases			.purchase
 
 	- liquid asset sales	/home/sales/asset/l
-		- summary
-	- liquid asset sales	/home/sales/asset/l/stock
-	- liquid asset sales	/home/sales/asset/l/bond
+		- stock				./stock
+			- sales				./sales
+			- purchases			.purchase
+		- bond				./bond
+			- sales				./sales
+			- purchases			.purchase
 
 - loans
-	/home/loans
-	/home/loans/bank
-	<!-- /home/loans/personal -->
+	- bank			/home/loans
+	- personal		/home/loans/bank
 
 - transactions
-	/home/transactions
-	/home/transactions/made
-	/home/transactions/received
+	- transactions ovrview	/home/transactions
+		- made				./made
+		- receive			./receive
 
 
 templates/borrow

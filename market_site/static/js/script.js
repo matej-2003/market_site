@@ -38,8 +38,8 @@ for (let alert of alerts) {
     }
 }
 
-$("tr [data-link]").array.forEach(e => {
-	e.onclick(() => {
-		window.location = e.dataset.link;
-	});
-});
+// $("tr [data-link]").array.forEach(e => {
+// 	e.onclick(() => {
+// 		window.location = e.dataset.link;
+// 	});
+// });

@@ -76,9 +76,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
 <div class="transactions collapsable">
     <h3>Payments made</h3>
     <div>
-        <a href="/transaction?receipient_id={{user.id}}">
-        <button>Make transactions</button>
-        </a>
+        {{ link(url_for('users.make_transaction', receipient_id=user.id), '<button>Make transactions</button>' | safe) }}
         <br>
         <br>
         Total payments made: <span class="m">{{ user.total_payments_made | price }}</span>

@@ -26,8 +26,8 @@
         <tr data-link="/user/{{ user.id }}">
 			<td>{{ user.id }}</td>
 			<td>{{ user_link(user) }}</a></td>
-			<td>{{ user.email }}</td>
-			<td>{{ user.full_name }}</td>
+			<td>{{ user.email | info }}</td>
+			<td>{{ user.full_name | info }}</td>
 			<td>{{ user.balance | price }}</td>
 			<td small>
 				{% if user.type == 0 %}

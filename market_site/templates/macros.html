@@ -10,9 +10,9 @@
     {{ link(url_for('hard_assets.hard_asset', hard_asset_id=asset.id), asset.name) }}
 {% endmacro %}
 
-{% macro ha_image(asset) %}
+{% macro ha_image(asset, attributes='') %}
     <a href="{{ url_for('hard_assets.hard_asset', hard_asset_id=asset.id) }}">
-        <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+        <img {{ attributes | safe }} asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
     </a>
 {% endmacro %}
 
@@ -70,4 +70,56 @@
             {% endif %}
         </div>
     {% endif %}
+{% endmacro %}
+
+{% macro auction_link(auction) %}
+    {{ link(url_for('auction.auction_page', auction_id=auction.id), auction.hard_asset.name) }}
+{% endmacro %}
+
+{% macro auction_image(auction) %}
+    <a href="{{ url_for('auction.auction_page', auction_id=auction.id)}} ">
+        <img vertical_logo src="/static/assets/hard/{{ auction.hard_asset.get_images()[0] }}"
+            alt="{{ auction.hard_asset.name }} image">
+    </a>
+{% endmacro %}
+
+{% macro auction_market(auction) %}
+    <div class="container">
+        <div class="logo">
+            {{ auction_image(auction) }}
+        </div>
+        <br>
+        <span class="name">{{ auction_link(auction) }}</span>
+        <br>
+        <div info>
+            <span mark>Auction price</span>: {{ auction.final_price | price }}<br>
+            <span mark>Propery value</span>: {{ auction.hard_asset.value | price }}<br>
+            <span mark>Current owner</span>: {{ user_link(auction.get_seller()) }}<br>
+            <span mark>Auction start</span>: {{ auction.start | time }}<br>
+            <span mark>Status</span>:
+                {% set status = auction.is_bidder(current_user) %}
+                {% if status %}
+                    <span class="status involved"></span>
+                {% else %}
+                    <span class="status not_involved"></span>
+                {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro ha_market(sale) %}
+    <div class="container">
+        <div class="logo">
+            {{ ha_image(sale.hard_asset, attributes='vertical_logo') }}
+        </div>
+        <br>
+        <span class="name">{{ ha_link(sale.hard_asset) }}</span>
+        <br>
+        <div info>
+            <span mark>Sale price</span>: {{ sale.price | price }}<br>
+            <span mark>Propery value</span>: {{ sale.hard_asset.value | price }}<br>
+            <span mark>Current owner</span>: {{ user_link(sale.get_seller()) }}</a><br>
+            <span mark>Sale start</span>: {{ sale.start | time }}<br>
+        </div>
+    </div>
 {% endmacro %}

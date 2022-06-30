@@ -45,10 +45,8 @@
 {% block content %}
 
 <div class="panel">
-    {% for auction in auctions %}
-        {% if not auction.is_over() %}
-            {{ auction_market(auction) }}
-        {% endif %}
+    {% for sale in sales %}
+        {{ ha_market(sale) }}
     {% endfor %}
 </div>
 {% endblock %}

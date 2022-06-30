@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="" method="POST" class="form">
+    {{ form.hidden_tag() }}
+    <fieldset>
+        <legend>Receipient information</legend>
+        <table>
+            <tr>
+                <td>{{ form.receipient_id.label() }}</td>
+                <td>
+                    {{ form.receipient_id() }}
+                    {% if form.receipient_id.errors %}
+                        <div class="invalid_feadback">
+                            {% for error in form.receipient_id.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.amount.label() }}</td>
+                <td>
+                    {{ form.amount() }}
+                    {% if form.amount.errors %}
+                        <div class="invalid_feadback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100">
+                    <details>
+                        <summary>{{ form.info.label() }}</summary>
+                        {{ form.info() }}
+                        {% if form.info.errors %}
+                        <div class="invalid_feadback">
+                            {% for error in form.info.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </details>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {{ form.submit.label() }}
+                    {{ form.submit() }}
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+{% endblock %}

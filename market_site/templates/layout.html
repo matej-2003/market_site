@@ -1,4 +1,17 @@
-{% from "macros.html" import link, ha_link, company_link, company_image, ha_image, ha_compact, pagination, user_link with context %}
+{% from "macros.html" import
+    link,
+    ha_link,
+    company_link,
+    company_image,
+    ha_image,
+    ha_compact,
+    pagination,
+    user_link,
+    auction_link,
+    auction_image,
+    auction_market,
+    ha_market
+with context %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,6 +77,7 @@
                 <!-- <a href="/user_assets">My assets</a><br> -->
                 <!-- <a href="/borrow">Borrow money</a><br> -->
                 <!-- <a href="/transaction">Transaction</a><br> -->
+                {{ link(url_for('users.make_transaction'), 'Transaction') }}<br>
                 <a href="/users">Users</a><br>
                 <!-- <a href="/countries">Countries</a><br> -->
                 <a href="/market">Market</a><br>

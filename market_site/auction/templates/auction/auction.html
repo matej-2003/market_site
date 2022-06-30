@@ -117,27 +117,27 @@
                 <table bb>
                     <tr>
                         <td><span mark>Propery value</span></td>
-                        <td><span class="m">{{ auction.hard_asset.value | price }}</span></td>
+                        <td>{{ auction.hard_asset.value | price }}</td>
                     </tr>
                     <tr>
                         <td><span mark>Auction price</span></td>
-                        <td><span class="m">{{ auction.final_price | price }}</span></td>
+                        <td>{{ auction.final_price | price }}</td>
                     </tr>
                     <tr>
                         <td><span mark>Current owner</span></td>
-                        <td><a href="/user/{{ auction.get_seller().id }}">{{ auction.get_seller().username }}</a></td>
+                        <td>{{ user_link(auction.get_seller()) }}</td>
                     </tr>
                     <tr>
                         <td><span mark>Auction start</span></td>
-                        <td><span class="t">{{ auction.start | time }}</span> </td>
+                        <td>{{ auction.start | time }}</td>
                     </tr>
                     <tr>
                         <td><span mark>Auction end</span></td>
-                        <td><span class="t">{{ auction.end | time }}</span> </td>
+                        <td>{{ auction.end | time }}</td>
                     </tr>
                     <tr>
                         <td><span mark>Countdown timer</span></td>
-                        <td><span class="t" timer><b></b></span> </td>
+                        <td><span class="t" timer><b></b></span></td>
                     </tr>
                 </table>
             </div>
@@ -157,7 +157,7 @@
                                 <td>
                                     {% set bid = bidder.last_bid() %}
                                     {% if bid %}
-                                        <span class="m">{{ bid.amount | price }}</span>
+                                        {{ bid.amount | price }}</span>
                                     {% else %}
                                         /
                                     {% endif %}
@@ -181,8 +181,8 @@
                         {% for bid in auction.get_bids(current_user)[::-1] %}
                         <tr>
                             <td>{{ bid.bidder.user.username }}</td>
-                            <td><span class="m">{{ bid.amount | price }}</span></td>
-                            <td><span class="t">{{ bid.time | time }}</span></td>
+                            <td>{{ bid.amount | price }}</span></td>
+                            <td>{{ bid.time | time }}</span></td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -198,17 +198,17 @@
                             <br>
                             {% if auction.last_bid() %}
                                 Highest bidder: {{ auction.last_bid().bidder.user.username }} <br>
-                                Highest bid: <span class="m">{{ auction.final_price }}</span>
+                                Highest bid: {{ auction.final_price | price }}</span>
                             {% else %}
                                 Highest bidder: / <br>
-                                Initial price: <span class="m">{{ auction.final_price }}</span>
+                                Initial price: {{ auction.final_price | price }}</span>
                             {% endif %}
                             <hr>
                             <br>
                             <table>
                                 <tr>
                                     <td><b>Amount:</b></td>
-                                    <td><span class="m"><input type="number" name="bid_amount" min="{{ auction.final_price }}" value="{{ auction.final_price }}" step="0.01" required></span></td>
+                                    <td><input type="number" name="bid_amount" min="{{ auction.final_price }}" value="{{ auction.final_price }}" step="0.01" required></span></td>
                                     <td><input type="submit" value="BID" name="bid_submit"></td>
                                 </tr>
                                 <tr>
@@ -233,8 +233,8 @@
                         {% for bid in auction.bids[::-1] %}
                         <tr>
                             <td>{{ bid.bidder.user.username }}</td>
-                            <td><span class="m">{{ bid.amount | price }}</span></td>
-                            <td><span class="t">{{ bid.time | time }}</span></td>
+                            <td>{{ bid.amount | price }}</td>
+                            <td>{{ bid.time | time }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -248,7 +248,7 @@
 {% block javascript %}
 <script>
     let timer = document.querySelector('span[timer] b');
-    let countDownDate = new Date("{{ auction.end | time }}).getTime();
+    let countDownDate = new Date("{{ auction.end }}").getTime();
 
     // Update the count down every 1 second
     let x = setInterval(function () {

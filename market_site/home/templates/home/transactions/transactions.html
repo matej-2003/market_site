@@ -2,17 +2,25 @@
 {% block content %}
 <table>
     <tr>
-        <th>{{ 'Payee' if made else 'Payer'}}</th>
+        <th>{{ 'Payer' if made else 'Payee'}}</th>
         <th>Amount</th>
-        <th>Time</th>
+        <th>
+            {% if request.args.get('time_sort') == 'asc' %}
+                &#8593;{{ link(url_for('home.home_transactions_made', time_sort='desc'), 'Time') }}
+            {% elif request.args.get('time_sort') == 'desc' %}
+                &#8595;{{ link(url_for('home.home_transactions_made', time_sort='asc'), 'Time') }}
+            {% else %}
+                &#8593;{{ link(url_for('home.home_transactions_made', time_sort='desc'), 'Time') }}
+            {% endif %}
+        </th>
         <th>Info</th>
     </tr>
     {% for transaction in transactions.items %}
     <tr>
         {% if made %}
-            <td>{{ user_link(transaction.payer) }}</td>
-        {% else %}
             <td>{{ user_link(transaction.payee) }}</td>
+        {% else %}
+            <td>{{ user_link(transaction.payer) }}</td>
         {% endif %}
 
         <td>{{ transaction.amount | price }}</td>
