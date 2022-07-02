@@ -68,19 +68,19 @@
         <table bb>
             <tr>
                 <td><span mark>Propery value</span></td>
-                <td><span class="m">{{ auction.hard_asset.value | price }}</span></td>
+                <td>{{ auction.hard_asset.value | price }}</td>
             </tr>
             <tr>
-                <td><span mark>Auction price</span></td>
-                <td><span class="m">{{ auction.final_price | price }}</span></td>
+                <td><span mark>Auction price</td>
+                <td>{{ auction.final_price | price }}</span></td>
             </tr>
             <tr>
                 <td><span mark>Current owner</span></td>
-                <td><a href="/user/{{ auction.get_seller().id }}">{{ auction.get_seller().username }}</a></td>
+                <td>{{ user_link(auction.get_seller()) }}</td>
             </tr>
             <tr>
                 <td><span mark>Auction start</span></td>
-                <td><span class="t">{{ auction.start | time }}</span> </td>
+                <td>{{ auction.start | time }} </td>
             </tr>
         </table>
     </div>
@@ -88,7 +88,7 @@
         <form action="" method="POST">
             <b>Conditions for participation in the auction</b>
             <br><br>
-            The amount of the security deposit is <span class="m">{{ auction.security_deposit | price }}</span>.
+            The amount of the security deposit is {{ auction.security_deposit | price }}.
             <br>
             <br>
             1. If you join the auction the security deposit will be frozen.
@@ -100,7 +100,7 @@
             Do you agree to these terms <input type="checkbox" name="agree_to_terms" required>.
             <br>
             <hr>
-            2. The auction is conducted by (this bank) to join pay the the commission of <span class="m">{{ auction.bank.auction_commission }}</span>.
+            2. The auction is conducted by (this bank) to join pay the the commission of {{ auction.bank.auction_commission | price }}.
             <br>
             <br>
             Agree to play commission <input type="checkbox" name="agree_to_commission" required>.
@@ -120,11 +120,11 @@
                     <td>Amount</td>
                     <td>Time</td>
                 </tr>
-                {% for bid in auction.bids[::-1] %}
+                {% for bid in auction.bids[5::-1] %}
                 <tr>
                     <td>{{ bid.bidder.user.username }}</td>
-                    <td><span class="m">{{ bid.amount | price }}</span></td>
-                    <td><span class="t">{{ bid.time | time }}</span></td>
+                    <td>{{ bid.amount | price }}</td>
+                    <td>{{ bid.time | time }}</td>
                 </tr>
                 {% endfor %}
             </table>

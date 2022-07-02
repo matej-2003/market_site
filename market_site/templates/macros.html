@@ -20,9 +20,9 @@
     {{ link(url_for('liquid_assets.company', company_id=company.id), company.name) }}
 {% endmacro %}
 
-{% macro company_image(company) %}
+{% macro company_image(company, attributes='') %}
     <a href="{{ url_for('liquid_assets.company', company_id=company.id) }}">
-        <img company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+        <img {{ attributes | safe }} company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
     </a>
 {% endmacro %}
 

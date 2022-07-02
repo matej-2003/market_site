@@ -12,9 +12,7 @@ from flask_breadcrumbs import register_breadcrumb
 @login_required
 @register_breadcrumb(home, '.home_auctions', 'Auctions')
 def home_auctions():
-	auctions = db.session.query(Auction)\
-		.where(Auction.seller_id == current_user.id).all()
-	return render_template('home/auctions/auctions.html', title='Auctions', auctions=auctions)
+	return render_template('home/auctions/auctions.html', title='Auctions')
 
 
 
@@ -29,18 +27,22 @@ def home_sale_auctions():
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_sale_auctions.home_sale_auctions_active', 'Active')
 def home_sale_auctions_active():
+	page = request.args.get('page', 1, type=int)
 	auctions = db.session.query(Auction)\
 		.where(Auction.seller_id == current_user.id)\
-		.where(Auction.is_over(Auction) == False).all()
-	return render_template('home/auctions/sales_auctions.html', title='Active sales auctions', auctions=auctions)
+		.where(Auction.is_over(Auction) == False)\
+		.paginate(page=page, per_page=6)
+	return render_template('home/auctions/sales_auctions.html', title='Active sales auctions', auctions=auctions, active=True)
 
 @home.route('/auctions/sale/finnished')
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_sale_auctions.home_sale_auctions_finnished', 'Finnished')
 def home_sale_auctions_finnished():
+	page = request.args.get('page', 1, type=int)
 	auctions = db.session.query(Auction)\
 		.where(Auction.seller_id == current_user.id)\
-		.where(Auction.is_over(Auction) == True).all()
+		.where(Auction.is_over(Auction) == True)\
+		.paginate(page=page, per_page=6)
 	return render_template('home/auctions/sales_auctions.html', title='Finnished sales auctions', auctions=auctions)
 
 
@@ -57,16 +59,20 @@ def home_purchase_auctions():
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_purchase_auctions.home_purchase_auctions_active', 'Active')
 def home_purchase_auctions_active():
-	auctions = db.session.query(Auction)\
-		.where(Auction.buyer_id == current_user.id)\
-		.where(Auction.is_over(Auction) == False).all()
-	return render_template('home/auctions/purchase_auctions.html', title='Active purchase auctions', auctions=auctions)
+	page = request.args.get('page', 1, type=int)
+	auctions = db.session.query(AuctionBidder, Auction)\
+		.join(Auction, AuctionBidder.auction_id == Auction.id)\
+		.where(AuctionBidder.user_id == current_user.id, Auction.is_over(Auction) == False)\
+		.paginate(page=page, per_page=6)
+	return render_template('home/auctions/purchase_auctions.html', title='Active purchase auctions', auctions=auctions, active=True)
 
 @home.route('/auctions/purchase/finnished')
 @login_required
 @register_breadcrumb(home, '.home_auctions.home_purchase_auctions.home_purchase_auctions_finnished', 'Finnished')
 def home_purchase_auctions_finnished():
-	auctions = db.session.query(Auction)\
-		.where(Auction.buyer_id == current_user.id)\
-		.where(Auction.is_over(Auction) == True).all()
+	page = request.args.get('page', 1, type=int)
+	auctions = db.session.query(AuctionBidder, Auction)\
+		.join(Auction, AuctionBidder.auction_id == Auction.id)\
+		.where(AuctionBidder.user_id == current_user.id, Auction.is_over(Auction) == True)\
+		.paginate(page=page, per_page=6)
 	return render_template('home/auctions/purchase_auctions.html', title='Finnished purchase auctions', auctions=auctions)

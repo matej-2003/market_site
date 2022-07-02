@@ -12,7 +12,7 @@
         <th>Initial price</th>
         <th>Final price</th>
     </tr>
-    {% for auction in auctions %}
+    {% for bidder, auction in auctions.items %}
     <tr>
         <td>
             {{ ha_image(auction.hard_asset) }}
@@ -41,4 +41,9 @@
     </tr>
     {% endfor %}
 </table>
+{% if active %}
+    {{ pagination(auctions, 'home.home_purchase_auctions_active') }}
+{% else %}
+    {{ pagination(auctions, 'home.home_purchase_auctions_finnished') }}
+{% endif %}
 {% endblock %}

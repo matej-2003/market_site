@@ -1,0 +1,102 @@
+[asset_image] {
+    height: 10em;
+}
+
+.container {
+    display: grid;
+    grid-template-areas: 'name name name' 'image details bidders' 'your_bids bidder all_bids';
+    grid-template-columns: auto auto auto;
+    grid-template-rows: max-content max-content max-content;
+    width: auto;
+}
+
+.name {
+    grid-area: name;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 1em;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.image {
+    grid-area: image;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.details {
+    grid-area: details;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5em;
+}
+
+.bidders {
+    grid-area: bidders;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5em;
+    height: 13em;
+    overflow: auto;
+}
+
+table.list thead {
+    position: sticky;
+    inset-block-end: 0;
+    top: 0;
+    background-color: #ddd;
+}
+
+table.list thead th {
+    border: 1px solid #aaa;
+}
+
+.your_bids {
+    grid-area: your_bids;
+    padding: 0.5em;
+    height: 13em;
+    overflow: auto;
+}
+
+.bidder {
+    grid-area: bidder;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 0.5em;
+    /*        margin-left: 0.5em;
+        margin-right: 0.5em;*/
+}
+
+.bidder div {
+    text-align: left;
+    width: max-content;
+}
+
+.bidder table td {
+    padding: 0.5em 0.2em;
+}
+
+.all_bids {
+    grid-area: all_bids;
+    padding: 0.5em;
+    height: 13em;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+[hammer_logo] {
+    height: 5em;
+}
+
+table[bb] tr {
+    border-bottom: 1px solid #727272;
+}
+
+table[bb] td {
+    padding: 0em 1em;
+}

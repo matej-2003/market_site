@@ -5,10 +5,12 @@ from flask_login import LoginManager
 from market_site.config import Config
 from flask_breadcrumbs import Breadcrumbs
 from jinja2 import filters
+from flask_socketio import SocketIO
 
 db = SQLAlchemy()
 # db.create_all()
 bc = Bcrypt()
+socket = SocketIO()
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
@@ -21,6 +23,7 @@ def create_app(config_class=Config):
 
 	db.init_app(app)
 	bc.init_app(app)
+	socket.init_app(app)
 	login_manager.init_app(app)
 
 	# @app.template_filter()
@@ -52,10 +55,14 @@ def create_app(config_class=Config):
 			return filters.do_mark_safe("<span class=\"p {}\">{}</span>".format(" ".join(classes), "{:,.2f}".format(value)))
 		else:
 			return value
+	
+	@app.template_filter()
+	def stime(value):
+		return value.strftime('%m/%d/%Y %H:%M:%S')
 
 	@app.template_filter()
 	def time(value, *classes):
-		return filters.do_mark_safe("<span class=\"t {}\">{}</span>".format(" ".join(classes), value.strftime('%d/%m/%Y %H:%M:%S')))
+		return filters.do_mark_safe("<span class=\"t {}\">{}</span>".format(" ".join(classes), value.strftime('%m/%d/%Y %H:%M:%S')))
 
 	@app.template_filter()
 	def info(value, other_msg='/'):
@@ -63,6 +70,7 @@ def create_app(config_class=Config):
 
 
 	app.jinja_env.filters['time'] = time
+	app.jinja_env.filters['stime'] = stime
 	app.jinja_env.filters['price'] = price
 	app.jinja_env.filters['percent'] = percent
 	app.jinja_env.filters['status'] = status
@@ -84,4 +92,4 @@ def create_app(config_class=Config):
 	app.register_blueprint(auction)
 	app.register_blueprint(users)
 
-	return app
+	return app, socket
