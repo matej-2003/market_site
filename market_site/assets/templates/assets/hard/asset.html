@@ -5,11 +5,13 @@
         <td colspan="2">{{ asset.name }}</td>
     </tr>
     <tr>
-        <td colspan="2"><img src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image"></td>
+        <td colspan="2">
+			{{ ha_image(asset) }}
+		</td>
     </tr>
     <tr>
         <td>Value</td>
-        <td><span class="m">{{ asset.value }}</span></td>
+        <td>{{ asset.value | price }}</td>
     </tr>
     <tr>
         <td>Owner ID</td>

@@ -16,7 +16,7 @@
     .container {
         display: flex;
         /*flex-wrap: wrap;*/
-        width: 100%;
+        /* width: 100%; */
         gap: 1em;
     }
 
@@ -35,7 +35,6 @@
     table {
         width: max-content;
         padding: 1em;
-        height: 100%;
     }
 
     table td {
@@ -53,18 +52,19 @@
     <span class="fall">&#8595$4.9 Amazon inc.</span>&nbsp&nbsp
 </marquee>
 
-<div class="container">
+<div class="container col-12">
     <div>
         <form action="" method="POST">
             <fieldset>
                 <legend>Sell bonds</legend>
-                <table>
+                <table class="col-12">
                     <tr>
                         <td colspan="2">{{ company.name }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}"
-                                alt="{{ company.name }} image"></td>
+                        <td colspan="2">
+							{{ company_image(company) }}
+						</td>
                     </tr>
                     <tr>
                         <td>Bond value</td>
@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td>Your bond value</td>
-                        <td><span class="m">{{ 1 | price }}</span></td>
+                        <td>{{ 1 | price }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -133,7 +133,7 @@
         Before: <input type="date" name="before">
         After: <input type="date" name="after">
         <button>SHOW</button>
-        <div id="bond_chart" style="height: 300px; width: 100%;"></div>
+        <div id="bond_chart" class="col-12" style="height: 300px;"></div>
     </div>
 </div>
 

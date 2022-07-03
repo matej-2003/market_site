@@ -16,7 +16,7 @@
     .container {
         display: flex;
         /*flex-wrap: wrap;*/
-        width: 100%;
+        /* width: 100%; */
         gap: 1em;
     }
 
@@ -53,7 +53,7 @@
     <span class="fall">&#8595$4.9 Amazon inc.</span>&nbsp&nbsp
 </marquee>
 
-<div class="container">
+<div class="container col-12>
     <div>
         <form action="" method="POST">
             <fieldset>
@@ -63,12 +63,13 @@
                         <td colspan="2">{{ company.name }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}"
-                                alt="{{ company.name }} image"></td>
+                        <td colspan="2">
+							{{ company_image(company) }}
+						</td>
                     </tr>
                     <tr>
                         <td>Share value</td>
-                        <td><span class="m">{{ company.share_value }}</span></td>
+                        <td>{{ company.share_value  | price }}</td>
                     </tr>
                     <tr>
                         <td>Your shares</td>
@@ -76,7 +77,7 @@
                     </tr>
                     <tr>
                         <td>Your share value</td>
-                        <td><span class="m">{{ current_user.share_value(company) | price }}</span></td>
+                        <td>{{ current_user.share_value(company) | price }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -133,7 +134,7 @@
         Before: <input type="date" name="before">
         After: <input type="date" name="after">
         <button>SHOW</button>
-        <div id="stock_chart" style="height: 300px; width: 100%;"></div>
+        <div id="stock_chart" class="col-12" style="height: 300px;"></div>
     </div>
 </div>
 

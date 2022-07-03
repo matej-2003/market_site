@@ -22,11 +22,11 @@
             </td>
             <td><a href="/borrow/bank/{{ bank.id }}">{{ bank.name }}</a></td>
             <td>{{ loan.status }}</td>
-            <td><span class="m">{{ loan.amount | price }}</span></td>
-            <td><span class="p">{{ (loan.interest_rate - 1) * 100 | price }}</span></td>
-            <td><span class="m">{{ loan.full_cost() | price }}</span></td>
-            <td><span class="t">{{ loan.due_date | time }}</span></td>
-            <td><span class="t">{{ loan.date_created | time }}</span></td>
+            <td>{{ loan.amount | price }}</td>
+            <td>{{ (loan.interest_rate - 1) * 100 | percent }}</td>
+            <td>{{ loan.full_cost() | price }}</td>
+            <td>{{ loan.due_date | time }}</td>
+            <td>{{ loan.date_created | time }}</td>
             <td>{{ asset.name }}</td>
         </tr>
     {% endfor %}

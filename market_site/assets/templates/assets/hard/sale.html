@@ -1,5 +1,4 @@
-{% extends "layout.html" %}
-{% block style %}
+{% extends "layout.html" %} {% block style %}
 <style>
     .box {
         display: flex;
@@ -8,33 +7,23 @@
         gap: 1em;
     }
 
-    img[asset_image] {
-        height: auto;
-    }
-
-    table {
-        width: 100%;
-    }
-
     table td[value] {
         width: 15em;
     }
-
+    
     table tr {
         padding: 0.5em;
         border-bottom: 1px solid gray;
     }
-
+    
     [content] {
         width: 80%;
     }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <b>The property you want to buy:</b>
 <br>
-<table>
+<table class="col-12">
     <tr>
         <th colspan="3">{{ asset.name }}</th>
     </tr>
@@ -61,8 +50,8 @@
 </table>
 <br>
 <div class="box">
-    <img asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
-    <table sub>
+    {{ ha_image(asset) }}
+    <table sub class="col-12">
         <tr>
             <td>Owner ID</td>
             <td value>{{ asset.owner.id }}</td>
@@ -81,22 +70,22 @@
         </tr>
         <tr>
             <td>Value</td>
-            <td value><span class="m">{{ asset.value }}</span></td>
+            <td value>{{ asset.value | price }}</td>
         </tr>
         <tr>
             <td>Sale price</td>
-            <td value><span class="m">{{ sale.price }}</span></td>
+            <td value>{{ sale.price | price }}</td>
         </tr>
         <tr>
             <td>Diffrence</td>
-            <td value><span class="m">{{ asset.value - sale.price }}</span></td>
+            <td value>{{ (asset.value - sale.price) | price }}</td>
         </tr>
         <tr>
             <td colspan="2">
                 <b>Info</b>
-                <br>
-                {{ asset.info.strip(' \n\t') }}
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt cupiditate sunt dicta voluptate totam similique voluptatibus laudantium, officia eius quos odit mollitia tenetur iure magni, distinctio animi deserunt sequi hic?
+				<br> {{ asset.info.strip(' \n\t') }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt cupiditate sunt
+				dicta voluptate totam similique voluptatibus laudantium, officia eius quos odit mollitia tenetur iure magni, distinctio
+                animi deserunt sequi hic?
             </td>
         </tr>
     </table>
@@ -104,9 +93,6 @@
 <br>
 <form action="" method="POST">
     {% if current_user.balance >= sale.price %}
-        <input type="submit" value="CONFIRM PAYMENT" name="buy">
-    {% else %}
-        YOU DO NOT HAVE ENOUGH MONEY
-    {% endif %}
+    <input type="submit" value="CONFIRM PAYMENT" name="buy"> {% else %} YOU DO NOT HAVE ENOUGH MONEY {% endif %}
 </form>
 {% endblock %}

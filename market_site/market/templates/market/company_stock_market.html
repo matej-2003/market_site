@@ -1,17 +1,4 @@
 {% extends "layout.html" %}
-{% block style %}
-
-<style>
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-
-    table {
-        width: 100%;
-    }
-</style>
-{% endblock %}
 {% block content %}
 <table tb>
     <tr>
@@ -19,14 +6,12 @@
     </tr>
     <tr>
         <td colspan="100">
-            <a href="/assets/l/company/{{ company.id }}">
-            <img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
-            </a>
+            {{ company_image(company) }}
         </td>
     </tr>
     <tr>
         <td colspan="1">Company value</td>
-        <td colspan="20"><span class="m">{{ company.value | price }}</span></td>
+        <td colspan="20">{{ company.value | price }}</td>
     </tr>
     <tr>
         <td colspan="1">Total bonds</td>
@@ -34,8 +19,8 @@
     </tr>
 </table>
 <br>
-Last sale price: <span class="m">{{ company.share_value }}</span>
-<table tb>
+Last sale price: {{ company.share_value  | price }}
+<table tb class="col-12">
     <tr>
         <th>Number of shares</th>
         <th>Sale price / share</th>
@@ -49,17 +34,17 @@ Last sale price: <span class="m">{{ company.share_value }}</span>
     {% for share_number, sale, share, company, user in share_sales %}
         <tr>
             <td>{{ share_number }}</td>
-            <td><span class="m">{{ sale.price }}</span></td>
-            <td><span class="m">{{ sale.share.company.share_value }}</span></td>
+            <td>{{ sale.price | price }}</td>
+            <td>{{ sale.share.company.share_value  | price }}</td>
             <td>
                 {% set returns = (sale.price - company.share_value) / company.share_value * 100 %}
                 {% if returns < 0 %}
-                    <span class="p neg">{{ returns | price }}</span>
+                    {{ returns | percent('neg') }}
                 {% elif returns > 0 %}
-                    <span class="p pos">{{ returns | price }}</span>
+                    {{ returns | percent('pos') }}
                 {% endif %}
             </td>
-            <td><span class="m">{{ sale.price * share_number }}</span></td>
+            <td>{{ sale.price * share_number  | price }}</td>
             <td>{{ company.name }}</td>
             <td>{{ share.owner.username }}</td>
             <td>

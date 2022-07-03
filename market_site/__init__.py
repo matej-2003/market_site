@@ -67,7 +67,16 @@ def create_app(config_class=Config):
 	@app.template_filter()
 	def info(value, other_msg='/'):
 		return value if value else other_msg
+	
+	def args2dict(args=[]):
+		return {key: value for key, value in args}
 
+	def merge_dicts(*dict_args):
+		result = {}
+		for dictionary in dict_args:
+			result.update(dictionary)
+		result.pop('page', None)
+		return result
 
 	app.jinja_env.filters['time'] = time
 	app.jinja_env.filters['stime'] = stime
@@ -75,6 +84,8 @@ def create_app(config_class=Config):
 	app.jinja_env.filters['percent'] = percent
 	app.jinja_env.filters['status'] = status
 	app.jinja_env.filters['info'] = info
+	app.jinja_env.globals.update(args2dict=args2dict)
+	app.jinja_env.globals.update(merge_dicts=merge_dicts)
 
 	from market_site.home import home
 	from market_site.api.routes import api

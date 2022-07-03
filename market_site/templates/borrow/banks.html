@@ -23,7 +23,7 @@
             </a>
         </td>
         <td><a href="/borrow/bank/{{ bank.id }}">{{ bank.name }}</a></td>
-        <td><span class="m">{{ bank.legal_person.balance | price }}</span></td>
+        <td>{{ bank.legal_person.balance | price }}</td>
         <td>{{ bank.country.name }}</td>
     </tr>
     {% endfor %}

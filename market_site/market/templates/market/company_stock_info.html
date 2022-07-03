@@ -1,23 +1,12 @@
 {% extends "layout.html" %}
-{% block style %}
-
-<style>
-    table {
-        width: 100%;
-    }
-</style>
-
-{% endblock %}
 {% block content %}
-<table tb>
+<table tb class="col-12">
     <tr>
         <td colspan="4">{{ company.name }}</td>
     </tr>
     <tr>
         <td colspan="4">
-            <a href="/assets/l/company/{{ company.id }}">
-            <img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
-            </a>
+			{{ company_image(company) }}
         </td>
     </tr>
     <tr>
@@ -39,7 +28,7 @@
         <td>{{ user_link(user) }}</td>
         <td>{{ share_number }}</td>
         <td>{{ share_number * company.share_value | price }}</td>
-        <td>{{ share_number / company.share_number() * 100  | price }}</td>
+        <td>{{ share_number / company.share_number() * 100  | percent }}</td>
     </tr>
     {% endfor %}
 </table>

@@ -6,11 +6,6 @@
         grid-template-columns: repeat(4, auto);
     }
 
-    img[vertical_logo] {
-        max-width: 10em;
-        height: auto;
-    }
-
     .info {
         width: max-content;
     }
@@ -59,7 +54,7 @@
         <br>
         <br>
         <div info>
-            <span mark>Value</span>: <span class="m">{{ company.value | price }}</span>
+            <span mark>Value</span>: {{ company.value | price }}
             <br>
             <span mark>Bond number</span>: {{ company.bond_number() }}
         </div>

@@ -1,33 +1,17 @@
 {% extends "layout.html" %}
-{% block style %}
-
-<style>
-    img[company_logo_min] {
-        display: inline-block;
-        max-height: 1.7em;
-    }
-
-    table {
-        width: 100%;
-    }
-</style>
-
-{% endblock %}
 {% block content %}
-<table tb>
+<table tb class="col-12">
     <tr>
         <td colspan="100">{{ company.name }}</td>
     </tr>
     <tr>
         <td colspan="100">
-            <a href="/assets/l/company/{{ company.id }}">
-            <img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
-            </a>
+            {{ company_image(company) }}
         </td>
     </tr>
     <tr>
         <td colspan="1">Company value</td>
-        <td colspan="20"><span class="m">{{ company.value | price }}</span></td>
+        <td colspan="20">{{ company.value | price }}</td>
     </tr>
     <tr>
         <td colspan="1">Total bonds</td>
@@ -35,7 +19,7 @@
     </tr>
 </table>
 <br>
-<table tb>
+<table tb class="col-12">
     <tr>
         <th colspan="3">Info</th>
         <th colspan="3">Bond</th>
@@ -61,23 +45,23 @@
     {% for bond_number, sale, bond, user in bond_sales %}
         <tr>
             <td>{{ company.name }}</td>
-            <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
+            <td>{{ user_link(user) }}</td>
             <td>{{ bond_number }}</td>
             
-            <td><span class="p">{{ (bond.interest_rate - 1) * 100 | price }}</span></td>
-            <td><span class="m">{{ bond.value | price }}</span></td>
+            <td>{{ (bond.interest_rate - 1) * 100 | percent }}</td>
+            <td>{{ bond.value | price }}</td>
             <td>
                 {% if bond_number > 1 %}
-                    <span class="m">{{ bond.value * bond_number | price }}</span>
+                    {{ bond.value * bond_number | price }}
                 {% else %}
                     /
                 {% endif %}
             </td>
 
-            <td><span class="m">{{ sale.price }}</span></td>
+            <td>{{ sale.price  | price }}</td>
             <td>
                 {% if bond_number > 1 %}
-                    <span class="m">{{ sale.price * bond_number | price }}</span>
+                    {{ sale.price * bond_number | price }}
                 {% else %}
                     /
                 {% endif %}
@@ -85,22 +69,22 @@
             <td>
                 {% set profit_per_bond = bond.value * bond.interest_rate - sale.price %}
                 {% if profit_per_bond < 0 %}
-                    <span class="m neg">{{ profit_per_bond | price }}</span>
+                    {{ profit_per_bond | price('neg') }}
                 {% elif profit_per_bond > 0 %}
-                    <span class="m pos">{{ profit_per_bond | price }}</span>
+                    {{ profit_per_bond | price('pos') }}
                 {% else %}
-                    <span class="m">{{ profit_per_bond | price }}</span>
+                    {{ profit_per_bond | price }}
                 {% endif %}
             </td>
             <td>
                 {% if bond_number > 1 %}
                     {% set full_profit = profit_per_bond * bond_number %}
                     {% if full_profit < 0 %}
-                        <span class="m neg">{{ full_profit | price }}</span>
+                        {{ full_profit | price('neg') }}
                     {% elif full_profit > 0 %}
-                        <span class="m pos">{{ full_profit | price }}</span>
+                        {{ full_profit | price('pos') }}
                     {% else %}
-                        <span class="m">{{ full_profit | price }}</span>
+                        {{ full_profit | price }}
                     {% endif %}
                 {% else %}
                     /
@@ -109,11 +93,11 @@
             <td>
                 {% set returns = profit_per_bond /  bond.value * 100 %}
                 {% if returns < 0 %}
-                    <span class="p neg">{{ returns | price }}</span>
+                    {{ returns | percent('neg') }}
                 {% elif returns > 0 %}
-                    <span class="p pos">{{ returns | price }}</span>
+                    {{ returns | percent('pos') }}
                 {% else %}
-                    <span class="p">{{ returns | price }}</span>
+                    {{ returns | percent }}
                 {% endif %}
             </td>
             <td>

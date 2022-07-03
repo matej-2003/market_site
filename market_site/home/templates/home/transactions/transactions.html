@@ -2,15 +2,31 @@
 {% block content %}
 <table>
     <tr>
-        <th>{{ 'Payer' if made else 'Payee'}}</th>
-        <th>Amount</th>
+        <th>
+			{% if request.args.get('user_sort') == 'asc' %}
+				&#8593;{{ link(url_for('home.home_transactions_made', user_sort='desc'), 'Payer' if made else 'Payee') }}
+			{% elif request.args.get('user_sort') == 'desc' %}
+				&#8595;{{ link(url_for('home.home_transactions_made', user_sort='asc'), 'Payer' if made else 'Payee') }}
+			{% else %}
+				{{ link(url_for('home.home_transactions_made', user_sort='asc'), 'Payer' if made else 'Payee') }}
+			{% endif %}
+		</th>
+        <th>
+			{% if request.args.get('amount_sort') == 'asc' %}
+				&#8593;{{ link(url_for('home.home_transactions_made', amount_sort='desc'), 'Amount') }}
+			{% elif request.args.get('amount_sort') == 'desc' %}
+				&#8595;{{ link(url_for('home.home_transactions_made', amount_sort='asc'), 'Amount') }}
+			{% else %}
+				{{ link(url_for('home.home_transactions_made', amount_sort='asc'), 'Amount') }}
+			{% endif %}
+		</th>
         <th>
             {% if request.args.get('time_sort') == 'asc' %}
                 &#8593;{{ link(url_for('home.home_transactions_made', time_sort='desc'), 'Time') }}
             {% elif request.args.get('time_sort') == 'desc' %}
                 &#8595;{{ link(url_for('home.home_transactions_made', time_sort='asc'), 'Time') }}
             {% else %}
-                &#8593;{{ link(url_for('home.home_transactions_made', time_sort='desc'), 'Time') }}
+                &#8595;{{ link(url_for('home.home_transactions_made', time_sort='asc'), 'Time') }}
             {% endif %}
         </th>
         <th>Info</th>
@@ -30,8 +46,8 @@
     {% endfor %}
 </table>
 {% if made %}
-    {{ pagination(transactions, 'home.home_transactions_made') }}
+    {{ pagination(transactions, 'home.home_transactions_made', retain_params=true) }}
 {% else %}
-    {{ pagination(transactions, 'home.home_transactions_received') }}
+    {{ pagination(transactions, 'home.home_transactions_received', retain_params=true) }}
 {% endif %}
 {% endblock %}

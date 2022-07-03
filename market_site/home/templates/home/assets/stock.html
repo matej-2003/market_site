@@ -13,7 +13,7 @@
             {{ company_image(company) }}
         </td>
         <td>{{ company_link(company) }}</td>
-        <td><span class="m">{{ company.share_value * share_number  | price }}</span></td>
+        <td>{{ company.share_value * share_number  | price }}</td>
         <td>{{ share_number }}</td>
     </tr>
     {% endfor %}

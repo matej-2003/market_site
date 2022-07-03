@@ -216,3 +216,89 @@ img[company_logo] {
     font-weight: bold;
     background-color: rgba(1, 124, 255, 0.487);
 }
+
+
+img {
+	display: inline-block;
+}
+
+img.asset_image.w1 {
+	height: auto;
+	width: 4em;
+}
+img.asset_image.w2 {
+	height: auto;
+	width: 7em;
+}
+img.asset_image.w3 {
+	height: auto;
+	width: 10em;
+}
+
+img.asset_image.h1 {
+	width: auto;
+	height: 4em;
+}
+img.asset_image.h2 {
+	width: auto;
+	height: 7em;
+}
+img.asset_image.h3 {
+	width: auto;
+	height: 10em;
+}
+
+
+img.company_logo.w1 {
+	height: auto;
+	width: 10em;
+}
+img.company_logo.w2 {
+	height: auto;
+	width: 15em;
+}
+img.company_logo.w3 {
+	height: auto;
+	width: 20em;
+}
+
+img.company_logo.h1 {
+	width: auto;
+	height: 1.7em;
+}
+img.company_logo.h2 {
+	width: auto;
+	height: 4em;
+}
+img.company_logo.h3 {
+	width: auto;
+	height: 6em;
+}
+
+
+img[bank_logo_min] {
+	max-height: 1.5rem;
+}
+
+img[vertical_logo] {
+	max-width: 10em;
+	height: auto;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+[class*="col-"] {
+	float: left;
+	/* padding: 15px; */
+	border: 1px solid red;
+}

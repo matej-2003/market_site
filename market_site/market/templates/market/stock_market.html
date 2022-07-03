@@ -59,11 +59,11 @@
         <br>
         <br>
         <div info>
-            <span mark>Value</span>: <span class="m">{{ company.value | price }}</span>
+            <span mark>Value</span>: {{ company.value | price }}
             <br>
             <span mark>Share number</span>: {{ company.share_number() }}
             <br>
-            <span mark>Share value</span>: <span class="m">{{ company.share_value | price }}</span>
+            <span mark>Share value</span>: {{ company.share_value | price }}
         </div>
     </div>
     {% endfor %}

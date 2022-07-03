@@ -5,18 +5,18 @@
         <td colspan="2">{{ company.name }}</td>
     </tr>
     <tr>
-        <td colspan="2"><img company_logo src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image"></td>
+        <td colspan="2">{{ company_image(company, size='h2') }}</td>
     </tr>
     <tr>
         <td colspan="2"><b>Company data</b></td>
     </tr>
     <tr>
         <td>Company value</td>
-        <td><span class="m">{{ company.value | price }}</span></td>
+        <td>{{ company.value | price }}</td>
     </tr>
     <tr>
         <td>Company debt</td>
-        <td><span class="m">{{ company.get_debt() | price }}</span></td>
+        <td>{{ company.get_debt() | price }}</td>
     </tr>
     <tr>
         <td>Total shares</td>
@@ -24,7 +24,7 @@
     </tr>
     <tr>
         <td>Share value</td>
-        <td><span class="m">{{ company.share_value | price }}</span></td>
+        <td>{{ company.share_value | price }}</td>
     </tr>
     <tr>
         <td>Share list</td>
@@ -43,11 +43,11 @@
     </tr>
     <tr>
         <td>Your share value</td>
-        <td><span class="m">{{ current_user.share_value(company) | price }}</span></td>
+        <td>{{ current_user.share_value(company) | price }}</td>
     </tr>
     <tr>
         <td>Your share %</td>
-        <td><span class="p">{{ (100 * current_user.share_percentage(company)) | price }}</span></td>
+        <td>{{ (100 * current_user.share_percentage(company)) | percent }}</td>
     </tr>
     <tr>
         <td>Information</td>

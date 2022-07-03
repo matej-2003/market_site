@@ -3,3 +3,4 @@ __pycache__/
 *.save
 *.pyc
 .vscode/
+market_site/site.db

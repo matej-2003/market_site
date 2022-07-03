@@ -10,9 +10,9 @@
     {{ link(url_for('hard_assets.hard_asset', hard_asset_id=asset.id), asset.name) }}
 {% endmacro %}
 
-{% macro ha_image(asset, attributes='') %}
+{% macro ha_image(asset, size='w3', attributes='') %}
     <a href="{{ url_for('hard_assets.hard_asset', hard_asset_id=asset.id) }}">
-        <img {{ attributes | safe }} asset_image src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+        <img {{ attributes | safe }} class="asset_image {{ size }}" src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
     </a>
 {% endmacro %}
 
@@ -20,9 +20,9 @@
     {{ link(url_for('liquid_assets.company', company_id=company.id), company.name) }}
 {% endmacro %}
 
-{% macro company_image(company, attributes='') %}
+{% macro company_image(company, size='h1', attributes='') %}
     <a href="{{ url_for('liquid_assets.company', company_id=company.id) }}">
-        <img {{ attributes | safe }} company_logo_min src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
+        <img {{ attributes | safe }} class="company_logo {{ size }}" src="/static/companies/{{ company.get_images()[0] }}" alt="{{ company.name }} image">
     </a>
 {% endmacro %}
 
@@ -48,28 +48,36 @@
 </div>
 {% endmacro %}
 
-{% macro pagination(items, func) %}
+{% macro pagination_(items, func, params={}) %}
     {% if items.pages > 1 %}
         <div class="pagination">
             {% if items.has_prev %}
-                <a  href="{{ url_for(func, page=items.prev_num) }}">&laquo;</a>
+                <a  href="{{ url_for(func, page=items.prev_num, **params) }}">&laquo;</a>
             {% endif %}
             {% for page_num in items.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
                 {% if page_num %}
                     {% if items.page == page_num %}
-                        <a class="current" href="{{ url_for(func, page=page_num) }}">{{ page_num }}</a>
+                        <a class="current" href="{{ url_for(func, page=page_num, **params) }}">{{ page_num }}</a>
                     {% else %}
-                        <a href="{{ url_for(func, page=page_num) }}">{{ page_num }}</a>
+                        <a href="{{ url_for(func, page=page_num, **params) }}">{{ page_num }}</a>
                     {% endif %}
                 {% else %}
                     ...
                 {% endif %}
             {% endfor %}
             {% if items.has_next %}
-                <a href="{{ url_for(func, page=items.next_num) }}">&raquo;</a>
+                <a href="{{ url_for(func, page=items.next_num, **params) }}">&raquo;</a>
             {% endif %}
         </div>
     {% endif %}
+{% endmacro %}
+
+{% macro pagination(items, func, retain_params=False, params={}) %}
+	{% if retain_params and request.args.to_dict(flat=False) %}
+		{{ pagination_(items, func, params=merge_dicts(params, request.args.to_dict(flat=False))) }}
+	{% else %}
+		{{ pagination_(items, func, params) }}
+	{% endif %}
 {% endmacro %}
 
 {% macro auction_link(auction) %}
