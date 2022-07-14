@@ -1,13 +1,13 @@
 {% extends "layout.html" %} {% block style %}
-<style>    
+<style>
     span.gray {
         color: #414141;
     }
-    
+
     span.small {
         font-size: small;
     }
-    
+
     .container {
         display: inline-grid;
         grid-template-columns: max-content max-content;
@@ -15,7 +15,7 @@
         background-color: #c0c0c0;
         grid-gap: 1px;
     }
-    
+
     .asset_item {
         display: flex;
         flex-direction: row;
@@ -62,7 +62,7 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
 
 <br>
 
-<div class="transactions collapsable">
+<div class="collapsable">
     <h3>Payments made</h3>
     <div>
         {{ link(url_for('users.make_transaction', receipient_id=user.id), '<button>Make transactions</button>' | safe) }}
@@ -107,36 +107,14 @@ My sales: <a href="/sales/user/{{ current_user.id }}">sales</a><br>
             {% endfor %}
         </table>
     </div>
-</div>
 
-<br>
-
-<div class="hard_assets collapsable">
     <h3>Hard assets</h3>
     <div class="container">
         {% for asset in user.hard_assets %}
-        <div class="asset_item">
-            <div>
-				{{ ha_image(asset) }}
-            </div>
-            <div>
-                <span class="gray">Name: </span>{{ ha_link(asset) }}<br>
-                <span class="gray">Value: </span>{{ asset.value  | price }}<br>
-                <span class="gray">Type: </span><span class="small">{{ asset.type }}<br> </span>
-                <span class="gray">Info: </span><span class="small">{{ asset.info }}<br></span>
-                <span class="gray">Status: </span> {% if asset.is_on_sale() %}
-                <span class="status small for_sale"></span> {% elif asset.is_on_auction() %}
-                <span class="status small auction"></span> {% else %}
-                <span class="status small not_for_sale"></span> {% endif %}
-            </div>
-        </div>
+			{{ ha_compact(asset) }}
         {% endfor %}
     </div>
-</div>
 
-<br>
-
-<div class="liquid_assets collapsable">
     <h3>Company shares</h3>
     <div>
         <table tb>

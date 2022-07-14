@@ -2,18 +2,66 @@
     <a href="{{ path }}">{{ name }}</a>
 {% endmacro %}
 
+{% macro btn_link(path, name) %}
+    <a href="{{ path }}"><button>{{ name }}</button></a>
+{% endmacro %}
+
+{% macro status(classes='', name='') %}
+<span class="status {{ classes }}">{{ name }}</span>
+{% endmacro %}
+
+{% macro tf_status(bool, options=[]) %}
+	{%- if bool -%}
+		{{ status(options[0]) if options.__len__() >= 1 else status('true') }}
+	{% else %}
+		{{ status(options[1]) if options.__len__() >= 2 else status('false') }}
+	{% endif %}
+{% endmacro %}
+
+{% macro multi_status(options=[], default='', additional_classes='') %}
+	{% set is_default = namespace(value = true) %}
+	{%- for bool, classes in options -%}
+		{%- if bool -%}
+			{{ status(additional_classes + ' ' + classes) }}
+			{% set is_default.value = false %}
+			{% break %}
+		{% endif  %}
+	{% endfor %}
+	{%- if is_default.value -%}
+{{ status(default) }}
+	{% endif %}
+{% endmacro %}
+
+{% macro ha_sale_status(asset, additional_classes='') %}
+{{ multi_status(
+	options = [
+		(asset.is_on_sale(), 'for_sale'),
+		(asset.is_on_auction(), 'auction'),
+	],
+	default='not_for_sale', additional_classes=additional_classes)
+}}
+{% endmacro %}
+
+{% macro sale_status(sale_status) %}
+    {{ tf_status(sale_status, ['sold', 'for_sale']) if sale_status }}
+{% endmacro %}
+
+
 {% macro user_link(user) %}
-    {{ link(url_for('users.user', user_id=user.id), user.username) }}
+    {{ link(url_for('users.user', user_id=user.id), user.username) if user }}
 {% endmacro %}
 
 {% macro ha_link(asset) %}
-    {{ link(url_for('hard_assets.hard_asset', hard_asset_id=asset.id), asset.name) }}
+	{{ link(url_for('hard_assets.hard_asset', ha_id=asset.id), asset.name) }}
 {% endmacro %}
 
 {% macro ha_image(asset, size='w3', attributes='') %}
-    <a href="{{ url_for('hard_assets.hard_asset', hard_asset_id=asset.id) }}">
-        <img {{ attributes | safe }} class="asset_image {{ size }}" src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
-    </a>
+    <div class="ha_img_container {{ size }}">
+		<a href="{{ url_for('hard_assets.hard_asset', ha_id=asset.id) }}">
+			<img {{ attributes | safe }} class="asset_image"
+			src="/static/assets/hard/{{ asset.get_images()[0] }}" alt="{{ asset.name }} image">
+		</a>
+	</div>
 {% endmacro %}
 
 {% macro company_link(company) %}
@@ -36,27 +84,59 @@
         <span class="gray">Value: </span>{{ asset.value | price }}<br>
         <span class="gray">Type: </span><span class="small">{{ asset.type }}</span><br>
         <span class="gray">Info: </span><span class="small">{{ asset.info }}</span><br>
-        <span class="gray">Status: </span>
-        {% if asset.is_on_sale() %}
-            <span class="status small for_sale"></span>
-        {% elif asset.is_on_auction() %}
-            <span class="status small auction"></span>
-        {% else %}
-            <span class="status small not_for_sale"></span>
-        {% endif %}
+        <span class="gray">Status: </span>{{ ha_sale_status(asset, 'small') }}
     </div>
 </div>
 {% endmacro %}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% macro pagination_(items, func, params={}) %}
-    {% if items.pages > 1 %}
+    {%- if items.pages > 1 -%}
         <div class="pagination">
-            {% if items.has_prev %}
+            {%- if items.has_prev -%}
                 <a  href="{{ url_for(func, page=items.prev_num, **params) }}">&laquo;</a>
             {% endif %}
-            {% for page_num in items.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
-                {% if page_num %}
-                    {% if items.page == page_num %}
+            {%- for page_num in items.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) -%}
+                {%- if page_num -%}
+                    {%- if items.page == page_num -%}
                         <a class="current" href="{{ url_for(func, page=page_num, **params) }}">{{ page_num }}</a>
                     {% else %}
                         <a href="{{ url_for(func, page=page_num, **params) }}">{{ page_num }}</a>
@@ -65,7 +145,7 @@
                     ...
                 {% endif %}
             {% endfor %}
-            {% if items.has_next %}
+            {%- if items.has_next -%}
                 <a href="{{ url_for(func, page=items.next_num, **params) }}">&raquo;</a>
             {% endif %}
         </div>
@@ -73,7 +153,7 @@
 {% endmacro %}
 
 {% macro pagination(items, func, retain_params=False, params={}) %}
-	{% if retain_params and request.args.to_dict(flat=False) %}
+	{%- if retain_params and request.args.to_dict(flat=False) -%}
 		{{ pagination_(items, func, params=merge_dicts(params, request.args.to_dict(flat=False))) }}
 	{% else %}
 		{{ pagination_(items, func, params) }}
@@ -104,13 +184,7 @@
             <span mark>Propery value</span>: {{ auction.hard_asset.value | price }}<br>
             <span mark>Current owner</span>: {{ user_link(auction.get_seller()) }}<br>
             <span mark>Auction start</span>: {{ auction.start | time }}<br>
-            <span mark>Status</span>:
-                {% set status = auction.is_bidder(current_user) %}
-                {% if status %}
-                    <span class="status involved"></span>
-                {% else %}
-                    <span class="status not_involved"></span>
-                {% endif %}
+            <span mark>Status</span>: {{ status('involved') if auction.is_bidder(current_user) else status('not_involved') }}
         </div>
     </div>
 {% endmacro %}

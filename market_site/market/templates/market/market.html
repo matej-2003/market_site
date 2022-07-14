@@ -11,10 +11,20 @@
     }
     
     div.container {
-        display: inline-block;
+        /*
+		display: inline-block;
         padding: 0.2em;
         border-radius: 3px;
         text-align: center;
+		*/
+		display: inline-flex;
+		padding: 0.2em;
+		border-radius: 3px;
+		text-align: center;
+		overflow-wrap: break-word;
+		width: min-content;
+		flex-direction: column;
+		justify-content: space-between;
     }
     
     div.container:hover {
@@ -71,17 +81,17 @@
     <h2><a href="/market/assets/h">Hard assets</a></h2>
     <div class="multi">
         <div class="container"><a href="/market/assets/h/art"><img src="{{url_for('static', filename='logos/art.jpg')}}" class="logo"><br>Art</a></div>
-        <!-- <div class="container"><a href="/market/assets/h/energy"><img src="{{url_for('static', filename='logos/energy.jpg')}}" class="logo"><br>Energy</a></div> -->
-        <!-- <div class="container"><a href="/market/assets/h/fashion"><img src="{{url_for('static', filename='logos/fashion.jpg')}}" class="logo"><br>Fashion</a></div> -->
-        <!-- <div class="container"><a href="/market/assets/h/food_industry"><img src="{{url_for('static', filename='logos/food_industry.jpg')}}" class="logo"><br>Food industry</a></div> -->
+        <div class="container"><a href="/market/assets/h/energy"><img src="{{url_for('static', filename='logos/energy.jpg')}}" class="logo"><br>Energy</a></div>
+        <div class="container"><a href="/market/assets/h/fashion"><img src="{{url_for('static', filename='logos/fashion.jpg')}}" class="logo"><br>Fashion</a></div>
+        <div class="container"><a href="/market/assets/h/food_industry"><img src="{{url_for('static', filename='logos/food_industry.jpg')}}" class="logo"><br>Food industry</a></div>
         <div class="container"><a href="/market/assets/h/historical_artifacts"><img src="{{url_for('static', filename='logos/historical_artifacts.jpg')}}" class="logo"><br>Historical artifacts</a></div>
         <div class="container"><a href="/market/assets/h/rare_earths"><img src="{{url_for('static', filename='logos/rare_earths.jpg')}}" class="logo"><br>Rare earths</a></div>
         <div class="container"><a href="/market/assets/h/precious_metals"><img src="{{url_for('static', filename='logos/precious_metals.jpg')}}" class="logo"><br>Precious metals</a></div>
         <div class="container"><a href="/market/assets/h/real_estate"><img src="{{url_for('static', filename='logos/real_estate.jpg')}}" class="logo"><br>Real estate</a></div>
-        <!-- <div class="container"><a href="/market/assets/h/technology"><img src="{{url_for('static', filename='logos/technology.jpg')}}" class="logo"><br>Technology</a></div> -->
-        <!-- <div class="container"><a href="/market/assets/h/telecommunications"><img src="{{url_for('static', filename='logos/telecommunications.jpg')}}" class="logo"><br>Telecomunications</a></div> -->
-        <!-- <div class="container"><a href="/market/assets/h/transport"><img src="{{url_for('static', filename='logos/transport.jpg')}}" class="logo"><br>Transport</a></div> -->
-        <!-- <div class="container"><a href="/market/assets/h/pharmaceutical_industry"><img src="{{url_for('static', filename='logos/pharmaceutical_industry.jpg')}}" class="logo"><br>Pharmaceutical industry</a></div> -->
+        <div class="container"><a href="/market/assets/h/technology"><img src="{{url_for('static', filename='logos/technology.jpg')}}" class="logo"><br>Technology</a></div>
+        <div class="container"><a href="/market/assets/h/telecommunications"><img src="{{url_for('static', filename='logos/telecommunications.jpg')}}" class="logo"><br>Telecomunications</a></div>
+        <div class="container"><a href="/market/assets/h/transport"><img src="{{url_for('static', filename='logos/transport.jpg')}}" class="logo"><br>Transport</a></div>
+        <div class="container"><a href="/market/assets/h/pharmaceutical_industry"><img src="{{url_for('static', filename='logos/pharmaceutical_industry.jpg')}}" class="logo"><br>Pharmaceutical industry</a></div>
     </div>
     
     <h2><a href="/market/assets/l">Liquid assets</a></h2>

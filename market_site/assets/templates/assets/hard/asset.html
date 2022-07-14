@@ -6,7 +6,7 @@
     </tr>
     <tr>
         <td colspan="2">
-			{{ ha_image(asset) }}
+			{{ ha_image(asset, size='h3') }}
 		</td>
     </tr>
     <tr>
@@ -31,30 +31,36 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="/asset/h/{{ asset.id }}/sale_history">sale history</a>
+			{{ link(url_for('hard_assets.ha_sale_history', ha_id=asset.id), 'sale history') }}
         </td>
     </tr>
     <tr>
         <td colspan="2">
             {% if asset.owner == current_user %}
                 {% if asset.is_on_sale() %}
-                    <a href="/asset/h/{{ asset.id }}/sell"><button>EDIT SALE</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/sell"><button>EDIT SALE</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_sale_edit', ha_id=asset.id), 'EDIT SALE') }}
                 {% else %}
-                    <a href="/asset/h/{{ asset.id }}/sell"><button>SELL</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/sell"><button>SELL</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_sell', ha_id=asset.id), 'SELL') }}
                 {% endif %}
 
                 {% if asset.is_on_auction() %}
-                    <a href="/asset/h/{{ asset.id }}/auction"><button>EDIT AUCTION</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/auction"><button>EDIT AUCTION</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_auction_edit', ha_id=asset.id), 'EDIT AUCTION') }}
                 {% else %}
-                    <a href="/asset/h/{{ asset.id }}/auction"><button>PUT UP FOR AUCTION</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/auction"><button>PUT UP FOR AUCTION</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_auction_create', ha_id=asset.id), 'PUT UP FOR AUCTION') }}
                 {% endif %}
             {% else %}
                 {% if asset.is_on_sale() %}
-                    <a href="/asset/h/{{ asset.id }}/sale"><button>BUY</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/sale"><button>BUY</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_sale', ha_id=asset.id), 'BUY') }}
                 {% elif asset.is_on_auction() %}
-                    <a href="/asset/h/{{ asset.id }}/auction"><button>BUY AT AUCTION</button></a>
+                    <!-- <a href="/asset/h/{{ asset.id }}/auction"><button>BUY AT AUCTION</button></a> -->
+					{{ btn_link(url_for('hard_assets.ha_sale', ha_id=asset.id), 'BUY AT AUCTION') }}
                 {% else %}
-                    <span class="status not_for_sale"></span>
+					{{ status('not_for_sale') }}
                 {% endif %}
             {% endif %}
         </td>

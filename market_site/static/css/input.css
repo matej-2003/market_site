@@ -9,7 +9,7 @@ textarea {
     padding: 0.2em 0.1em;
 
     /* do not delete this */
-    /* border-radius: 0.1rem; */
+    border-radius: 0.1rem;
     margin: 0.2em 0.3em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -57,7 +57,47 @@ input[type=color] {
     height: 1.2rem;
     background-color: #fff;
     color: #fff;
-}    
+}
+
+.prepend-group {
+	display: flex;
+	flex-direction: row;
+	gap: 0px;
+}
+
+.prepend-group input {
+	width: 100%;
+}
+
+.prepend~input {
+	margin-left: 0;
+	margin-right: 0;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.prepend {
+	display: inline-flex;
+    width: min-content;
+    padding: 0em 0.3em;
+    margin: calc(0.2em - 0.5px) 0.3em;
+	margin-right: 0;
+    background: #eaeaea;
+    border: 1px solid #ced4da;
+	color: #444;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+	border-radius: 0.2em 0px 0px 0.2em;
+	vertical-align: middle;
+}
+
+.append {
+	padding: 0rem 0.3rem;
+	margin: 0px;
+	padding-right: 0em;
+	background: #d0d0d0;
+}
 
 
 select:focus-visible {

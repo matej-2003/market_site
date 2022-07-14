@@ -1,16 +1,23 @@
 {% from "macros.html" import
-    link,
-    ha_link,
-    company_link,
-    company_image,
-    ha_image,
-    ha_compact,
-    pagination,
-    user_link,
-    auction_link,
-    auction_image,
-    auction_market,
-    ha_market
+	link,
+	btn_link,
+	status,
+	tf_status,
+	multi_status,
+	ha_sale_status,
+	sale_status,
+	user_link,
+	ha_link,
+	ha_image,
+	company_link,
+	company_image,
+	ha_compact,
+	pagination_,
+	pagination,
+	auction_link,
+	auction_image,
+	auction_market,
+	ha_market,
 with context %}
 <!DOCTYPE html>
 <html lang="en">
@@ -35,11 +42,11 @@ with context %}
     <script src="{{url_for('static', filename='jquery/jquery-ui.min.js')}}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/modal.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/alert.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/btn.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/input.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 
 
     <link rel="icon" href="{{ url_for('static', filename='logos/logo1.1.png') }}">
@@ -110,10 +117,10 @@ with context %}
 
             <div>
                 {% if breadcrumbs  %}
-                    {%- for breadcrumb in breadcrumbs -%}
+                    {% for breadcrumb in breadcrumbs %}
                         <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
                         {{ '/ ' if not loop.last }}
-                    {%- endfor -%}
+                    {% endfor %}
                 {% endif %}
             </div>
             <br>

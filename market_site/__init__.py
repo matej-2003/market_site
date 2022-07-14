@@ -1,10 +1,9 @@
-from flask import Flask
+from flask import Flask, Markup
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from market_site.config import Config
 from flask_breadcrumbs import Breadcrumbs
-from jinja2 import filters
 from flask_socketio import SocketIO
 
 db = SQLAlchemy()
@@ -40,19 +39,19 @@ def create_app(config_class=Config):
 	
 	@app.template_filter()
 	def status(value, *classes):
-		return filters.do_mark_safe("<span class=\"status {}\">{}</span>".format(" ".join(classes), value))
+		return Markup("<span class=\"status {}\">{}</span>".format(" ".join(classes), value))
 	
 	@app.template_filter()
 	def price(value, *classes):
 		if isinstance(value, float):
-			return filters.do_mark_safe("<span class=\"m {}\">{}</span>".format(" ".join(classes), "{:,.2f}".format(value)))
+			return Markup("<span class=\"m {}\">{}</span>".format(" ".join(classes), "{:,.2f}".format(value)))
 		else:
 			return value
 
 	@app.template_filter()
 	def percent(value, *classes):
 		if isinstance(value, float):
-			return filters.do_mark_safe("<span class=\"p {}\">{}</span>".format(" ".join(classes), "{:,.2f}".format(value)))
+			return Markup("<span class=\"p {}\">{}</span>".format(" ".join(classes), "{:,.2f}".format(value)))
 		else:
 			return value
 	
@@ -62,7 +61,7 @@ def create_app(config_class=Config):
 
 	@app.template_filter()
 	def time(value, *classes):
-		return filters.do_mark_safe("<span class=\"t {}\">{}</span>".format(" ".join(classes), value.strftime('%m/%d/%Y %H:%M:%S')))
+		return Markup("<span class=\"t {}\">{}</span>".format(" ".join(classes), value.strftime('%m/%d/%Y %H:%M:%S')))
 
 	@app.template_filter()
 	def info(value, other_msg='/'):
@@ -77,7 +76,12 @@ def create_app(config_class=Config):
 			result.update(dictionary)
 		result.pop('page', None)
 		return result
-
+	
+	app.jinja_env.strip_trailing_newlines = False
+	app.jinja_env.trim_blocks = True
+	app.jinja_env.lstrip_blocks = True
+	app.jinja_env.rstrip_blocks = True
+	app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 	app.jinja_env.filters['time'] = time
 	app.jinja_env.filters['stime'] = stime
 	app.jinja_env.filters['price'] = price

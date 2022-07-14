@@ -16,18 +16,18 @@ def list_hard_assets():
 
 
 
-@hard_assets.route('/<int:hard_asset_id>')
+@hard_assets.route('/<int:ha_id>')
 @login_required
-def hard_asset(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def hard_asset(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return render_template('assets/hard/asset.html', title='Asset', asset=hard_asset)
 
 
 
-@hard_assets.route('/<int:hard_asset_id>/sale', methods=['GET', 'POST'])
+@hard_assets.route('/<int:ha_id>/sale', methods=['GET', 'POST'])
 @login_required
-def hard_asset_sale(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_sale(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	sale = hard_asset.sales[-1]
 	if hard_asset.owner != current_user and hard_asset.is_on_sale():
 		if current_user.balance >= sale.price:
@@ -45,71 +45,73 @@ def hard_asset_sale(hard_asset_id):
 			flash('You do not have enough money', 'success')
 		return render_template('assets/hard/sale.html', title='Sale', asset=hard_asset, sale=sale)
 	else:
-		return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+		return redirect(url_for('hard_asset', ha_id=ha_id))
 
 
-@hard_assets.route('/<int:hard_asset_id>/sale/create')
+@hard_assets.route('/<int:ha_id>/sale/create')
 @login_required
-def hard_asset_sale_create(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_sale_create(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('sale_create', sale_id=hard_asset.last_sale()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/sale/delete')
+@hard_assets.route('/<int:ha_id>/sale/delete')
 @login_required
-def hard_asset_sale_delete(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_sale_delete(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('sale_delete', sale_id=hard_asset.last_sale()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/sale/edit')
+@hard_assets.route('/<int:ha_id>/sale/edit')
 @login_required
-def hard_asset_sale_edit(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_sale_edit(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('sale_edit', sale_id=hard_asset.last_sale()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/sale/history')
+@hard_assets.route('/<int:ha_id>/sale/history')
 @login_required
-def hard_asset_sale_history(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
-	return redirect(url_for('sale_history', sale_id=hard_asset.last_sale()))
+def ha_sale_history(ha_id):
+	asset = HardAsset.query.get_or_404(ha_id)
+	sales = db.session.query(HardAssetSale)\
+			.where(HardAssetSale.hard_asset_id == ha_id).all()
+	return render_template('assets/hard/sale_history.html', sales=sales, asset=asset)
 
 
 
 
-@hard_assets.route('/<int:hard_asset_id>/auction/create')
+@hard_assets.route('/<int:ha_id>/auction/create')
 @login_required
-def hard_asset_auction_create(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_auction_create(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('auction_create', auction_id=hard_asset.last_auction()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/auction/delete')
+@hard_assets.route('/<int:ha_id>/auction/delete')
 @login_required
-def hard_asset_auction_delete(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_auction_delete(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('auction_delete', auction_id=hard_asset.last_auction()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/auction/edit')
+@hard_assets.route('/<int:ha_id>/auction/edit')
 @login_required
-def hard_asset_auction_edit(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_auction_edit(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('auction_edit', auction_id=hard_asset.last_auction()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/auction/history')
+@hard_assets.route('/<int:ha_id>/auction/history')
 @login_required
-def hard_asset_auction_history(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_auction_history(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	return redirect(url_for('auction_history', auction_id=hard_asset.last_auction()))
 
 
-@hard_assets.route('/<int:hard_asset_id>/sell', methods=['GET', 'POST'])
+@hard_assets.route('/<int:ha_id>/sell', methods=['GET', 'POST'])
 @login_required
-def hard_asset_sell(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_sell(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	sale = None
 	if len(hard_asset.sales) > 0:
 		sale = hard_asset.sales[-1]
@@ -126,7 +128,7 @@ def hard_asset_sell(hard_asset_id):
 						hard_asset.info = info.strip(' \n\t')
 						has = HardAssetSale(
 							price = price,
-							hard_asset_id = hard_asset_id,
+							hard_asset_id = ha_id,
 							seller_id = current_user.id,
 						)
 						db.session.add(has)
@@ -139,15 +141,15 @@ def hard_asset_sell(hard_asset_id):
 					db.session.commit()
 			except ValueError:
 				pass
-			return redirect(url_for('user_assets'))
+			return redirect(url_for('home.home_hard_assets'))
 		return render_template('assets/hard/sell.html', title='Sall', asset=hard_asset, sale=sale)
-	return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+	return redirect(url_for('hard_asset', ha_id=ha_id))
 
 
-@hard_assets.route('/<int:hard_asset_id>/auction', methods=['GET', 'POST'])
+@hard_assets.route('/<int:ha_id>/auction', methods=['GET', 'POST'])
 @login_required
-def hard_asset_auction(hard_asset_id):
-	hard_asset = HardAsset.query.get_or_404(hard_asset_id)
+def ha_auction(ha_id):
+	hard_asset = HardAsset.query.get_or_404(ha_id)
 	if hard_asset.owner == current_user:
 		return render_template('assets/hard/auction.html', title='Sall', asset=hard_asset)
-	return redirect(url_for('hard_asset', hard_asset_id=hard_asset_id))
+	return redirect(url_for('hard_asset', ha_id=ha_id))

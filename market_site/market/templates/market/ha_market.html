@@ -2,8 +2,11 @@
 {% block style %}
 <style>
     .panel {
-        display: grid;
-        grid-template-columns: repeat(4, auto);
+		display: inline-flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+        /*display: grid;
+        grid-template-columns: repeat(4, auto);*/
     }
 
     img[vertical_logo] {
@@ -16,10 +19,19 @@
     }
 
     .container {
-        display: inline-block;
-        padding: 0.5em;
-        border: 1px solid #ccc;
-        text-align: center;
+		/*
+			display: inline-block;
+			padding: 0.5em;
+			border: 1px solid #ccc;
+			text-align: center;
+		*/
+		display: inline-flex;
+		padding: 0.5em;
+		border: 1px solid #ccc;
+		text-align: center;
+		flex-direction: column;
+		justify-content: space-between;
+		width: calc(25% - 1em - 2px);
     }
 
     div[info] {
@@ -45,8 +57,11 @@
 {% block content %}
 
 <div class="panel">
-    {% for sale in sales %}
+    {% for sale in sales.items %}
         {{ ha_market(sale) }}
     {% endfor %}
 </div>
+
+{{ pagination(sales, 'market.market_hard_asset_category', params={'category': category}) }}
+
 {% endblock %}

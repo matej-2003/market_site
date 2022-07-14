@@ -33,12 +33,14 @@ tr.selected {
     background-color: #e3e3ff;
 }
 
-td.status {
-    font-size: small;
-    font-weight: bold;
-    width: max-content;
-    color: #fff;
-}
+/*
+	td.status {
+		font-size: small;
+		font-weight: bold;
+		width: max-content;
+		color: #fff;
+	}
+*/
 
 table[data-link] tr:active {
     background-color: #e3e3ff;

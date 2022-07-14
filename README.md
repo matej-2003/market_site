@@ -112,28 +112,28 @@ templates/hard_assets
 /asset/l
 
 ## hard asset
-/asset/h/<int:hard_asset_id>
+/asset/h/<int:ha_id>
 
-/asset/h/<int:hard_asset_id>/sale/create
-/asset/h/<int:hard_asset_id>/sales/history
-/asset/h/<int:hard_asset_id>/sale/edit
-/asset/h/<int:hard_asset_id>/sale/delete
+/asset/h/<int:ha_id>/sale/create
+/asset/h/<int:ha_id>/sales/history
+/asset/h/<int:ha_id>/sale/edit
+/asset/h/<int:ha_id>/sale/delete
 
 /sale/<int:id>/edit
 /sale/<int:id>/delete
 
-/asset/h/<int:hard_asset_id>/auction/create
-/asset/h/<int:hard_asset_id>/auctions/history
-/asset/h/<int:hard_asset_id>/auction/edit
-/asset/h/<int:hard_asset_id>/auction/delete
+/asset/h/<int:ha_id>/auction/create
+/asset/h/<int:ha_id>/auctions/history
+/asset/h/<int:ha_id>/auction/edit
+/asset/h/<int:ha_id>/auction/delete
 
 /auction/<int:id>/edit
 /auction/<int:id>/delete
 
-# /asset/h/<int:hard_asset_id>/trade/create
-# /asset/h/<int:hard_asset_id>/trades/history
-# /asset/h/<int:hard_asset_id>/trade/edit
-# /asset/h/<int:hard_asset_id>/trade/delete
+# /asset/h/<int:ha_id>/trade/create
+# /asset/h/<int:ha_id>/trades/history
+# /asset/h/<int:ha_id>/trade/edit
+# /asset/h/<int:ha_id>/trade/delete
 
 # /trade/<int:id>/edit
 # /trade/<int:id>/delete

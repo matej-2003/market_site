@@ -8,7 +8,10 @@
             <tr>
                 <td>{{ form.receipient_id.label() }}</td>
                 <td>
-                    {{ form.receipient_id() }}
+					<div class="prepend-group">
+						<div class="prepend">ID</div>
+						{{ form.receipient_id() }}
+					</div>
                     {% if form.receipient_id.errors %}
                         <div class="invalid_feadback">
                             {% for error in form.receipient_id.errors %}
@@ -21,7 +24,10 @@
             <tr>
                 <td>{{ form.amount.label() }}</td>
                 <td>
-                    {{ form.amount() }}
+					<div class="prepend-group">
+						<div class="prepend">$</div>
+						{{ form.amount() }}
+					</div>
                     {% if form.amount.errors %}
                         <div class="invalid_feadback">
                             {% for error in form.amount.errors %}

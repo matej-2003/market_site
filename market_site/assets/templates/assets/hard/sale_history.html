@@ -27,16 +27,10 @@
     </tr>
     {% for sale in sales %}
         <tr>
-            <td>{{ user_link(get_seller()) }}</td>
-            <td>{{ user_link(get_buyer()) }}</td>
+            <td>{{ user_link(sale.get_seller()) }}</td>
+            <td>{{ user_link(sale.get_buyer()) }}</td>
             <td>{{ sale.price | price }}</td>
-            <td>
-                {% if sale.status == 0 %}
-                    <span class="status for_sale"></span>
-                {% else %}
-                    <span class="status sold"></span>
-                {% endif %}
-            </td>
+            <td>{{ sale_status(sale.status) }}
             <td><span class="t">{{ sale.start | time }}</span> </td>
             <td>
                 {% if sale.end %}

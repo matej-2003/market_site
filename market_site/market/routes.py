@@ -28,29 +28,16 @@ def market_hard_assets():
 @market.route('/assets/h/<string:category>')
 @login_required
 def market_hard_asset_category(category):
+	page = request.args.get('page', 1, type=int)
 	category = category.upper()
-	type = OTHER
-	if category == REAL_ESTATE:
-		type = REAL_ESTATE
-	elif category == ART:
-		type = ART
-	elif category == HISTORICAL_ARTIFACTS:
-		type = HISTORICAL_ARTIFACTS
-	elif category == RARE_EARTHS:
-		type = RARE_EARTHS
-	elif category == PRECIOUS_METALS:
-		type = PRECIOUS_METALS
-	elif category == TRANSPORT:
-		type = TRANSPORT
-	elif category == OTHER:
-		type = OTHER
-
+	ha_type = category
 	# sales = HardAssetSale.query.filter_by(status=FOR_SALE, hard_asset.type=type).all()
 	sales = db.session.query(HardAssetSale)\
 		.join(HardAsset, HardAssetSale.hard_asset_id==HardAsset.id)\
-		.where(HardAssetSale.status == FOR_SALE, HardAsset.type == type).all()
-	title = type.lower().replace('_', ' ').capitalize()
-	return render_template('market/ha_market.html', title=title, sales=sales)
+		.where(HardAssetSale.status == FOR_SALE, HardAsset.type == ha_type)\
+		.paginate(page=page, per_page=12)
+	title = ha_type.lower().replace('_', ' ').capitalize()
+	return render_template('market/ha_market.html', title=title, sales=sales, category=category.lower())
 
 
 
