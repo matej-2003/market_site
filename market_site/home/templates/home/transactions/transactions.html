@@ -46,8 +46,8 @@
     {% endfor %}
 </table>
 {% if made %}
-    {{ pagination(transactions, 'home.home_transactions_made', retain_params=true) }}
+    {{ render_pagination(transactions, endpoint='home.home_transactions_made', size='sm', align='center') }}
 {% else %}
-    {{ pagination(transactions, 'home.home_transactions_received', retain_params=true) }}
+    {{ render_pagination(transactions, endpoint='home.home_transactions_received', size='sm', align='center') }}
 {% endif %}
 {% endblock %}

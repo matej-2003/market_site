@@ -62,6 +62,6 @@
     {% endfor %}
 </div>
 
-{{ pagination(sales, 'market.market_hard_asset_category', params={'category': category}) }}
+{{ render_pagination(sales, args={'category': category}, size='sm', align='center') }}
 
 {% endblock %}

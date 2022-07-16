@@ -196,27 +196,11 @@ img[company_logo] {
     content: "%";
 }
 
-.pagination {
-    padding-top: 2em;
-    display: block;
-    width: 100%;
-    text-align: center;
+.breadcrumb-sm {
+	padding: 0.3rem 0.5rem !important;
+	margin-bottom: 0.5rem !important;
+	font-size: 0.9rem;
 }
-
-.pagination a {
-    padding-left: 0.3em;
-    padding-right: 0.3em;
-}
-
-.pagination a:hover {
-    background-color: rgba(1, 124, 255, 0.487);
-}
-
-.pagination a.current {
-    font-weight: bold;
-    background-color: rgba(1, 124, 255, 0.487);
-}
-
 
 div.ha_img_container {
 	display: inline-block;

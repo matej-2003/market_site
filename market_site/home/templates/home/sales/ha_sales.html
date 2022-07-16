@@ -55,8 +55,8 @@
     {% endfor %}
 </table>
 {% if purchase %}
-	{{ pagination(sales, 'home.home_ha_purchases') }}
+	{{ render_pagination(sales, endpoint='home.home_ha_purchases', size='sm', align='center') }}
 {% else %}
-	{{ pagination(sales, 'home.home_ha_sales') }}
+	{{ render_pagination(sales, endpoint='home.home_ha_sales', size='sm', align='center') }}
 {% endif %}
 {% endblock %}

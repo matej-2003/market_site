@@ -23,6 +23,6 @@
     {% endfor %}
 </table>
 
-{{ pagination(bonds, 'home.home_bonds') }}
+{{ render_pagination(bonds, size='sm', align='center') }}
 
 {% endblock %}

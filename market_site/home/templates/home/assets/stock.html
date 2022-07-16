@@ -18,5 +18,5 @@
     </tr>
     {% endfor %}
 </table>
-{{ pagination(stock, 'home.home_stock') }}
+{{ render_pagination(stock, size='sm', align='center') }}
 {% endblock %}

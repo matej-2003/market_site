@@ -45,10 +45,11 @@
 {% block content %}
 
 <div class="panel">
-    {% for auction in auctions %}
+    {% for auction in auctions.items %}
         {% if not auction.is_over() %}
             {{ auction_market(auction) }}
         {% endif %}
     {% endfor %}
 </div>
+{{ render_pagination(auctions, size='sm', align='center') }}
 {% endblock %}

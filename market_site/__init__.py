@@ -5,11 +5,17 @@ from flask_login import LoginManager
 from market_site.config import Config
 from flask_breadcrumbs import Breadcrumbs
 from flask_socketio import SocketIO
+from flask_bootstrap import Bootstrap4
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 db = SQLAlchemy()
 # db.create_all()
 bc = Bcrypt()
+bootstrap = Bootstrap4()
 socket = SocketIO()
+admin = Admin(name='Manage', template_mode='bootstrap3')
+
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
@@ -19,6 +25,8 @@ def create_app(config_class=Config):
 	app = Flask(__name__)
 	app.config.from_object(Config)
 	Breadcrumbs(app=app)
+	bootstrap.init_app(app)
+	admin.init_app(app)
 
 	db.init_app(app)
 	bc.init_app(app)
@@ -106,5 +114,25 @@ def create_app(config_class=Config):
 	app.register_blueprint(market)
 	app.register_blueprint(auction)
 	app.register_blueprint(users)
+
+
+	from market_site.models import User, Transaction, HardAsset, HardAssetSale, Company, CompanyShare, CompanyShareSale
+	from market_site.models import CompanyBond, CompanyBondSale, Bank, BankLoan, Country, Auction, AuctionBidder, AuctionBid
+
+	admin.add_view(ModelView(User, db.session))
+	admin.add_view(ModelView(Transaction, db.session))
+	admin.add_view(ModelView(HardAsset, db.session))
+	admin.add_view(ModelView(HardAssetSale, db.session))
+	admin.add_view(ModelView(Company, db.session))
+	admin.add_view(ModelView(CompanyShare, db.session))
+	admin.add_view(ModelView(CompanyShareSale, db.session))
+	admin.add_view(ModelView(CompanyBond, db.session))
+	admin.add_view(ModelView(CompanyBondSale, db.session))
+	admin.add_view(ModelView(Bank, db.session))
+	admin.add_view(ModelView(BankLoan, db.session))
+	admin.add_view(ModelView(Country, db.session))
+	# admin.add_view(ModelView(Auction, db.session))
+	# admin.add_view(ModelView(AuctionBidder, db.session))
+	# admin.add_view(ModelView(AuctionBid, db.session))
 
 	return app, socket

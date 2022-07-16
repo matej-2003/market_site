@@ -16,7 +16,10 @@ def market_():
 @market.route('/auctions')
 @login_required
 def auctions():
-	auctions = db.session.query(Auction).where(Auction.status == FOR_SALE, Auction.seller_id != current_user.id).all()
+	page = request.args.get('page', 1, type=int)
+	auctions = db.session.query(Auction)\
+		.where(Auction.status == FOR_SALE, Auction.seller_id != current_user.id)\
+		.paginate(page=page, per_page=12)
 	return render_template('market/auctions.html', title='Auctions', auctions=auctions)
 
 

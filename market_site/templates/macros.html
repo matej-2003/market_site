@@ -127,7 +127,7 @@
 
 
 
-
+{#
 {% macro pagination_(items, func, params={}) %}
     {%- if items.pages > 1 -%}
         <div class="pagination">
@@ -159,6 +159,7 @@
 		{{ pagination_(items, func, params) }}
 	{% endif %}
 {% endmacro %}
+#}
 
 {% macro auction_link(auction) %}
     {{ link(url_for('auction.auction_page', auction_id=auction.id), auction.hard_asset.name) }}

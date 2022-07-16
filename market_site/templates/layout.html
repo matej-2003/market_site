@@ -1,24 +1,14 @@
 {% from "macros.html" import
-	link,
-	btn_link,
-	status,
-	tf_status,
-	multi_status,
-	ha_sale_status,
-	sale_status,
-	user_link,
-	ha_link,
-	ha_image,
-	company_link,
-	company_image,
-	ha_compact,
-	pagination_,
-	pagination,
-	auction_link,
-	auction_image,
-	auction_market,
+	link, btn_link, status, tf_status, multi_status, ha_sale_status,
+	sale_status, user_link, ha_link, ha_image, company_link, company_image,
+	ha_compact, pagination_, pagination, auction_link, auction_image, auction_market,
 	ha_market,
 with context %}
+{% from "bootstrap4/pagination.html" import render_pagination %}
+{% from 'bootstrap4/utils.html' import render_messages %}
+{% from 'bootstrap4/utils.html' import render_icon %}
+{% from 'bootstrap4/nav.html' import render_breadcrumb_item %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,106 +27,115 @@ with context %}
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script> -->
 
-    <link rel="stylesheet" href="{{url_for('static', filename='jquery/jquery-ui.min.css')}}">
-    <script src="{{url_for('static', filename='jquery/external/jquery/jquery.js')}}"></script>
-    <script src="{{url_for('static', filename='jquery/jquery-ui.min.js')}}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{url_for('static', filename='jquery/jquery-ui.min.css')}}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="{{url_for('static', filename='css/modal.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/alert.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/btn.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/input.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/modal.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/alert.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/btn.css')}}">
+	<!-- <link rel="stylesheet" href="{{url_for('static', filename='css/input.css')}}"> -->
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+	<link rel="icon" href="{{ url_for('static', filename='logos/logo1.1.png') }}">
 
+	{% block styles %}
+		<!-- Bootstrap CSS -->
+		{{ bootstrap.load_css() }}
+	{% endblock %}
 
-    <link rel="icon" href="{{ url_for('static', filename='logos/logo1.1.png') }}">
     {% block style %}{% endblock %}
     {% block meta_tags %}{% endblock %}
 </head>
 
 <body>
-    <header>
-        <img src="{{ url_for('static', filename='logos/logo1.1.png') }}" logo>
-        <img src="{{ url_for('static', filename='logos/logo1.2.png') }}" logo>
-    </header>
+{% block content %}
+	<header>
+		<img src="{{ url_for('static', filename='logos/logo1.1.png') }}" logo>
+		<img src="{{ url_for('static', filename='logos/logo1.2.png') }}" logo>
+	</header>
 
-    <div main>
-        {% if current_user.is_authenticated and request.route != "/login" %}
-            <nav>
-                <div>
-                    <a href="/home">
-                        <img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
-                    </a>
-                    <br>
-                    <b>
-                        <!-- LEGAL_PERSON == 0 -->
-                        {% if current_user.type == 0 %}
-                            CEO of
-                            <br>
-                            {{ current_user.get_company().name }}
-                        {% else %}
-                            {{current_user.username}}
-                        {% endif %}
-                    </b>
-                </div>
-                <!-- <a href="/profile">Profile</a><br> -->
-                <a href="/home">Home</a><br>
-                <!-- <a href="/user_assets">My assets</a><br> -->
-                <!-- <a href="/borrow">Borrow money</a><br> -->
-                <!-- <a href="/transaction">Transaction</a><br> -->
-                {{ link(url_for('users.make_transaction'), 'Transaction') }}<br>
-                <a href="/users">Users</a><br>
-                <!-- <a href="/countries">Countries</a><br> -->
-                <a href="/market">Market</a><br>
-                <a href="/logout">Logout</a><br>
-            </nav>
-        {% endif %}
-        <div content>
-            <div class="title">
-                {% if title %}
-                    {{title}}
-                {% endif %}
-            </div>
+	<div main>
+		{% if current_user.is_authenticated and request.route != "/login" %}
+			<nav>
+				<div>
+					<a href="/home">
+						<img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
+					</a>
+					<br>
+					<b>
+						<!-- LEGAL_PERSON == 0 -->
+						{% if current_user.type == 0 %}
+							CEO of
+							<br>
+							{{ current_user.get_company().name }}
+						{% else %}
+							{{current_user.username}}
+						{% endif %}
+					</b>
+				</div>
+				<!-- <a href="/profile">Profile</a><br> -->
+				<a href="/home">Home</a><br>
+				<!-- <a href="/user_assets">My assets</a><br> -->
+				<!-- <a href="/borrow">Borrow money</a><br> -->
+				<!-- <a href="/transaction">Transaction</a><br> -->
+				{{ link(url_for('users.make_transaction'), 'Transaction') }}<br>
+				<a href="/users">Users</a><br>
+				<!-- <a href="/countries">Countries</a><br> -->
+				<a href="/market">Market</a><br>
+				<a href="/logout">Logout</a><br>
+			</nav>
+		{% endif %}
+		<div content>
+			<div class="title">
+				{% if title %}
+					{{title}}
+				{% endif %}
+			</div>
 
-            {% if current_user.is_authenticated %}
-                <b>Your balance:</b> {{ current_user.balance | price }}
-                <br>
-                <br>
-            {% endif %}
+			{% if current_user.is_authenticated %}
+				<b>Your balance:</b> {{ current_user.balance | price }}
+				<br>
+				<br>
+			{% endif %}
 
-            {% with msgs = get_flashed_messages(with_categories=true) %}
-                {% if msgs %}
-                    {% for category, msg in msgs%}
-                        <div class="alert {{ category}}">
-                            <span class="close_alert">&times;</span>
-                            {{ msg | safe }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+			{{ render_messages(dismissible=true, dismiss_animate=true, default_category='info') }}
 
-            <div>
-                {% if breadcrumbs  %}
-                    {% for breadcrumb in breadcrumbs %}
-                        <a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a>
-                        {{ '/ ' if not loop.last }}
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <br>
+			{% if breadcrumbs  %}
+			
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb breadcrumb-sm">
+					{% for breadcrumb in breadcrumbs %}
+						{% if loop.last %}
+							<li class="breadcrumb-item active" aria-current="page">{{ breadcrumb.text }}</li>
+						{% else %}
+							<li class="breadcrumb-item"><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+						{% endif %}
+					{% endfor %}
+				</ol>
+			</nav>
+			{% endif %}
+			<br>
 
-            {% block content %}
-            {% endblock %}
-        </div>
-    </div>
+			{% block content %}
+			{% endblock %}
+		</div>
+	</div>
 
-    <footer>
+	<footer>
 		Copyright &copy; 2021 Market site inc., All rights reserved.
 		<br>
 		<a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
 	</footer>
-    <script src="{{url_for('static', filename='js/script.js')}}"></script>
-    <script src="{{url_for('static', filename='js/modal_script.js')}}"></script>
+{% endblock content %}
 
-    {% block javascript %}{% endblock %}
+{% block scripts %}
+	<!-- Optional JavaScript -->
+	{{ bootstrap.load_js() }}
+	<script src="{{url_for('static', filename='js/script.js')}}"></script>
+	<script src="{{url_for('static', filename='js/modal_script.js')}}"></script>
+	<!-- <script src="{{url_for('static', filename='jquery/external/jquery/jquery.js')}}"></script>
+	<script src="{{url_for('static', filename='jquery/jquery-ui.min.js')}}"></script> -->
+{% endblock %}
+
+
+{% block javascript %}{% endblock %}
 </body>

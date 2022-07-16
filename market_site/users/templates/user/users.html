@@ -41,5 +41,5 @@
         </tr>
     {% endfor %}
 </table>
-{{ pagination(users, 'users.user_list') }}
+{{ render_pagination(users, size='sm', align='center') }}
 {% endblock %}

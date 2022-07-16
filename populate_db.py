@@ -357,9 +357,7 @@ for count in range(10):
 
 	db.session.commit()
 
-	
 
-"""
 
 for _ in range(20):
 	payer = random.choice(User.query.all())
@@ -368,7 +366,7 @@ for _ in range(20):
 	print(f"Transaction ${amount}: {payer.username} -> {payee.username}")
 	payer.pay(amount, payee)
 
-db.session.commit()
+# db.session.commit()
 
 countries = [
 	["SI", "Slovenia"],
@@ -597,9 +595,6 @@ for u in users:
 	l.pay()
 db.session.commit()
 
-"""
-
-"""
 
 # GET USERS SHARES
 # SELECT users.username, users.id, companies.name as company_name, companies.id, count(company_shares.company_id) as number_of_shares
@@ -648,5 +643,3 @@ db.session.commit()
 # from companies
 # inner join company_shares on company_shares.company_id = companies.id
 # group by companies.name;
-
-"""

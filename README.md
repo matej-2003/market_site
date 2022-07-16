@@ -1,5 +1,13 @@
 # citalnice
 
+to run
+
+``
+pip install -r requirements.txt
+python run.py
+
+``
+
 float "{:,.2f}".format()
 time .strftime('%d/%m/%Y %H:%M:%S')
 

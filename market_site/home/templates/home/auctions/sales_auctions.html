@@ -42,8 +42,8 @@
     {% endfor %}
 </table>
 {% if active %}
-    {{ pagination(auctions, 'home.home_purchase_auctions_active') }}
+    {{ render_pagination(auctions, endpoint='home.home_purchase_auctions_active', size='sm', align='center') }}
 {% else %}
-    {{ pagination(auctions, 'home.home_purchase_auctions_finnished') }}
+    {{ render_pagination(auctions, endpoint='home.home_purchase_auctions_finnished', size='sm', align='center') }}
 {% endif %}
 {% endblock %}
