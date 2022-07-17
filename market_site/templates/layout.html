@@ -47,7 +47,6 @@ with context %}
 </head>
 
 <body>
-{% block content %}
 	<header>
 		<img src="{{ url_for('static', filename='logos/logo1.1.png') }}" logo>
 		<img src="{{ url_for('static', filename='logos/logo1.2.png') }}" logo>
@@ -55,7 +54,7 @@ with context %}
 
 	<div main>
 		{% if current_user.is_authenticated and request.route != "/login" %}
-			<nav>
+			<div class="sidenav">
 				<div>
 					<a href="/home">
 						<img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
@@ -72,17 +71,48 @@ with context %}
 						{% endif %}
 					</b>
 				</div>
-				<!-- <a href="/profile">Profile</a><br> -->
-				<a href="/home">Home</a><br>
-				<!-- <a href="/user_assets">My assets</a><br> -->
-				<!-- <a href="/borrow">Borrow money</a><br> -->
-				<!-- <a href="/transaction">Transaction</a><br> -->
+				{{ link(url_for('home.user_home'), 'Home') }}<br>
+				{{ link(url_for('users.user_list'), 'Users') }}<br>
+				{{ link(url_for('market.market_'), 'Market') }}<br>
 				{{ link(url_for('users.make_transaction'), 'Transaction') }}<br>
-				<a href="/users">Users</a><br>
-				<!-- <a href="/countries">Countries</a><br> -->
-				<a href="/market">Market</a><br>
-				<a href="/logout">Logout</a><br>
-			</nav>
+				{{ link(url_for('users.logout'), 'Logout') }}<br>
+			</div>
+			<!-- <div class="sidenav">
+				<div>
+					<a href="/home">
+						<img user_image src="{{ url_for('static', filename='logos/profile.png') }}" alt="">
+					</a>
+					<br>
+					<b>
+						{% if current_user.type == 0 %}
+							CEO of
+							<br>
+							{{ current_user.get_company().name }}
+						{% else %}
+							{{current_user.username}}
+						{% endif %}
+					</b>
+				</div>
+				<div class="container">
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('home.user_home') }}">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('users.user_list') }}">Users</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('market.market_') }}">Market</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('users.make_transaction') }}">Transaction</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</div> -->
 		{% endif %}
 		<div content>
 			<div class="title">
@@ -125,7 +155,6 @@ with context %}
 		<br>
 		<a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a>
 	</footer>
-{% endblock content %}
 
 {% block scripts %}
 	<!-- Optional JavaScript -->

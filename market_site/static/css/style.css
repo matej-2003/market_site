@@ -68,14 +68,14 @@ div[main] {
     font-size: x-large;
 }
 
-nav {
+div.sidenav {
     grid-area: nav;
     border-right: 1px solid gray;
     text-align: left;
     padding: 0.8em 1em;
 }
 
-nav img[user_image] {
+div.sidenav img[user_image] {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 0.2em;
